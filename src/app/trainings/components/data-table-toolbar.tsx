@@ -9,7 +9,8 @@ import { DataTableViewOptions } from './data-table-view-options';
 
 import { statuses } from '../data/data';
 import { DataTableFacetedFilter } from './data-table-faceted-filter';
-import { DialogFileUpload } from './dialog-file-upload';
+import { DialogFileUpload } from '../FileUploader/dialog-file-upload';
+import DialogGenerateBulkPDF from '../GeneratePDF/DialogGenerateBulkPDF';
 
 interface DataTableToolbarProps<TData> {
   table: Table<TData>;
@@ -59,7 +60,7 @@ export function DataTableToolbar<TData>({
       {/* TODO: Add import file */}
       <div className="flex items-center space-x-2">
         {/* <CalendarDateRangePicker /> */}
-        <DialogFileUpload />
+        <DialogGenerateBulkPDF />
         <DataTableViewOptions table={table} />
       </div>
     </div>

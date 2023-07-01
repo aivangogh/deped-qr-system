@@ -1,6 +1,10 @@
 import { Training } from './data/columns';
 import { columns } from './components/columns';
 import { DataTable } from './components/data-table';
+import { EventInfo } from './components/event-info/EventInfo';
+import { DialogFileUpload } from './FileUploader/dialog-file-upload';
+import { Separator } from '@/components/ui/separator';
+import Header from './Header';
 
 async function getData() {
   // Fetch data from your API here.
@@ -201,7 +205,7 @@ async function getData() {
   ];
 }
 
-export default async function DemoPage() {
+export default async function TrainingInfoPage() {
   const participant = await getData();
 
   return (
@@ -222,18 +226,10 @@ export default async function DemoPage() {
           className="hidden dark:block"
         />
       </div> */}
-      <div className="hidden h-full flex-1 flex-col space-y-8 p-8 md:flex">
-        <div className="flex items-center justify-between space-y-2">
-          <div>
-            <h2 className="text-2xl font-bold tracking-tight">Welcome back!</h2>
-            <p className="text-muted-foreground">
-              Here&apos;s a list of your tasks for this month!
-            </p>
-          </div>
-          {/* <div className="flex items-center space-x-2">
-            <UserNav />
-          </div> */}
-        </div>
+      
+      <div className="hidden h-full flex-1 flex-col space-y-8 p-4 md:flex">
+        <EventInfo />
+
         <DataTable data={participant} columns={columns} />
       </div>
     </>

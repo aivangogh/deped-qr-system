@@ -1,24 +1,16 @@
 'use client';
 
 import { Row } from '@tanstack/react-table';
-import { Copy, MoreHorizontal, Pen, Star, Tags, Trash } from 'lucide-react';
+import { Eye, FileText, MoreHorizontal } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
-  DropdownMenuSeparator,
-  DropdownMenuShortcut,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
-  DropdownMenuTrigger,
+  DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
 
-import { labels } from '../data/data';
 import { trainingSchema } from '../data/schema';
 
 interface DataTableRowActionsProps<TData> {
@@ -43,22 +35,12 @@ export function DataTableRowActions<TData>({
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-[160px]">
         <DropdownMenuItem>
-          <Pen className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
-          Edit
+          <FileText className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
+          Generate PDF
         </DropdownMenuItem>
         <DropdownMenuItem>
-          <Copy className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
-          Make a copy
-        </DropdownMenuItem>
-        <DropdownMenuItem>
-          <Star className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
-          Favorite
-        </DropdownMenuItem>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem>
-          <Trash className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
-          Delete
-          <DropdownMenuShortcut>⌘⌫</DropdownMenuShortcut>
+          <Eye className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
+          Preview PDF
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
