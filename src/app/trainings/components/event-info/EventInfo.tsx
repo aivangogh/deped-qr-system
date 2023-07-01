@@ -102,7 +102,7 @@ export function EventInfo() {
             <FormItem>
               <FormLabel>Title of training</FormLabel>
               <FormControl>
-                <Input placeholder="Title of training" {...field} />
+                <Input disabled placeholder="Title of training" {...field} />
               </FormControl>
               <FormDescription>
                 This is the name that will be displayed on your profile and in
@@ -119,7 +119,7 @@ export function EventInfo() {
             <FormItem>
               <FormLabel>Number of hours</FormLabel>
               <FormControl>
-                <Input placeholder="Number of hours" {...field} />
+                <Input disabled placeholder="Number of hours" {...field} />
               </FormControl>
               <FormDescription>
                 This is the name that will be displayed on your profile and in

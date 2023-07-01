@@ -13,20 +13,40 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { FileSpreadsheet } from 'lucide-react';
-import { useState } from 'react';
 import ExcelToJson from './ExcelToJson';
-import { parseExcelToJson } from './parseExcelToJson';
+import { parseExcelToJson } from '../../../utils/parseExcelToJson';
+import prettierJson from '@/utils/prettierJson';
+import useTrainingInfoStore from '@/store/useTrainingInfoStore';
+import useParticipantsStore from '@/store/useParticipantsStore';
+import { useState } from 'react';
+import { TrainingInfoT } from '@/types/types';
 
 export function DialogFileUpload() {
-  const [jsonData, setJsonData] = useState<any>(null);
+  const [formattedJsonData, setFormattedJsonData] =
+    useState<TrainingInfoT | null>(null);
+
+  const setTrainingInfo = useTrainingInfoStore(
+    (state) => state.setTrainingInfo
+  );
+  const setParticipants = useParticipantsStore(
+    (state) => state.setParticipants
+  );
 
   const handleFileUpload = async (file: File) => {
     try {
       const data = await parseExcelToJson(file);
-      setJsonData(data);
+      setFormattedJsonData(prettierJson(data));
     } catch (error) {
       console.error('Error parsing Excel:', error);
     }
+  };
+
+  const handleSetTrainingInfo = () => {
+    // setTrainingInfo(formattedJsonData?.training!);
+    setParticipants(formattedJsonData?.participants!);
+
+    console.log(formattedJsonData?.training!);
+    console.log(formattedJsonData?.participants!);
   };
 
   return (
@@ -51,15 +71,17 @@ export function DialogFileUpload() {
 
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <Button type="submit">Import File</Button>
+          <AlertDialogAction onClick={() => handleSetTrainingInfo()}>
+            Import File
+          </AlertDialogAction>
         </AlertDialogFooter>
 
-        {jsonData && (
+        {/* {jsonData && (
           <div>
             <h2>Parsed JSON:</h2>
             <pre>{JSON.stringify(jsonData, null, 2)}</pre>
           </div>
-        )}
+        )} */}
       </AlertDialogContent>
     </AlertDialog>
   );

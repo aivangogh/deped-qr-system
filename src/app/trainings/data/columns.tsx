@@ -1,5 +1,6 @@
 'use client';
 
+import { TrainingDetailsT } from '@/types/types';
 import { ColumnDef } from '@tanstack/react-table';
 
 // This type is used to define the shape of our data.
@@ -15,7 +16,7 @@ export type Training = {
   email: string;
 };
 
-export const columns: ColumnDef<Training>[] = [
+export const columns: ColumnDef<TrainingDetailsT>[] = [
   {
     accessorKey: 'participant',
     header: 'Participant',

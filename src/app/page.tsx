@@ -1,5 +1,5 @@
 import Header from './trainings/Header';
-import TrainingInfo from './trainings/page';
+import TrainingInfo from './trainings/TrainingInfo';
 
 export default function Home() {
   return (
@@ -7,7 +7,7 @@ export default function Home() {
       <div className="border-b container py-2 px-12">
         <Header />
       </div>
-      <div className='container pt-4'>
+      <div className="container pt-4">
         <TrainingInfo />
       </div>
     </div>

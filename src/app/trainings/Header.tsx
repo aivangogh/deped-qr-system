@@ -1,6 +1,6 @@
 import Image from 'next/image';
-import { DialogFileUpload } from './FileUploader/dialog-file-upload';
 import DepedLogo from '../../../public/images/deped-logo.png';
+import { DialogFileUpload } from './FileUploader/dialog-file-upload';
 
 export default function Header() {
   return (
@@ -9,10 +9,12 @@ export default function Header() {
         <div className="flex space-x-2">
           <Image src={DepedLogo} width={50} height={50} alt="DepEd Logo" />
           <div className="flex items-center">
-            <h2 className="text-3xl font-bold tracking-tight">QR System</h2>
+            <h2 className="text-3xl font-bold tracking-tight">
+              Training QR System
+            </h2>
           </div>
         </div>
-        <div className='flex items-center'>
+        <div className="flex items-center">
           <DialogFileUpload />
         </div>
       </div>

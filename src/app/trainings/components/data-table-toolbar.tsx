@@ -7,9 +7,6 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { DataTableViewOptions } from './data-table-view-options';
 
-import { statuses } from '../data/data';
-import { DataTableFacetedFilter } from './data-table-faceted-filter';
-import { DialogFileUpload } from '../FileUploader/dialog-file-upload';
 import DialogGenerateBulkPDF from '../GeneratePDF/DialogGenerateBulkPDF';
 
 interface DataTableToolbarProps<TData> {
@@ -24,21 +21,21 @@ export function DataTableToolbar<TData>({
   return (
     <div className="flex items-center justify-between">
       <div className="flex flex-1 items-center space-x-2">
-        <Input
+        {/* <Input
           placeholder="Filter tasks..."
           value={(table.getColumn('title')?.getFilterValue() as string) ?? ''}
           onChange={(event) =>
             table.getColumn('title')?.setFilterValue(event.target.value)
           }
           className="h-8 w-[150px] lg:w-[250px]"
-        />
-        {table.getColumn('status') && (
+        /> */}
+        {/* {table.getColumn('status') && (
           <DataTableFacetedFilter
             column={table.getColumn('status')}
             title="Status"
             options={statuses}
           />
-        )}
+        )} */}
         {/* {table.getColumn('priority') && (
           <DataTableFacetedFilter
             column={table.getColumn('priority')}
@@ -57,9 +54,8 @@ export function DataTableToolbar<TData>({
           </Button>
         )}
       </div>
-      {/* TODO: Add import file */}
+
       <div className="flex items-center space-x-2">
-        {/* <CalendarDateRangePicker /> */}
         <DialogGenerateBulkPDF />
         <DataTableViewOptions table={table} />
       </div>
