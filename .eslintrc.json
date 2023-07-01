@@ -1,3 +1,14 @@
 {
-  "extends": "next/core-web-vitals"
+  "extends": "next/core-web-vitals",
+  "rules": {
+    "@next/next/no-html-link-for-pages": ["error", "packages/my-app/pages/"],
+    "react/no-unknown-property": [
+      2,
+      {
+        "ignore": [
+          "jsx"
+        ]
+      }
+    ]
+  }
 }
