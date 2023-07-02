@@ -31,7 +31,7 @@ export function PresetActions() {
     <>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="secondary">
+          <Button variant="secondary" size="sm">
             <span className="sr-only">Actions</span>
             <MoreHorizontal className="h-4 w-4" />
           </Button>
@@ -42,7 +42,7 @@ export function PresetActions() {
             className="text-red-600"
           >
             <ListRestart className="mr-2 h-4 w-4" />
-            Reset
+            Reset Data
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

@@ -22,6 +22,10 @@ import {
 
 import GenerateQRCode from '@/components/qr/QRCode';
 import { ParticipantDetailsT } from '@/types/types';
+import QRCode from 'react-qr-code';
+import html2canvas from 'html2canvas';
+import jsPDF from 'jspdf';
+import { useRef } from 'react';
 
 interface DataTableRowActionsProps<TData> {
   row: Row<TData>;
@@ -32,28 +36,30 @@ export function DataTableRowActions<TData>({
 }: DataTableRowActionsProps<TData>) {
   const participant = row.original as ParticipantDetailsT;
 
-  function handleGeneratePDF() {
-    return (
-      <>
-        <Dialog>
-          <DialogTrigger>Open</DialogTrigger>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Are you sure absolutely sure?</DialogTitle>
-              <DialogDescription>
-                This action cannot be undone. This will permanently delete your
-                account and remove your data from our servers.
-              </DialogDescription>
-            </DialogHeader>
-            <GenerateQRCode value={participant.participant} />
-            <DialogFooter>
-              <Button type="submit">Download</Button>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
-      </>
-    );
-  }
+  const qrCodeRef = useRef<HTMLDivElement>(null);
+
+  const downloadQRCodeAsPDF = () => {
+    if (qrCodeRef.current) {
+      html2canvas(qrCodeRef.current).then((canvas) => {
+        const imgData = canvas.toDataURL('image/png');
+        const pdf = new jsPDF();
+        pdf.addImage(imgData, 'PNG', 10, 10, 50, 0, 'FAST');
+        pdf.save('qrcode.pdf');
+      });
+    }
+  };
+
+  const previewQRCodeAsPDF = () => {
+    if (qrCodeRef.current) {
+      html2canvas(qrCodeRef.current).then((canvas) => {
+        const imgData = canvas.toDataURL('image/png');
+        const pdf = new jsPDF();
+        pdf.addImage(imgData, 'PNG', 10, 10, 50, 0, 'FAST');
+        const previewUrl = pdf.output('datauristring');
+        window.open(previewUrl, '_blank');
+      });
+    }
+  };
 
   return (
     <Dialog>
@@ -74,23 +80,34 @@ export function DataTableRowActions<TData>({
               Generate PDF
             </DialogTrigger>
           </DropdownMenuItem>
-          <DropdownMenuItem>
+          {/* <DropdownMenuItem>
             <Eye className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
             Preview PDF
-          </DropdownMenuItem>
+          </DropdownMenuItem> */}
         </DropdownMenuContent>
       </DropdownMenu>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Are you sure absolutely sure?</DialogTitle>
+          <DialogTitle>Generated QR code</DialogTitle>
           <DialogDescription>
-            This action cannot be undone. This will permanently delete your
-            account and remove your data from our servers.
+            This QR code can be used to check-in the participant.
           </DialogDescription>
         </DialogHeader>
-        <GenerateQRCode value={participant.participant} />
+
+        <div ref={qrCodeRef} className="h-auto w-100 max-w-64 m-0 mx-auto">
+          <QRCode
+            size={256}
+            style={{ height: 'auto', maxWidth: '100%', width: '100%' }}
+            value={participant.participant}
+            viewBox={`0 0 256 256`}
+          />
+        </div>
         <DialogFooter>
-          <Button type="submit">
+          <Button variant="secondary" size="sm" onClick={previewQRCodeAsPDF}>
+            <Eye className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
+            Preview
+          </Button>
+          <Button size="sm" onClick={downloadQRCodeAsPDF}>
             <Download className="mr-2 h-4 w-4" />
             Download
           </Button>
