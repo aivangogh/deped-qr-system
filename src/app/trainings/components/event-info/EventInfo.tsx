@@ -214,7 +214,7 @@ export function EventInfo({ data }: { data: TrainingDetailsT }) {
                     >
                       {field.value
                         ? programs.find(
-                            (program) => program.value === data.programHolder
+                            (program) => program.label === data.programHolder
                           )?.label
                         : 'Select a Department'}
                       <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
@@ -226,8 +226,8 @@ export function EventInfo({ data }: { data: TrainingDetailsT }) {
                     <CommandGroup>
                       {programs.map((program) => (
                         <CommandItem
-                          value={program.value}
-                          key={program.value}
+                          value={program.label}
+                          key={program.label}
                           onSelect={(value) => {
                             form.setValue('programHolder', value);
                           }}
@@ -235,7 +235,7 @@ export function EventInfo({ data }: { data: TrainingDetailsT }) {
                           <Check
                             className={cn(
                               'mr-2 h-4 w-4',
-                              program.value === data.programHolder
+                              program.label === data.programHolder
                                 ? 'opacity-100'
                                 : 'opacity-0'
                             )}

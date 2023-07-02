@@ -1,6 +1,6 @@
 'use client';
 
-import { ListRestart, MoreHorizontal } from 'lucide-react';
+import { Download, ListRestart, MoreHorizontal } from 'lucide-react';
 
 import {
   AlertDialog,
@@ -16,16 +16,20 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuTrigger
+  DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { toast } from '@/components/ui/use-toast';
 import useTrainingInfoStore from '@/store/useTrainingInfoStore';
 import { useState } from 'react';
+import { Separator } from '@/components/ui/separator';
+import Link from 'next/link';
+import { Link as LinkIcon } from 'lucide-react';
 
 export function PresetActions() {
   const [open, setIsOpen] = useState<boolean>(false);
   const [showDeleteDialog, setShowDeleteDialog] = useState<boolean>(false);
   const { resetInfo } = useTrainingInfoStore();
+  const [showDownloadDialog, setShowDownloadDialog] = useState<boolean>(false);
 
   return (
     <>
@@ -37,6 +41,11 @@ export function PresetActions() {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
+          <DropdownMenuItem onSelect={() => setShowDownloadDialog(true)}>
+            <Download className="mr-2 h-4 w-4" />
+            Download Template
+          </DropdownMenuItem>
+          <Separator />
           <DropdownMenuItem
             onSelect={() => setShowDeleteDialog(true)}
             className="text-red-600"
@@ -68,6 +77,38 @@ export function PresetActions() {
               }}
             >
               Reset
+            </Button>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+      <AlertDialog
+        open={showDownloadDialog}
+        onOpenChange={setShowDownloadDialog}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>
+              You will be redirected to the link.
+            </AlertDialogTitle>
+            <AlertDialogDescription>
+              {/* Description edirection to the link to download the excel template */}
+              Clicking on the button below will redirect you to the link to
+              download the excel template.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <Button
+              onClick={() => {
+                setShowDownloadDialog(false);
+              }}
+            >
+              <Link
+                href="https://docs.google.com/spreadsheets/d/1vZsa6pFv6oCnsTnOoZp_Pnft1l8pyR51/edit?usp=drive_link&ouid=111981708478442355980&rtpof=true&sd=true"
+                target="_blank"
+              >
+                Open Link
+              </Link>
             </Button>
           </AlertDialogFooter>
         </AlertDialogContent>

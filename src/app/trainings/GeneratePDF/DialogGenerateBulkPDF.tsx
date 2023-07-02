@@ -17,7 +17,7 @@ export default function DialogGenerateBulkPDF() {
     <>
       <AlertDialog>
         <AlertDialogTrigger asChild>
-          <Button variant="secondary" size="sm" className="ml-auto hidden h-8 lg:flex">
+          <Button variant="secondary" size="sm" className="ml-auto h-8">
             <FileText className="mr-2 h-4 w-4" />
             Generate Certificates
           </Button>
@@ -31,7 +31,6 @@ export default function DialogGenerateBulkPDF() {
           </AlertDialogHeader>
 
           <AlertDialogFooter>
-            
             <AlertDialogCancel>Cancel</AlertDialogCancel>
             <AlertDialogAction>Generate</AlertDialogAction>
           </AlertDialogFooter>
