@@ -44,7 +44,7 @@ export function DataTableRowActions<TData>({
         const imgData = canvas.toDataURL('image/png');
         const pdf = new jsPDF();
         pdf.addImage(imgData, 'PNG', 10, 10, 50, 0, 'FAST');
-        pdf.save('qrcode.pdf');
+        pdf.save(`${participant.participant}.pdf`);
       });
     }
   };
@@ -55,8 +55,10 @@ export function DataTableRowActions<TData>({
         const imgData = canvas.toDataURL('image/png');
         const pdf = new jsPDF();
         pdf.addImage(imgData, 'PNG', 10, 10, 50, 0, 'FAST');
-        const previewUrl = pdf.output('datauristring');
-        window.open(previewUrl, '_blank');
+        setTimeout(() => {
+          const previewUrl = pdf.output('datauristring');
+          window.open(previewUrl, '_blank');
+        }, 500);
       });
     }
   };
