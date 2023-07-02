@@ -1,6 +1,8 @@
+
 import Image from 'next/image';
 import DepedLogo from '../../../public/images/deped-logo.png';
 import { DialogFileUpload } from './FileUploader/dialog-file-upload';
+import { PresetActions } from './PresetActions';
 
 export default function Header() {
   return (
@@ -14,8 +16,9 @@ export default function Header() {
             </h2>
           </div>
         </div>
-        <div className="flex items-center">
+        <div className="flex items-center space-x-2">
           <DialogFileUpload />
+          <PresetActions />
         </div>
       </div>
     </>

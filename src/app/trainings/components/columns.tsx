@@ -31,15 +31,15 @@ export const columns: ColumnDef<ParticipantDetailsT>[] = [
     enableSorting: false,
     enableHiding: false,
   },
-  {
-    accessorKey: 'id',
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="ID" />
-    ),
-    cell: ({ row }) => <div className="w-[80px] text-sm font-medium">{row.getValue('id')}</div>,
-    enableSorting: false,
-    enableHiding: false,
-  },
+  // {
+  //   accessorKey: 'id',
+  //   header: ({ column }) => (
+  //     <DataTableColumnHeader column={column} title="ID" />
+  //   ),
+  //   cell: ({ row }) => <div className="w-[80px] text-sm font-medium">{row.getValue('id')}</div>,
+  //   enableSorting: false,
+  //   enableHiding: false,
+  // },
   {
     accessorKey: 'participant',
     header: ({ column }) => (
@@ -108,7 +108,7 @@ export const columns: ColumnDef<ParticipantDetailsT>[] = [
     cell: ({ row }) => {
       return (
         <div className="flex space-x-2">
-          <span className="max-w-[100px] truncate font-medium">
+          <span className="max-w-[100px] font-medium">
             {row.getValue('email')}
           </span>
         </div>

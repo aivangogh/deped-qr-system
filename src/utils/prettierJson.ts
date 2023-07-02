@@ -1,7 +1,11 @@
 // Purpose: Prettify the JSON data extracted from the spreadsheet.
 //          Removing null and empty array after parsing the data.
 
-import { TrainingDetailsT, TrainingInfoT } from '@/types/types';
+import {
+  ParticipantDetailsT,
+  TrainingDetailsT,
+  TrainingInfoT,
+} from '@/types/types';
 
 // Function to convert Excel text date to JS Date
 function excelTextToDate(excelTextDate: any): Date {
@@ -43,7 +47,7 @@ export default function prettierJson(parsedData: any) {
   };
 
   // Extract the participant details
-  const participants = parsedData
+  const participants: ParticipantDetailsT[] = parsedData
     .slice(7) // Starting from the row with participant data
     .map((row: any) => ({
       participant: row[columnNames.participants],
@@ -56,7 +60,7 @@ export default function prettierJson(parsedData: any) {
   // Format the data object
   const formattedData: TrainingInfoT = {
     training: trainingDetails,
-    participants: participants.filter((p: any) => p.name), // Filter out empty rows
+    participants: participants, // Filter out empty rows
   };
 
   return formattedData;

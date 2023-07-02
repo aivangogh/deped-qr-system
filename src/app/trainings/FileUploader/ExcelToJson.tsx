@@ -9,6 +9,7 @@ interface ExcelToJsonProps {
 const ExcelToJson: React.FC<ExcelToJsonProps> = ({ onFileUpload }) => {
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
+    console.log('Selected file:', file);
     if (file) {
       onFileUpload(file);
     }

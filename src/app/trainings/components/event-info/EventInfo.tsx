@@ -34,8 +34,9 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 import { toast } from '@/components/ui/use-toast';
+import { TrainingDetailsT } from '@/types/types';
 
-const languages = [
+const programs = [
   { label: 'CID', value: 'cid' },
   { label: 'OSDS', value: 'osds' },
   { label: 'SGOD', value: 'sgod' },
@@ -67,7 +68,7 @@ const defaultValues: Partial<AccountFormValues> = {
   // dob: new Date("2023-01-23"),
 };
 
-export function EventInfo() {
+export function EventInfo({ data }: { data: TrainingDetailsT }) {
   const [date, setDate] = React.useState<DateRange | undefined>({
     from: new Date(2023, 0, 20),
     to: addDays(new Date(2023, 0, 20), 20),
@@ -89,20 +90,29 @@ export function EventInfo() {
     });
   }
 
+  console.log('Event Info');
+  console.log(data);
+
   return (
     <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className="flex justify-between items-center w-full gap-8"
-      >
+      <div className="w-full flex items-center space-x-2">
+        <FormLabel className="font-medium">Training ID:</FormLabel>
+        <FormLabel className="font-medium">{data.trainingId}</FormLabel>
+      </div>
+      <div className="flex justify-between items-center w-full gap-8 mt-0">
         <FormField
           control={form.control}
           name="titleOfTraining"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Title of training</FormLabel>
+              <FormLabel>Title of training:</FormLabel>
               <FormControl>
-                <Input disabled placeholder="Title of training" {...field} />
+                <Input
+                  disabled
+                  placeholder="Title of training"
+                  {...field}
+                  value={data.title}
+                />
               </FormControl>
               <FormDescription>
                 This is the name that will be displayed on your profile and in
@@ -117,9 +127,14 @@ export function EventInfo() {
           name="numberOfHours"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Number of hours</FormLabel>
+              <FormLabel>Number of hours:</FormLabel>
               <FormControl>
-                <Input disabled placeholder="Number of hours" {...field} />
+                <Input
+                  disabled
+                  placeholder="Number of hours"
+                  {...field}
+                  value={data.hours}
+                />
               </FormControl>
               <FormDescription>
                 This is the name that will be displayed on your profile and in
@@ -185,7 +200,7 @@ export function EventInfo() {
           name="programHolder"
           render={({ field }) => (
             <FormItem className="flex flex-col">
-              <FormLabel>Program Holder</FormLabel>
+              <FormLabel>Program Holder:</FormLabel>
               <Popover>
                 <PopoverTrigger asChild>
                   <FormControl>
@@ -198,8 +213,8 @@ export function EventInfo() {
                       )}
                     >
                       {field.value
-                        ? languages.find(
-                            (language) => language.value === field.value
+                        ? programs.find(
+                            (program) => program.value === data.programHolder
                           )?.label
                         : 'Select a Department'}
                       <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
@@ -209,10 +224,10 @@ export function EventInfo() {
                 <PopoverContent className="w-[200px] p-0">
                   <Command>
                     <CommandGroup>
-                      {languages.map((language) => (
+                      {programs.map((program) => (
                         <CommandItem
-                          value={language.value}
-                          key={language.value}
+                          value={program.value}
+                          key={program.value}
                           onSelect={(value) => {
                             form.setValue('programHolder', value);
                           }}
@@ -220,12 +235,12 @@ export function EventInfo() {
                           <Check
                             className={cn(
                               'mr-2 h-4 w-4',
-                              language.value === field.value
+                              program.value === data.programHolder
                                 ? 'opacity-100'
                                 : 'opacity-0'
                             )}
                           />
-                          {language.label}
+                          {program.label}
                         </CommandItem>
                       ))}
                     </CommandGroup>
@@ -240,7 +255,7 @@ export function EventInfo() {
           )}
         />
         {/* <Button type="submit">Update account</Button> */}
-      </form>
+      </div>
     </Form>
   );
 }

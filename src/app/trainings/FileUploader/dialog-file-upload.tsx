@@ -17,36 +17,32 @@ import ExcelToJson from './ExcelToJson';
 import { parseExcelToJson } from '../../../utils/parseExcelToJson';
 import prettierJson from '@/utils/prettierJson';
 import useTrainingInfoStore from '@/store/useTrainingInfoStore';
-import useParticipantsStore from '@/store/useParticipantsStore';
 import { useState } from 'react';
 import { TrainingInfoT } from '@/types/types';
 
 export function DialogFileUpload() {
+  const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const [formattedJsonData, setFormattedJsonData] =
     useState<TrainingInfoT | null>(null);
 
-  const setTrainingInfo = useTrainingInfoStore(
-    (state) => state.setTrainingInfo
-  );
-  const setParticipants = useParticipantsStore(
-    (state) => state.setParticipants
-  );
+  const { setTrainingInfo, setParticipants } = useTrainingInfoStore();
 
-  const handleFileUpload = async (file: File) => {
+  const handleSetTrainingInfo = async () => {
     try {
-      const data = await parseExcelToJson(file);
-      setFormattedJsonData(prettierJson(data));
+      const data = await parseExcelToJson(uploadedFile!);
+      const parsedData = prettierJson(data);
+
+      console.log(parsedData);
+
+      setTrainingInfo(parsedData.training);
+      setParticipants(parsedData.participants);
     } catch (error) {
       console.error('Error parsing Excel:', error);
     }
   };
 
-  const handleSetTrainingInfo = () => {
-    // setTrainingInfo(formattedJsonData?.training!);
-    setParticipants(formattedJsonData?.participants!);
-
-    console.log(formattedJsonData?.training!);
-    console.log(formattedJsonData?.participants!);
+  const handleFileUpload = (file: File) => {
+    setUploadedFile(file);
   };
 
   return (
@@ -71,7 +67,7 @@ export function DialogFileUpload() {
 
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction onClick={() => handleSetTrainingInfo()}>
+          <AlertDialogAction onClick={handleSetTrainingInfo}>
             Import File
           </AlertDialogAction>
         </AlertDialogFooter>
