@@ -1,52 +1,12 @@
 'use client';
 
+import { addDays } from 'date-fns';
 import * as React from 'react';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { addDays, format } from 'date-fns';
 import { DateRange } from 'react-day-picker';
-import { CalendarIcon, Check, ChevronsUpDown } from 'lucide-react';
-import { useForm } from 'react-hook-form';
-import * as z from 'zod';
 
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
-
-import { cn } from '@/lib/utils';
-import { Button } from '@/components/ui/button';
-import { Calendar } from '@/components/ui/calendar';
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-} from '@/components/ui/command';
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover';
-import { toast } from '@/components/ui/use-toast';
-import { TrainingDetailsT } from '@/types/types';
-import { programs } from '../../data/programs';
 import { Label } from '@/components/ui/label';
+import { TrainingDetailsT } from '@/types/types';
 import { CalendarDateRangePicker } from './date-range-picker';
 
 export function EventDetails({ data }: { data: TrainingDetailsT }) {
@@ -61,21 +21,11 @@ export function EventDetails({ data }: { data: TrainingDetailsT }) {
         <div className="space-y-4">
           <div className="grid w-full max-w-sm items-center gap-1.5">
             <Label htmlFor="trainingId">Training ID:</Label>
-            <Input
-              type="text"
-              id="trainingId"
-              placeholder="2023-#####"
-              value={data.trainingId}
-            />
+            <Input type="text" id="trainingId" value={data.trainingId} />
           </div>
           <div className="grid w-full max-w-sm items-center gap-1.5">
             <Label htmlFor="titleOfTraining">Title of Training:</Label>
-            <Input
-              type="text"
-              id="titleOfTraining"
-              placeholder="2023-#####"
-              value={data.title}
-            />
+            <Input type="text" id="titleOfTraining" value={data.title} />
           </div>
         </div>
         <div className="space-y-4">
@@ -93,21 +43,14 @@ export function EventDetails({ data }: { data: TrainingDetailsT }) {
             />
           </div>
         </div>
-        <div>
+        <div className="space-y-4">
           <div className="grid w-full max-w-sm items-center gap-1.5">
-            <Label htmlFor="numberOfHours">Program Holder:</Label>
-            <Select value={data.programHolder}>
-              <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="Select a Program" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectGroup>
-                  <SelectItem value="CID">CID</SelectItem>
-                  <SelectItem value="OSDS">OSDS</SelectItem>
-                  <SelectItem value="SGOD">SGOD</SelectItem>
-                </SelectGroup>
-              </SelectContent>
-            </Select>
+            <Label htmlFor="programHolder">Program Holder:</Label>
+            <Input type="text" id="programHolder" />
+          </div>
+          <div className="grid w-full max-w-sm items-center gap-1.5">
+            <Label htmlFor="nameOfProgramHolder">Name of Program Holder:</Label>
+            <Input type="text" id="nameOfProgramHolder" />
           </div>
         </div>
       </div>

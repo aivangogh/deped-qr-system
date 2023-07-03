@@ -20,12 +20,11 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 
-import GenerateQRCode from '@/components/qr/QRCode';
 import { ParticipantDetailsT } from '@/types/types';
-import QRCode from 'react-qr-code';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 import { useRef } from 'react';
+import QRCode from 'react-qr-code';
 
 interface DataTableRowActionsProps<TData> {
   row: Row<TData>;

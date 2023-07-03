@@ -3,6 +3,7 @@
 
 import {
   ParticipantDetailsT,
+  SpeakerDetailsT,
   TrainingDetailsT,
   TrainingInfoT,
 } from '@/types/types';
@@ -26,7 +27,7 @@ export default function prettierJson(parsedData: any) {
     dateStart: 1,
     dateEnd: 2,
     hours: 3,
-    programHolder: 4,
+    speaker: 4,
     participants: 0,
     position: 1,
     school: 2,
@@ -36,20 +37,33 @@ export default function prettierJson(parsedData: any) {
 
   // Extract the training details
   const trainingDetails: TrainingDetailsT = {
-    trainingId: '2023-00001',
+    trainingId: 'T00001',
     title: parsedData[2][columnNames.title],
     date: {
       start: excelTextToDate(parsedData[2][columnNames.dateStart]),
       end: excelTextToDate(parsedData[2][columnNames.dateEnd]),
     },
     hours: parsedData[2][columnNames.hours],
-    programHolder: parsedData[2][columnNames.programHolder],
+    speaker: parsedData[2][columnNames.speaker],
   };
+
+  // Extract the speaker details
+  let speakerDetails: SpeakerDetailsT[] = [];
+  const speakers = parsedData[2][columnNames.speaker];
+  if (Array.isArray(speakers)) {
+    speakerDetails = speakers.map((speaker: any) => ({
+      speakerId: 'T00001S1',
+      speaker,
+    }));
+  } else if (typeof speakers === 'string') {
+    speakerDetails = [{ speakerId: 'T00001S1', speaker: speakers }];
+  }
 
   // Extract the participant details
   const participants: ParticipantDetailsT[] = parsedData
     .slice(7) // Starting from the row with participant data
-    .map((row: any) => ({
+    .map((row: Array<ParticipantDetailsT[]>) => ({
+      participantId: `T00001P${parsedData.indexOf(row) + 1}`,
       participant: row[columnNames.participants],
       position: row[columnNames.position],
       school: row[columnNames.school],
@@ -60,7 +74,8 @@ export default function prettierJson(parsedData: any) {
   // Format the data object
   const formattedData: TrainingInfoT = {
     training: trainingDetails,
-    participants: participants, // Filter out empty rows
+    speaker: speakerDetails, // Speaker is an array
+    participants, // Filter out empty rows
   };
 
   return formattedData;

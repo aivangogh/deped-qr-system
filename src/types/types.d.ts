@@ -8,10 +8,18 @@ export type TrainingDetailsT = {
     end: Date;
   };
   hours: number;
-  programHolder: string;
+  speaker: string;
+  programHolder?: string;
+  nameOfProgramHolder?: string;
+};
+
+export type SpeakerDetailsT = {
+  speakerId?: string;
+  speaker: string;
 };
 
 export type ParticipantDetailsT = {
+  participantId: string;
   participant: string;
   position: string;
   school: string;
@@ -21,5 +29,6 @@ export type ParticipantDetailsT = {
 
 export type TrainingInfoT = {
   training: TrainingDetails;
+  speaker: SpeakerDetailsT[];
   participants: ParticipantDetails[];
 };

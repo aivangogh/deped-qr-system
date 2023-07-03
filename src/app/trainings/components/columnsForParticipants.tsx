@@ -9,7 +9,7 @@ import { DataTableColumnHeader } from './data-table-column-header';
 import { DataTableRowActions } from './data-table-row-actions';
 import { ParticipantDetailsT, TrainingDetailsT } from '@/types/types';
 
-export const columns: ColumnDef<ParticipantDetailsT>[] = [
+export const columnsForParticipants: ColumnDef<ParticipantDetailsT>[] = [
   {
     id: 'select',
     header: ({ table }) => (
@@ -31,15 +31,19 @@ export const columns: ColumnDef<ParticipantDetailsT>[] = [
     enableSorting: false,
     enableHiding: false,
   },
-  // {
-  //   accessorKey: 'id',
-  //   header: ({ column }) => (
-  //     <DataTableColumnHeader column={column} title="ID" />
-  //   ),
-  //   cell: ({ row }) => <div className="w-[80px] text-sm font-medium">{row.getValue('id')}</div>,
-  //   enableSorting: false,
-  //   enableHiding: false,
-  // },
+  {
+    accessorKey: 'participantId',
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Participant ID" />
+    ),
+    cell: ({ row }) => (
+      <div className="w-[80px] font-medium">
+        {row.getValue('participantId')}
+      </div>
+    ),
+    enableSorting: false,
+    enableHiding: false,
+  },
   {
     accessorKey: 'participant',
     header: ({ column }) => (

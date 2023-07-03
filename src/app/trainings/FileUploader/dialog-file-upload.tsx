@@ -1,6 +1,5 @@
 'use client';
 
-import { Button } from '@/components/ui/button';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -12,20 +11,22 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
-import { FileSpreadsheet } from 'lucide-react';
-import ExcelToJson from './ExcelToJson';
-import { parseExcelToJson } from '../../../utils/parseExcelToJson';
-import prettierJson from '@/utils/prettierJson';
+import { Button } from '@/components/ui/button';
 import useTrainingInfoStore from '@/store/useTrainingInfoStore';
-import { useState } from 'react';
 import { TrainingInfoT } from '@/types/types';
+import prettierJson from '@/utils/prettierJson';
+import { FileSpreadsheet } from 'lucide-react';
+import { useState } from 'react';
+import { parseExcelToJson } from '../../../utils/parseExcelToJson';
+import ExcelToJson from './ExcelToJson';
 
 export function DialogFileUpload() {
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const [formattedJsonData, setFormattedJsonData] =
     useState<TrainingInfoT | null>(null);
 
-  const { setTrainingInfo, setParticipants } = useTrainingInfoStore();
+  const { setTrainingInfo, setParticipants, setSpeakers } =
+    useTrainingInfoStore();
 
   const handleSetTrainingInfo = async () => {
     try {
@@ -35,6 +36,7 @@ export function DialogFileUpload() {
       console.log(parsedData);
 
       setTrainingInfo(parsedData.training);
+      setSpeakers(parsedData.speaker);
       setParticipants(parsedData.participants);
     } catch (error) {
       console.error('Error parsing Excel:', error);
