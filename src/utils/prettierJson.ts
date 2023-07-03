@@ -63,7 +63,7 @@ export default function prettierJson(parsedData: any) {
   const participants: ParticipantDetailsT[] = parsedData
     .slice(7) // Starting from the row with participant data
     .map((row: Array<ParticipantDetailsT[]>) => ({
-      participantId: `T00001P${parsedData.indexOf(row) + 1}`,
+      participantId: `T00001P1`,
       participant: row[columnNames.participants],
       position: row[columnNames.position],
       school: row[columnNames.school],

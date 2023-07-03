@@ -74,12 +74,18 @@ dependencies:
   date-fns:
     specifier: ^2.30.0
     version: 2.30.0
+  docxtemplater:
+    specifier: ^3.37.11
+    version: 3.37.11
   eslint:
     specifier: 8.43.0
     version: 8.43.0
   eslint-config-next:
     specifier: ^12.0.4
     version: 12.0.4(eslint@8.43.0)(next@13.4.7)(typescript@5.1.6)
+  file-saver:
+    specifier: ^2.0.5
+    version: 2.0.5
   html2canvas:
     specifier: ^1.4.1
     version: 1.4.1
@@ -1947,6 +1953,11 @@ packages:
       eslint-visitor-keys: 2.1.0
     dev: false
 
+  /@xmldom/xmldom@0.8.8:
+    resolution: {integrity: sha512-0LNz4EY8B/8xXY86wMrQ4tz6zEHZv9ehFMJPm8u2gq5lQ71cfRKdaKyxfJAx5aUoyzx0qzgURblTisPGgz3d+Q==}
+    engines: {node: '>=10.0.0'}
+    dev: false
+
   /acorn-jsx@5.3.2(acorn@8.9.0):
     resolution: {integrity: sha512-rq9s+JNhf0IChjtDXxllJ7g41oZk5SlXtp0LHwyA5cejwn7vKmKp4pPri6YEePv2PU65sAsegbXtIinmDFDXgQ==}
     peerDependencies:
@@ -2414,6 +2425,13 @@ packages:
       esutils: 2.0.3
     dev: false
 
+  /docxtemplater@3.37.11:
+    resolution: {integrity: sha512-nGrC0hVBLmBWiWVhczdjbP8bK9569Um3NlRanaum/o9Nib9Run9LvMvIYR/KWvvzrHjCa7X8dXwNYr0aB4KjbA==}
+    engines: {node: '>=0.10'}
+    dependencies:
+      '@xmldom/xmldom': 0.8.8
+    dev: false
+
   /dompurify@2.4.5:
     resolution: {integrity: sha512-jggCCd+8Iqp4Tsz0nIvpcb22InKEBrGz5dw3EQJMs8HPJDsKbFIO3STYtAvCfDx26Muevn1MHVI0XxjgFfmiSA==}
     requiresBuild: true
@@ -2815,6 +2833,10 @@ packages:
     engines: {node: ^10.12.0 || >=12.0.0}
     dependencies:
       flat-cache: 3.0.4
+    dev: false
+
+  /file-saver@2.0.5:
+    resolution: {integrity: sha512-P9bmyZ3h/PRG+Nzga+rbdI4OEpNDzAVyy74uVO9ATgzLK6VtAsYybF/+TOCvrc0MO793d6+42lLyZTw7/ArVzA==}
     dev: false
 
   /fill-range@7.0.1:

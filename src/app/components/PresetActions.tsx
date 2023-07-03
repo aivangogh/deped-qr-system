@@ -1,6 +1,7 @@
 'use client';
 
-import { Download, ListRestart, MoreHorizontal } from 'lucide-react';
+import { Download, ListRestart, MoreHorizontal, Settings } from 'lucide-react';
+import { routes } from '../routes';
 
 import {
   AlertDialog,
@@ -16,6 +17,7 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { toast } from '@/components/ui/use-toast';
@@ -24,12 +26,14 @@ import { useState } from 'react';
 import { Separator } from '@/components/ui/separator';
 import Link from 'next/link';
 import { Link as LinkIcon } from 'lucide-react';
+import useSettingsStore from '@/store/useSettingsStore';
 
 export function PresetActions() {
   const [open, setIsOpen] = useState<boolean>(false);
   const [showDeleteDialog, setShowDeleteDialog] = useState<boolean>(false);
   const { resetInfo } = useTrainingInfoStore();
   const [showDownloadDialog, setShowDownloadDialog] = useState<boolean>(false);
+  const { excelUrl } = useSettingsStore()
 
   return (
     <>
@@ -45,7 +49,13 @@ export function PresetActions() {
             <Download className="mr-2 h-4 w-4" />
             Download Template
           </DropdownMenuItem>
-          <Separator />
+          <DropdownMenuItem>
+            <Link href={routes.settings.path} passHref className="flex mr-2">
+              <Settings className="mr-2 h-4 w-4" />
+              Settings
+            </Link>
+          </DropdownMenuItem>
+          <DropdownMenuSeparator />
           <DropdownMenuItem
             onSelect={() => setShowDeleteDialog(true)}
             className="text-red-600"
@@ -103,10 +113,7 @@ export function PresetActions() {
                 setShowDownloadDialog(false);
               }}
             >
-              <Link
-                href="https://docs.google.com/spreadsheets/d/1vZsa6pFv6oCnsTnOoZp_Pnft1l8pyR51/edit?usp=drive_link&ouid=111981708478442355980&rtpof=true&sd=true"
-                target="_blank"
-              >
+              <Link href={excelUrl} target="_blank">
                 Open Link
               </Link>
             </Button>
