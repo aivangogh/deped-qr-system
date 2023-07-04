@@ -21,11 +21,23 @@ export function EventDetails({ data }: { data: TrainingDetailsT }) {
         <div className="space-y-4">
           <div className="grid w-full max-w-sm items-center gap-1.5">
             <Label htmlFor="trainingId">Training ID:</Label>
-            <Input type="text" id="trainingId" value={data.trainingId} />
+            <Input
+              type="text"
+              id="trainingId"
+              value={data.trainingId}
+              readOnly
+              className="cursor-default"
+            />
           </div>
           <div className="grid w-full max-w-sm items-center gap-1.5">
             <Label htmlFor="titleOfTraining">Title of Training:</Label>
-            <Input type="text" id="titleOfTraining" value={data.title} />
+            <Input
+              type="text"
+              id="titleOfTraining"
+              value={data.title}
+              readOnly
+              className="cursor-default"
+            />
           </div>
         </div>
         <div className="space-y-4">
@@ -40,6 +52,8 @@ export function EventDetails({ data }: { data: TrainingDetailsT }) {
               id="numberOfHours"
               placeholder="24"
               value={data.hours}
+              readOnly
+              className="cursor-default"
             />
           </div>
         </div>

@@ -25,6 +25,7 @@ import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 import { useRef } from 'react';
 import QRCode from 'react-qr-code';
+import DocumentGenerator from '@/components/DocumentGenerator';
 
 interface DataTableRowActionsProps<TData> {
   row: Row<TData>;
@@ -108,10 +109,11 @@ export function DataTableRowActions<TData>({
             <Eye className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
             Preview
           </Button>
-          <Button size="sm" onClick={downloadQRCodeAsPDF}>
+          {/* <Button size="sm" onClick={downloadQRCodeAsPDF}>
             <Download className="mr-2 h-4 w-4" />
             Download
-          </Button>
+          </Button> */}
+          <DocumentGenerator data={participant} />
         </DialogFooter>
       </DialogContent>
     </Dialog>

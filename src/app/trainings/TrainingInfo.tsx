@@ -5,7 +5,7 @@ import { columnsForParticipants } from './components/columnsForParticipants';
 import { columnsForSpeakers } from './components/columnsForSpeakers';
 import { DataTableForParticipants } from './components/data-table-for-participants';
 import { DataTableForSpeakers } from './components/data-table-for-speakers';
-import { EventDetails } from './components/event-info/EventDetails';
+import { EventDetails } from './event-info/EventDetails';
 import { Separator } from '@/components/ui/separator';
 
 export default function TrainingInfoPage() {
