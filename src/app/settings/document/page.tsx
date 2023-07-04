@@ -1,7 +1,7 @@
 import { Separator } from '@/components/ui/separator';
-import { DocumentTemplate } from './document/DocumentTemplate';
+import { DocumentTemplate } from './DocumentTemplate';
 
-export default function SettingsPage() {
+export default function SettingsExcelTemplatePage() {
   return (
     <div className="space-y-6">
       <div>

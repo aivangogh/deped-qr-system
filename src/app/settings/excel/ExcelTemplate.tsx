@@ -17,19 +17,41 @@ import {
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/components/ui/use-toast';
 import useSettingsStore from '@/store/useSettingsStore';
+import { createGoogleDriveDirectDownloadLink } from '@/utils/createDirectLink';
+import { Label } from '@/components/ui/label';
+import { useState } from 'react';
 
 const profileFormSchema = z.object({
-  excelUrl: z.string().url(),
+  excel: z.object({
+    url: z.string().url(),
+    directUrl: z.string().url(),
+  }),
 });
 
 type ProfileFormValues = z.infer<typeof profileFormSchema>;
 
 export function ExcelTemplate() {
+  const [copyUrl, setCopyUrl] = useState<string>('');
   const { toast } = useToast();
-  const { excelUrl, setExcelTemplate } = useSettingsStore();
+  const { excelUrl, excelDirectUrl, setExcelUrl, setExcelDirectUrl } =
+    useSettingsStore();
+
+  const linkHandler = (e: any) => {
+    setCopyUrl(e.target.value);
+  };
+
+  const copy = async () => {
+    await navigator.clipboard.writeText(excelDirectUrl);
+    toast({
+      description: 'Copied to clipboard.',
+    });
+  };
 
   const defaultValues = {
-    excelUrl,
+    excel: {
+      url: excelUrl,
+      directUrl: excelDirectUrl,
+    },
   };
 
   const form = useForm<ProfileFormValues>({
@@ -44,7 +66,12 @@ export function ExcelTemplate() {
   // });
 
   function onSubmit(data: ProfileFormValues) {
-    setExcelTemplate(data.excelUrl);
+    setExcelUrl(data.excel.url);
+    setExcelDirectUrl(createGoogleDriveDirectDownloadLink(data.excel.url));
+
+    console.log(data.excel.url);
+    console.log(createGoogleDriveDirectDownloadLink(data.excel.url));
+
     toast({
       description: 'Excel template updated.',
     });
@@ -56,21 +83,39 @@ export function ExcelTemplate() {
         <div>
           <FormField
             control={form.control}
-            name="excelUrl"
+            name="excel.url"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>URL</FormLabel>
+                <FormLabel>Drive file link for Excel Template</FormLabel>
                 <FormDescription></FormDescription>
                 <FormControl>
                   <Input {...field} />
                 </FormControl>
-                <FormDescription>
+                <div className="text-xs text-muted-foreground">
                   The URL of the Excel template.
-                </FormDescription>
+                </div>
                 <FormMessage />
               </FormItem>
             )}
           />
+        </div>
+        <div className="space-y-2">
+          <Label>Direct URL</Label>
+          <div className="flex space-x-2">
+            <Input value={excelDirectUrl} readOnly onChange={linkHandler} />
+            <Button
+              variant="secondary"
+              className="shrink-0"
+              onClick={copy}
+              disabled={!excelDirectUrl}
+            >
+              Copy Link
+            </Button>
+          </div>
+          <div className="text-xs text-muted-foreground">
+            The direct URL of the Excel template. This is the URL that will be
+            used to download the Excel template.
+          </div>
         </div>
         <Button type="submit">Update template</Button>
       </form>

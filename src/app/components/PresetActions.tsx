@@ -21,19 +21,17 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { toast } from '@/components/ui/use-toast';
-import useTrainingInfoStore from '@/store/useTrainingInfoStore';
-import { useState } from 'react';
-import { Separator } from '@/components/ui/separator';
-import Link from 'next/link';
-import { Link as LinkIcon } from 'lucide-react';
 import useSettingsStore from '@/store/useSettingsStore';
+import useTrainingInfoStore from '@/store/useTrainingInfoStore';
+import Link from 'next/link';
+import { useState } from 'react';
 
 export function PresetActions() {
   const [open, setIsOpen] = useState<boolean>(false);
   const [showDeleteDialog, setShowDeleteDialog] = useState<boolean>(false);
   const { resetInfo } = useTrainingInfoStore();
   const [showDownloadDialog, setShowDownloadDialog] = useState<boolean>(false);
-  const { excelUrl } = useSettingsStore()
+  const { excelDirectUrl } = useSettingsStore()
 
   return (
     <>
@@ -113,7 +111,7 @@ export function PresetActions() {
                 setShowDownloadDialog(false);
               }}
             >
-              <Link href={excelUrl} target="_blank">
+              <Link href={excelDirectUrl} target="_blank">
                 Open Link
               </Link>
             </Button>
