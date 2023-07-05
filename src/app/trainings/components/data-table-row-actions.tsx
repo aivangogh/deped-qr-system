@@ -114,6 +114,7 @@ export function DataTableRowActions<TData>({
             Download
           </Button> */}
           <DocumentGenerator data={participant} />
+          {/* <DocumentGenerator  /> */}
         </DialogFooter>
       </DialogContent>
     </Dialog>

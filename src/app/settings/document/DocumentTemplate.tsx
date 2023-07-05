@@ -14,6 +14,17 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/components/ui/use-toast';
 import useSettingsStore from '@/store/useSettingsStore';
@@ -21,6 +32,11 @@ import { createGoogleDriveDirectDownloadLink } from '@/utils/createDirectLink';
 import { Label } from '@/components/ui/label';
 import { useState } from 'react';
 import { Separator } from '@/components/ui/separator';
+
+import { useUploadThing } from '@/utils/uploadthing';
+import { UploadButton } from '@uploadthing/react';
+import { FileUploadButton } from '@/app/components/FileUploader/uploader-button';
+import { FileSpreadsheet, Upload } from 'lucide-react';
 
 const profileFormSchema = z.object({
   participants: z.object({
@@ -117,8 +133,52 @@ export function DocumentTemplate() {
     });
   }
 
+  const { startUpload } = useUploadThing('blobUploader', {
+    onClientUploadComplete: () => {
+      alert('uploaded successfully!');
+    },
+    onUploadError: () => {
+      alert('error occurred while uploading');
+    },
+  });
+
   return (
     <>
+      <div>
+        <AlertDialog>
+          <AlertDialogTrigger asChild>
+            <Button size="sm" className="ml-auto h-8">
+              <Upload className="mr-2 h-4 w-4" />
+              Upload Template
+            </Button>
+          </AlertDialogTrigger>
+          <AlertDialogContent className="sm:max-w-[425px]">
+            <AlertDialogHeader>
+              <AlertDialogTitle>Upload Certificate Template</AlertDialogTitle>
+              <AlertDialogDescription>
+                Upload the template for the certificates.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+
+            <div className="py-4">
+              <FileUploadButton />
+            </div>
+
+            <AlertDialogFooter>
+              <AlertDialogCancel>Cancel</AlertDialogCancel>
+              <AlertDialogAction>OK</AlertDialogAction>
+            </AlertDialogFooter>
+
+            {/* {jsonData && (
+          <div>
+            <h2>Parsed JSON:</h2>
+            <pre>{JSON.stringify(jsonData, null, 2)}</pre>
+          </div>
+        )} */}
+          </AlertDialogContent>
+        </AlertDialog>
+      </div>
+
       <Form {...form}>
         <div className="space-y-0">
           <h3 className="text-lg font-medium">Certificates for Participants</h3>
