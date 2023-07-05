@@ -15,8 +15,8 @@ const DocumentGenerator = ({ data }: { data: ParticipantDetailsT }) => {
         headers: {
           'Content-Type':
             'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+          mode: 'cors',
         },
-        mode: 'cors',
       });
       const templateFile = await response.blob();
 

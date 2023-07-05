@@ -48,6 +48,7 @@ const useTrainingInfoStore = create<TrainingInfoT>()(
         set({
           trainingInfo: defaultTrainingInfo,
           participants: [],
+          speakers: [],
         }),
     }),
     {
