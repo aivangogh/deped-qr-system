@@ -30,13 +30,16 @@ import { useToast } from '@/components/ui/use-toast';
 import useSettingsStore from '@/store/useSettingsStore';
 import { createGoogleDriveDirectDownloadLink } from '@/utils/createDirectLink';
 import { Label } from '@/components/ui/label';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Separator } from '@/components/ui/separator';
 
 import { useUploadThing } from '@/utils/uploadthing';
 import { UploadButton } from '@uploadthing/react';
 import { FileUploadButton } from '@/app/components/FileUploader/uploader-button';
 import { FileSpreadsheet, Upload } from 'lucide-react';
+import { createGoogleDriveTemporaryDownloadLink } from '@/utils/createGoogleDriveTemporaryDownloadLink';
+import { useMutation, useQuery } from 'react-query';
+import fetchGetDriveFile from '@/services/fetch/google-drive-file/fetchGetDriveFile';
 
 const profileFormSchema = z.object({
   participants: z.object({
@@ -64,6 +67,16 @@ export function DocumentTemplate() {
     setDocumentsForSpeakersUrl,
     setDocumentsForSpeakersDirectUrl,
   } = useSettingsStore();
+
+  const driveFile = useMutation({
+    mutationFn: fetchGetDriveFile,
+  });
+
+  useEffect(() => {
+    if (driveFile.isSuccess) {
+      setDocumentsForParticipantsDirectUrl(driveFile.data);
+    }
+  }, []);
 
   const linkHandler = (e: any) => {
     setCopyUrl(e.target.value);
@@ -105,14 +118,15 @@ export function DocumentTemplate() {
   //   control: form.control,
   // });
 
-  function onSubmitForParticipants(data: ProfileFormValues) {
+  async function onSubmitForParticipants(data: ProfileFormValues) {
     setDocumentsForParticipantsUrl(data.participants.url);
-    setDocumentsForParticipantsDirectUrl(
-      createGoogleDriveDirectDownloadLink(data.participants.url)
-    );
 
+    const link = driveFile.mutate(data.participants.url);
+    // setDocumentsForParticipantsDirectUrl();
+    console.log(link);
     console.log(data.participants.url);
-    console.log(createGoogleDriveDirectDownloadLink(data.participants.url));
+    // console.log(createGoogleDriveTemporaryDownloadLink(data.participants.url));
+    // console.log(createGoogleDriveDirectDownloadLink(data.participants.url));
 
     toast({
       description: 'Participant template updated.',

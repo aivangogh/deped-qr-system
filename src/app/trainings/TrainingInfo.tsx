@@ -15,12 +15,12 @@ export default function TrainingInfoPage() {
     <>
       <div className="hidden h-full flex-1 flex-col space-y-8 p-4 md:flex">
         <EventDetails data={trainingInfo} />
-        <Separator />
+        {/* <Separator />
         <DataTableForSpeakers
           data={speakers}
           columns={columnsForSpeakers}
         />
-        <Separator />
+        <Separator /> */}
         <DataTableForParticipants
           data={participants}
           columns={columnsForParticipants}

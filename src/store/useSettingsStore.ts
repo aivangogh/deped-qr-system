@@ -29,9 +29,9 @@ const defaultExcelSettings = {
 };
 
 const defaultDocumentForParticipantsSettings = {
-  url: 'https://docs.google.com/document/d/1iWsko4Z87K6n8KJRwT7QE5gHYN37rh0B/edit?usp=drive_link&ouid=111981708478442355980&rtpof=true&sd=true',
+  url: 'https://docs.google.com/document/d/1vRa2nJmx2M9DPdOuP60a5gUrQRZBk-s1/edit?usp=drive_link&ouid=117631688372439328232&rtpof=true&sd=true',
   directUrl:
-    'https://drive.google.com/uc?export=download&id=1iWsko4Z87K6n8KJRwT7QE5gHYN37rh0B',
+    'https://drive.google.com/uc?export=download&id=1vRa2nJmx2M9DPdOuP60a5gUrQRZBk-s1',
 };
 
 const defaultDocumentForSpeakersSettings = {
