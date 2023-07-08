@@ -25,10 +25,7 @@ export default async function generateCertificate(
 
   console.log(fileId);
 
-  const templateBuffer = await downloadTemplateFromGoogleDrive(
-    fileId!,
-    process.env.CREDENTIALS_PATH!
-  );
+  const templateBuffer = await downloadTemplateFromGoogleDrive(fileId!, process.env.CREDENTIALS_PATH!);
 
   const additionalJsContext = {
     qrCode: async () => {
