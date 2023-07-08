@@ -56,7 +56,7 @@ export default async function generateCertificate(
     additionalJsContext,
   });
 
-  const outputFile = './public/temp/certificate.docx';
+  const outputFile = process.env.OUTPUT_FILE_PATH!;
   writeFileSync(outputFile, buffer);
 
   res.json({ certificateFile: outputFile });
