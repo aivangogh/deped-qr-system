@@ -27,7 +27,7 @@ export default async function generateCertificate(
 
   const templateBuffer = await downloadTemplateFromGoogleDrive(
     fileId!,
-    './src/auth/credentials.json'
+    process.env.CREDENTIALS_PATH!
   );
 
   const additionalJsContext = {

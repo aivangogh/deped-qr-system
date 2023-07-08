@@ -1,4 +1,4 @@
-import { google, drive_v3 } from 'googleapis';
+import { google } from 'googleapis';
 
 export async function downloadTemplateFromGoogleDrive(
   fileId: string,

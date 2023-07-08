@@ -25,7 +25,7 @@ import { ParticipantDetailsT } from '@/types/types';
 
 import useSettingsStore from '@/store/useSettingsStore';
 import { TrainingDetailsT } from '@/types/types';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 interface DataTableRowActionsProps<TData> {
   row: Row<TData>;
@@ -67,9 +67,12 @@ function CertificateGenerator({ participant }: CertificateGeneratorProps) {
   const { trainingInfo, setParticipant } = useTrainingInfoStore();
   const { documentForParticipantsUrl } = useSettingsStore();
   const [certificateFile, setCertificateFile] = useState<string | null>(null);
+  const [isGenerating, setIsGenerating] = useState(false);
 
-  const generateCertificate = async () => {
+  const handleGenerateCertificate = useCallback(async () => {
     try {
+      setIsGenerating(true);
+
       const requestData: GenerateCertificateRequest = {
         url: documentForParticipantsUrl,
         participantData: participant,
@@ -81,12 +84,10 @@ function CertificateGenerator({ participant }: CertificateGeneratorProps) {
       setCertificateFile(response.certificateFile);
     } catch (error) {
       // Handle the error
+    } finally {
+      setIsGenerating(false);
     }
-  };
-
-  useEffect(() => {
-    generateCertificate();
-  }, []);
+  }, [documentForParticipantsUrl, participant, trainingInfo]);
 
   return (
     <>
@@ -103,7 +104,10 @@ function CertificateGenerator({ participant }: CertificateGeneratorProps) {
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuItem>
-              <DialogTrigger className="flex items-center">
+              <DialogTrigger
+                className="flex items-center"
+                onClick={handleGenerateCertificate}
+              >
                 <FileText className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
                 Generate Certificate
               </DialogTrigger>
