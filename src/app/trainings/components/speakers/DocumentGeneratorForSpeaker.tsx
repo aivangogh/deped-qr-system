@@ -33,7 +33,7 @@ interface DataTableRowActionsProps<TData> {
 }
 interface GenerateCertificateRequest {
   url: string;
-  participantData: ParticipantDetailsT;
+  speakerData: SpeakerDetailsT;
   trainingData: TrainingDetailsT;
 }
 
@@ -42,15 +42,14 @@ interface GenerateCertificateResponse {
 }
 
 type CertificateGeneratorProps = {
-  participant?: ParticipantDetailsT;
-  speaker?: SpeakerDetailsT;
+  speaker: SpeakerDetailsT;
 };
 
 async function generateCertificateApiRequest(
   requestData: GenerateCertificateRequest
 ): Promise<Blob> {
   console.log(requestData);
-  const response = await fetch('/api/google-drive-file', {
+  const response = await fetch('/api/google-drive-file/speaker', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -65,12 +64,11 @@ async function generateCertificateApiRequest(
   return response.blob();
 }
 
-function CertificateGenerator({
-  participant,
+function DocumentGeneratorForSpeaker({
   speaker,
 }: CertificateGeneratorProps) {
   const { trainingInfo, setParticipant } = useTrainingInfoStore();
-  const { documentForParticipantsUrl } = useSettingsStore();
+  const { documentForSpeakersUrl } = useSettingsStore();
   const [certificateURL, setCertificateURL] = useState<string | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
 
@@ -79,8 +77,8 @@ function CertificateGenerator({
       setIsGenerating(true);
 
       const requestData: GenerateCertificateRequest = {
-        url: documentForParticipantsUrl,
-        participantData: participant!,
+        url: documentForSpeakersUrl,
+        speakerData: speaker!,
         trainingData: trainingInfo,
       };
 
@@ -94,7 +92,7 @@ function CertificateGenerator({
     } finally {
       setIsGenerating(false);
     }
-  }, [documentForParticipantsUrl, participant, trainingInfo]);
+  }, [documentForSpeakersUrl, speaker, trainingInfo]);
 
   const handleCloseDialog = useCallback(() => {
     // Clean up the temporary URL when the dialog is closed
@@ -107,7 +105,7 @@ function CertificateGenerator({
   // Function to handle the download event for the "Download Certificate" button
   const handleDownloadCertificate = () => {
     if (certificateURL) {
-      const fileName = `${participant?.participant.toLowerCase()}-certificate.docx`;
+      const fileName = `${speaker?.speaker.toLowerCase()}-certificate.docx`;
 
       fetch(certificateURL)
         .then((response) => response.blob())
@@ -158,7 +156,7 @@ function CertificateGenerator({
           <DialogHeader>
             <DialogTitle>Generated Certificate</DialogTitle>
             <DialogDescription>
-              Certificate for {participant?.participant!}
+              Certificate for {speaker?.speaker!}
             </DialogDescription>
           </DialogHeader>
 
@@ -212,4 +210,4 @@ function CertificateGenerator({
   );
 }
 
-export default CertificateGenerator;
+export default DocumentGeneratorForSpeaker;

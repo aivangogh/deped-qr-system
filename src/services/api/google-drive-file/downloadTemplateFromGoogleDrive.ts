@@ -1,8 +1,7 @@
 import { google } from 'googleapis';
 
 export async function downloadTemplateFromGoogleDrive(
-  fileId: string,
-  keyFilePath: string
+  fileId: string
 ): Promise<Buffer> {
   try {
     const credentials = {

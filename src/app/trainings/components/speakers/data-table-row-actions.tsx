@@ -1,8 +1,8 @@
 'use client';
 
 import { Row } from '@tanstack/react-table';
-import DocumentGenerator from '@/components/DocumentGenerator';
-import { ParticipantDetailsT } from '@/types/types';
+import DocumentGeneratorForSpeaker from '@/app/trainings/components/speakers/DocumentGeneratorForSpeaker';
+import { SpeakerDetailsT } from '@/types/types';
 
 interface DataTableRowActionsProps<TData> {
   row: Row<TData>;
@@ -11,11 +11,11 @@ interface DataTableRowActionsProps<TData> {
 export function DataTableRowActions<TData>({
   row,
 }: DataTableRowActionsProps<TData>) {
-  const participant = row.original as ParticipantDetailsT;
+  const speaker = row.original as SpeakerDetailsT;
 
   return (
     <>
-      <DocumentGenerator participant={participant} />
+      <DocumentGeneratorForSpeaker speaker={speaker} />
     </>
   );
 }

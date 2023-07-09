@@ -55,7 +55,8 @@ const profileFormSchema = z.object({
 type ProfileFormValues = z.infer<typeof profileFormSchema>;
 
 export function DocumentTemplate() {
-  const [copyUrl, setCopyUrl] = useState<string>('');
+  const [copyUrlForParticipant, setCopyUrlForParticipant] = useState<string>('');
+  const [copyUrlForSpeaker, setCopyUrlForSpeaker] = useState<string>('');
   const { toast } = useToast();
   const {
     documentForParticipantsUrl,
@@ -78,8 +79,12 @@ export function DocumentTemplate() {
     }
   }, []);
 
-  const linkHandler = (e: any) => {
-    setCopyUrl(e.target.value);
+  const linkHandlerForParticipant = (e: any) => {
+    setCopyUrlForParticipant(e.target.value);
+  };
+
+  const linkHandlerForSpeaker = (e: any) => {
+    setCopyUrlForSpeaker(e.target.value);
   };
 
   const copyParticipantsLink = async () => {
@@ -133,14 +138,15 @@ export function DocumentTemplate() {
     });
   }
 
-  function onSubmitForSpeakers(data: ProfileFormValues) {
+  async function onSubmitForSpeakers(data: ProfileFormValues) {
     setDocumentsForSpeakersUrl(data.speakers.url);
-    setDocumentsForSpeakersDirectUrl(
-      createGoogleDriveDirectDownloadLink(data.speakers.url)
-    );
 
+    const link = driveFile.mutate(data.speakers.url);
+    // setDocumentsForParticipantsDirectUrl();
+    console.log(link);
     console.log(data.speakers.url);
-    console.log(createGoogleDriveDirectDownloadLink(data.speakers.url));
+    // console.log(createGoogleDriveTemporaryDownloadLink(data.participants.url));
+    // console.log(createGoogleDriveDirectDownloadLink(data.participants.url));
 
     toast({
       description: 'Speaker template updated.',
@@ -232,7 +238,7 @@ export function DocumentTemplate() {
               <Input
                 value={documentForParticipantsDirectUrl}
                 readOnly
-                onChange={linkHandler}
+                onChange={linkHandlerForParticipant}
               />
               <Button
                 variant="secondary"
@@ -290,7 +296,7 @@ export function DocumentTemplate() {
               <Input
                 value={documentForSpeakersDirectUrl}
                 readOnly
-                onChange={linkHandler}
+                onChange={linkHandlerForSpeaker}
               />
               <Button
                 variant="secondary"
