@@ -26,6 +26,8 @@ import { ParticipantDetailsT } from '@/types/types';
 import useSettingsStore from '@/store/useSettingsStore';
 import { TrainingDetailsT } from '@/types/types';
 import { useCallback, useEffect, useState } from 'react';
+import { saveAs } from 'file-saver';
+import Link from 'next/link';
 
 interface DataTableRowActionsProps<TData> {
   row: Row<TData>;
@@ -46,7 +48,7 @@ type CertificateGeneratorProps = {
 
 async function generateCertificateApiRequest(
   requestData: GenerateCertificateRequest
-): Promise<GenerateCertificateResponse> {
+): Promise<Blob> {
   console.log(requestData);
   const response = await fetch('/api/google-drive-file', {
     method: 'POST',
@@ -60,13 +62,13 @@ async function generateCertificateApiRequest(
     throw new Error('Failed to generate certificate');
   }
 
-  return response.json() as Promise<GenerateCertificateResponse>;
+  return response.blob();
 }
 
 function CertificateGenerator({ participant }: CertificateGeneratorProps) {
   const { trainingInfo, setParticipant } = useTrainingInfoStore();
   const { documentForParticipantsUrl } = useSettingsStore();
-  const [certificateFile, setCertificateFile] = useState<string | null>(null);
+  const [certificateURL, setCertificateURL] = useState<string | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
 
   const handleGenerateCertificate = useCallback(async () => {
@@ -79,15 +81,50 @@ function CertificateGenerator({ participant }: CertificateGeneratorProps) {
         trainingData: trainingInfo,
       };
 
-      const response = await generateCertificateApiRequest(requestData);
+      const blob = await generateCertificateApiRequest(requestData);
 
-      setCertificateFile(response.certificateFile);
+      // Create a temporary URL for the blob
+      const tempURL = URL.createObjectURL(blob);
+      setCertificateURL(tempURL);
     } catch (error) {
       // Handle the error
     } finally {
       setIsGenerating(false);
     }
   }, [documentForParticipantsUrl, participant, trainingInfo]);
+
+  const handleCloseDialog = useCallback(() => {
+    // Clean up the temporary URL when the dialog is closed
+    if (certificateURL) {
+      URL.revokeObjectURL(certificateURL);
+      setCertificateURL(null);
+    }
+  }, [certificateURL]);
+
+  // Function to handle the download event for the "Download Certificate" button
+  const handleDownloadCertificate = () => {
+    if (certificateURL) {
+      const fileName = `${participant.participant.toLowerCase()}-certificate.docx`;
+
+      fetch(certificateURL)
+        .then((response) => response.blob())
+        .then((blob) => {
+          // Set the correct content type and encoding for the response
+          const contentType =
+            'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+          const encoding = 'UTF-8';
+
+          const file = new File([blob], fileName, { type: contentType });
+
+          // Trigger the file download
+          saveAs(file);
+        })
+        .catch((error) => {
+          // Handle any errors
+          console.error('Error downloading certificate:', error);
+        });
+    }
+  };
 
   return (
     <>
@@ -116,18 +153,23 @@ function CertificateGenerator({ participant }: CertificateGeneratorProps) {
         </DropdownMenu>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Generate Certificate</DialogTitle>
+            <DialogTitle>Generated Certificate</DialogTitle>
             <DialogDescription>
-              Generate a certificate for the participant
+              Certificate for {participant.participant}
             </DialogDescription>
           </DialogHeader>
 
-          {certificateFile ? (
+          {certificateURL ? (
             <>
               <div className="flex items-center justify-center h-40">
-                <span className="text-2xl font-medium">
-                  Certificate generated successfully
-                </span>
+                <object
+                  data={certificateURL}
+                  type="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                  width="100%"
+                  height="100%"
+                >
+                  <p>Sorry, the certificate could not be displayed.</p>
+                </object>
               </div>
             </>
           ) : (
@@ -141,7 +183,7 @@ function CertificateGenerator({ participant }: CertificateGeneratorProps) {
           )}
 
           <DialogFooter>
-            {certificateFile && (
+            {certificateURL && (
               <>
                 <div className="flex space-x-2">
                   {/* <Button size="sm" variant="outline">
@@ -151,12 +193,11 @@ function CertificateGenerator({ participant }: CertificateGeneratorProps) {
                     />
                     Re-generate Certificate
                   </Button> */}
-                  <a href={certificateFile} download>
-                    <Button size="sm">
-                      <Download className="mr-2 h-3.5 w-3.5" />
-                      Download Certificate
-                    </Button>
-                  </a>
+                  {/* Render the "Download Certificate" button */}
+                  <Button size="sm" onClick={handleDownloadCertificate}>
+                    <Download className="mr-2 h-3.5 w-3.5" />
+                    Download Certificate
+                  </Button>
                 </div>
                 {/* <QRCode value={certificateFile} /> */}
               </>

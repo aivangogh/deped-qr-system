@@ -1,15 +1,12 @@
 import { downloadTemplateFromGoogleDrive } from '@/services/api/google-drive-file/downloadTemplateFromGoogleDrive';
 import { ParticipantDetailsT, TrainingDetailsT } from '@/types/types';
 import { getFileIdFromGoogleDriveLink } from '@/utils/getFileIdFromGoogleDriveLink';
-import { writeFileSync } from 'fs';
 import { NextApiRequest, NextApiResponse } from 'next';
 import QRCode from 'qrcode';
 import createReport from 'docx-templates';
-
-interface ImageOptions {
-  getImage(tag: string): Buffer | ArrayBuffer | null;
-  getSize(): number[];
-}
+import { writeFileSync } from 'fs';
+import { Readable } from 'stream';
+import { pipeline } from 'stream/promises';
 
 export default async function generateCertificate(
   req: NextApiRequest,
@@ -56,8 +53,22 @@ export default async function generateCertificate(
     additionalJsContext,
   });
 
-  const outputFile = process.env.OUTPUT_FILE_PATH!;
-  writeFileSync(outputFile, buffer);
+  // writeFileSync('certificate.docx', buffer);
 
-  res.json({ certificateFile: outputFile });
+  const fileName = `${participantData.participant.toLocaleLowerCase()}-certificate.docx`; // Specify the desired file name and extension
+
+  // Set the response headers
+  res.setHeader('Content-Disposition', `attachment; filename="${fileName}"`);
+  res.setHeader(
+    'Content-Type',
+    'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+  );
+
+  // Create a readable stream from the buffer
+  const stream = new Readable();
+  stream.push(buffer);
+  stream.push(null);
+
+  // Pipe the stream to the response
+  await pipeline(stream, res);
 }
