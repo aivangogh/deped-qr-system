@@ -10,7 +10,7 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { Row } from '@tanstack/react-table';
-import { Download, FileText, MoreHorizontal, RotateCcw } from 'lucide-react';
+import { Download, FileText, MoreHorizontal } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -21,13 +21,12 @@ import {
 } from '@/components/ui/dropdown-menu';
 
 import useTrainingInfoStore from '@/store/useTrainingInfoStore';
-import { ParticipantDetailsT } from '@/types/types';
+import { ParticipantDetailsT, SpeakerDetailsT } from '@/types/types';
 
 import useSettingsStore from '@/store/useSettingsStore';
 import { TrainingDetailsT } from '@/types/types';
-import { useCallback, useEffect, useState } from 'react';
 import { saveAs } from 'file-saver';
-import Link from 'next/link';
+import { useCallback, useState } from 'react';
 
 interface DataTableRowActionsProps<TData> {
   row: Row<TData>;
@@ -43,7 +42,8 @@ interface GenerateCertificateResponse {
 }
 
 type CertificateGeneratorProps = {
-  participant: ParticipantDetailsT;
+  participant?: ParticipantDetailsT;
+  speaker?: SpeakerDetailsT;
 };
 
 async function generateCertificateApiRequest(
@@ -65,7 +65,10 @@ async function generateCertificateApiRequest(
   return response.blob();
 }
 
-function CertificateGenerator({ participant }: CertificateGeneratorProps) {
+function CertificateGenerator({
+  participant,
+  speaker,
+}: CertificateGeneratorProps) {
   const { trainingInfo, setParticipant } = useTrainingInfoStore();
   const { documentForParticipantsUrl } = useSettingsStore();
   const [certificateURL, setCertificateURL] = useState<string | null>(null);
@@ -77,7 +80,7 @@ function CertificateGenerator({ participant }: CertificateGeneratorProps) {
 
       const requestData: GenerateCertificateRequest = {
         url: documentForParticipantsUrl,
-        participantData: participant,
+        participantData: participant!,
         trainingData: trainingInfo,
       };
 
@@ -104,7 +107,7 @@ function CertificateGenerator({ participant }: CertificateGeneratorProps) {
   // Function to handle the download event for the "Download Certificate" button
   const handleDownloadCertificate = () => {
     if (certificateURL) {
-      const fileName = `${participant.participant.toLowerCase()}-certificate.docx`;
+      const fileName = `${participant?.participant.toLowerCase()}-certificate.docx`;
 
       fetch(certificateURL)
         .then((response) => response.blob())
@@ -155,7 +158,7 @@ function CertificateGenerator({ participant }: CertificateGeneratorProps) {
           <DialogHeader>
             <DialogTitle>Generated Certificate</DialogTitle>
             <DialogDescription>
-              Certificate for {participant.participant}
+              Certificate for {participant?.participant!}
             </DialogDescription>
           </DialogHeader>
 

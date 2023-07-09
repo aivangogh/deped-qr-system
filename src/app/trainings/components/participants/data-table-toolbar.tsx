@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { DataTableViewOptions } from './data-table-view-options';
 
-import DialogGenerateBulkPDF from '../GeneratePDF/DialogGenerateBulkPDF';
+import DialogGenerateBulkPDF from '../../GeneratePDF/DialogGenerateBulkPDF';
 
 interface DataTableToolbarProps<TData> {
   table: Table<TData>;
