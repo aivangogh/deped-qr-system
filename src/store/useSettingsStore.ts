@@ -35,9 +35,9 @@ const defaultDocumentForParticipantsSettings = {
 };
 
 const defaultDocumentForSpeakersSettings = {
-  url: 'https://docs.google.com/document/d/1UqJgCCuoDoH1cPkEJJCUw3iP2DWVSrIE/edit?usp=drive_link&ouid=111981708478442355980&rtpof=true&sd=true',
+  url: 'https://docs.google.com/document/d/1_Kqj8YOZS1_itslnfPiHcuDxaDGab3vA/edit?usp=drive_link&ouid=117631688372439328232&rtpof=true&sd=true',
   directUrl:
-    'https://drive.google.com/uc?export=download&id=1UqJgCCuoDoH1cPkEJJCUw3iP2DWVSrIE',
+    'https://drive.google.com/uc?export=download&id=1_Kqj8YOZS1_itslnfPiHcuDxaDGab3vA',
 };
 
 const useSettingsStore = create<SettingsT>()(
