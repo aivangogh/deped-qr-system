@@ -165,14 +165,17 @@ function DocumentGeneratorForParticipant({
           {certificateURL ? (
             <>
               <div className="flex items-center justify-center h-40">
-                <object
+                {/* <object
                   data={certificateURL}
                   type="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
                   width="100%"
                   height="100%"
                 >
                   <p>Sorry, the certificate could not be displayed.</p>
-                </object>
+                </object> */}
+                <span className="text-2xl font-medium text-muted-foreground/70">
+                  Certificate generated
+                </span>
               </div>
             </>
           ) : (

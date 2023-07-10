@@ -4,16 +4,6 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 
-import { Button } from '@/components/ui/button';
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -25,21 +15,29 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
+import { Button } from '@/components/ui/button';
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Separator } from '@/components/ui/separator';
 import { useToast } from '@/components/ui/use-toast';
 import useSettingsStore from '@/store/useSettingsStore';
-import { createGoogleDriveDirectDownloadLink } from '@/utils/createDirectLink';
-import { Label } from '@/components/ui/label';
 import { useEffect, useState } from 'react';
-import { Separator } from '@/components/ui/separator';
 
-import { useUploadThing } from '@/utils/uploadthing';
-import { UploadButton } from '@uploadthing/react';
 import { FileUploadButton } from '@/app/components/FileUploader/uploader-button';
-import { FileSpreadsheet, Upload } from 'lucide-react';
-import { createGoogleDriveTemporaryDownloadLink } from '@/utils/createGoogleDriveTemporaryDownloadLink';
-import { useMutation, useQuery } from 'react-query';
 import fetchGetDriveFile from '@/services/fetch/google-drive-file/fetchGetDriveFile';
+import fetchUploadDocument from '@/services/fetch/google-drive-file/google-drive/fetchUploadDocument';
+import { useUploadThing } from '@/utils/uploadthing';
+import { Upload } from 'lucide-react';
+import { useMutation } from 'react-query';
 
 const profileFormSchema = z.object({
   participants: z.object({
@@ -55,7 +53,8 @@ const profileFormSchema = z.object({
 type ProfileFormValues = z.infer<typeof profileFormSchema>;
 
 export function DocumentTemplate() {
-  const [copyUrlForParticipant, setCopyUrlForParticipant] = useState<string>('');
+  const [copyUrlForParticipant, setCopyUrlForParticipant] =
+    useState<string>('');
   const [copyUrlForSpeaker, setCopyUrlForSpeaker] = useState<string>('');
   const { toast } = useToast();
   const {
@@ -162,9 +161,25 @@ export function DocumentTemplate() {
     },
   });
 
+  async function handleFileDocumentUpload(event: React.ChangeEvent<HTMLInputElement>) {
+
+    const document = await fetchUploadDocument(event.target.files?.[0]!);
+
+    // console.log(document);
+  }
+
   return (
     <>
       <div>
+        {/* <div className="grid w-full max-w-sm items-center gap-1.5">
+          <Label htmlFor="documents">Certificate for Participants</Label>
+          <Input
+            id="documents"
+            type="file"
+            onChange={handleFileDocumentUpload}
+            accept="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+          />
+        </div> */}
         <AlertDialog>
           <AlertDialogTrigger asChild>
             <Button size="sm" className="ml-auto h-8">

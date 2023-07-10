@@ -31,7 +31,7 @@ export function PresetActions() {
   const [showDeleteDialog, setShowDeleteDialog] = useState<boolean>(false);
   const { resetInfo } = useTrainingInfoStore();
   const [showDownloadDialog, setShowDownloadDialog] = useState<boolean>(false);
-  const { excelDirectUrl } = useSettingsStore()
+  const { excelDirectUrl } = useSettingsStore();
 
   return (
     <>
@@ -47,8 +47,12 @@ export function PresetActions() {
             <Download className="mr-2 h-4 w-4" />
             Download Template
           </DropdownMenuItem>
-          <DropdownMenuItem>
-            <Link href={routes.settings.path} passHref className="flex mr-2">
+          <DropdownMenuItem className="">
+            <Link
+              href={routes.settings.path}
+              passHref
+              className="flex mr-2 w-full"
+            >
               <Settings className="mr-2 h-4 w-4" />
               Settings
             </Link>
