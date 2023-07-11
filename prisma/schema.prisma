@@ -1,0 +1,59 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model Training {
+  id                  String           @id @default(auto()) @map("_id") @db.ObjectId
+  traningId           String           @unique @db.ObjectId
+  createdAt           DateTime         @default(now())
+  updatedAt           DateTime         @updatedAt
+  title               String
+  DateOfTraining      DateOfTraining[]
+  hours               Int
+  programHolder       String
+  nameOfProgramHolder String
+  speaker             Speaker[]
+  participant         Participant[]
+}
+
+model DateOfTraining {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  start      DateTime
+  end        DateTime
+  trainingId String   @db.ObjectId
+  training   Training @relation(fields: [trainingId], references: [id])
+}
+
+model Speaker {
+  id         String    @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  speakerId  String    @unique @db.ObjectId
+  name       String
+  Training   Training? @relation(fields: [trainingId], references: [id])
+  trainingId String?   @db.ObjectId
+}
+
+model Participant {
+  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  participantId String    @unique @db.ObjectId
+  name          String
+  position      String
+  school        String
+  email         String
+  phone         String
+  Training      Training? @relation(fields: [trainingId], references: [id])
+  trainingId    String?   @db.ObjectId
+}
