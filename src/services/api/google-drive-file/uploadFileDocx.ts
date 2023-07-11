@@ -6,6 +6,7 @@ export async function uploadFileDocx(
   file: File,
   folderId: string
 ): Promise<string> {
+  console.log('uploadFileDocx');
   console.log(file);
 
   try {

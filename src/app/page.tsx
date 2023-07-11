@@ -1,4 +1,3 @@
-import Header from './components/Navbar';
 import TrainingInfo from './trainings/TrainingInfo';
 
 export default function Home() {

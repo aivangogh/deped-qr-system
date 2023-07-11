@@ -171,7 +171,7 @@ function DocumentGeneratorForSpeaker({
                 >
                   <p>Sorry, the certificate could not be displayed.</p>
                 </object> */}
-                <span className="text-2xl font-medium text-muted-foreground/70">
+                <span className="text-2xl font-medium">
                   Certificate generated
                 </span>
               </div>

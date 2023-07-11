@@ -8,14 +8,14 @@ export default function uploadDocument(
 ) {
   const { file } = req.body as { file: File };
 
-  console.log("HANDLER");
-  // console.log(file)
-  console.log(inspect(req.body, { depth: null }));
+  console.log('HANDLER');
+  console.log(file)
+  // console.log(inspect(req.body, { depth: null }));
+  
+  const response = uploadFileDocx(file, process.env.GOOGLE_FOLDER_ID!);
 
-  // const response = uploadFileDocx(file, process.env.GOOGLE_FOLDER_ID!);
+  if (!response)
+    return res.status(500).json({ message: 'Something went wrong' });
 
-  // if (!response)
-  //   return res.status(500).json({ message: 'Something went wrong' });
-
-  // return res.status(200).json(response);
+  return res.status(200).json(response);
 }
