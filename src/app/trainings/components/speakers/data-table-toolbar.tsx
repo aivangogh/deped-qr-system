@@ -3,11 +3,11 @@
 import { Table } from '@tanstack/react-table';
 import { X } from 'lucide-react';
 
-import { Filter } from "lucide-react"
+import { Filter } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { DataTableViewOptions } from './data-table-view-options';
-import DialogGenerateBulkPDF from '../../GeneratePDF/DialogGenerateBulkPDF';
+import DialogGenerateBulkPDF from '../participants/DialogGenerateBulkCertificatesForParticipants';
 
 interface DataTableToolbarProps<TData> {
   table: Table<TData>;

@@ -3,12 +3,11 @@
 import { Table } from '@tanstack/react-table';
 import { X } from 'lucide-react';
 
-import { Filter } from "lucide-react"
+import { Filter } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { DataTableViewOptions } from './data-table-view-options';
-
-import DialogGenerateBulkPDF from '../../GeneratePDF/DialogGenerateBulkPDF';
+import DialogGenerateBulkCertificatesForParticipants from './DialogGenerateBulkCertificatesForParticipants';
 
 interface DataTableToolbarProps<TData> {
   table: Table<TData>;
@@ -62,7 +61,7 @@ export function DataTableToolbar<TData>({
       </div>
 
       <div className="flex items-center space-x-2">
-        <DialogGenerateBulkPDF />
+        <DialogGenerateBulkCertificatesForParticipants />
         <DataTableViewOptions table={table} />
       </div>
     </div>

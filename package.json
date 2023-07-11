@@ -4,10 +4,12 @@
   "private": true,
   "proxy": "http://localhost:3000",
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev && prisma generate",
     "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
+    "start": "next build && next start && prisma generate",
+    "lint": "next lint",
+    "vercel-build": "prisma generate && next build",
+    "prisma:generate": "prisma generate"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.1.1",
@@ -29,12 +31,14 @@
     "@types/react": "18.2.14",
     "@types/react-dom": "18.2.6",
     "@types/xlsx": "^0.0.36",
+    "archiver": "^5.3.1",
     "autoprefixer": "10.4.14",
     "axios": "^1.4.0",
     "class-variance-authority": "^0.6.1",
     "clsx": "^1.2.1",
     "cmdk": "^0.2.0",
     "date-fns": "^2.30.0",
+    "docx": "^8.2.0",
     "docx-templates": "^4.11.1",
     "eslint": "8.43.0",
     "eslint-config-next": "^13.4.9",
@@ -64,6 +68,7 @@
     "zustand": "^4.3.8"
   },
   "devDependencies": {
+    "@types/archiver": "^5.3.2",
     "@types/file-saver": "^2.0.5",
     "@types/qrcode": "^1.5.1",
     "file-loader": "^6.2.0",

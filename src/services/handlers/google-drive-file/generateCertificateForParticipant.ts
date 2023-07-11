@@ -45,8 +45,6 @@ export default async function generateCertificateForParticipant(
     additionalJsContext,
   });
 
-  // writeFileSync('certificate.docx', buffer);
-
   const fileName = `${participantData.participant.toLocaleLowerCase()}-certificate.docx`; // Specify the desired file name and extension
 
   // Set the response headers
