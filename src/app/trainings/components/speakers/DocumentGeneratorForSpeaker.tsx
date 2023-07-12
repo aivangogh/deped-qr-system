@@ -10,7 +10,7 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { Row } from '@tanstack/react-table';
-import { Download, FileText, MoreHorizontal } from 'lucide-react';
+import { Download, FileCheck2, FileText, MoreHorizontal, RefreshCw } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -21,7 +21,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 
 import useTrainingInfoStore from '@/store/useTrainingInfoStore';
-import { ParticipantDetailsT, SpeakerDetailsT } from '@/types/types';
+import { SpeakerDetailsT } from '@/types/types';
 
 import useSettingsStore from '@/store/useSettingsStore';
 import { TrainingDetailsT } from '@/types/types';
@@ -162,7 +162,7 @@ function DocumentGeneratorForSpeaker({
 
           {certificateURL ? (
             <>
-              <div className="flex items-center justify-center h-40">
+              <div className="flex flex-col items-center justify-center h-40 space-y-4">
                 {/* <object
                   data={certificateURL}
                   type="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
@@ -171,6 +171,7 @@ function DocumentGeneratorForSpeaker({
                 >
                   <p>Sorry, the certificate could not be displayed.</p>
                 </object> */}
+                <FileCheck2 size={40} color="green"/>
                 <span className="text-2xl font-medium">
                   Certificate generated
                 </span>
@@ -178,8 +179,9 @@ function DocumentGeneratorForSpeaker({
             </>
           ) : (
             <>
-              <div className="flex items-center justify-center h-40">
-                <span className="text-2xl font-medium text-muted-foreground/70">
+              <div className="flex flex-col items-center justify-center h-40 space-y-4">
+                <RefreshCw className="animate-spin" size={40} />
+                <span className="text-2xl font-medium">
                   Generating certificate...
                 </span>
               </div>

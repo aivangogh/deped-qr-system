@@ -1,6 +1,12 @@
 'use client';
 
-import { Download, ListRestart, MoreHorizontal, Settings } from 'lucide-react';
+import {
+  Download,
+  ListRestart,
+  MoreHorizontal,
+  Settings,
+  Settings2,
+} from 'lucide-react';
 import { routes } from '../routes';
 
 import {
@@ -37,9 +43,9 @@ export function PresetActions() {
     <>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="secondary" size="sm">
+          <Button variant="outline" size="sm">
             <span className="sr-only">Actions</span>
-            <MoreHorizontal className="h-4 w-4" />
+            <Settings2 className="h-4 w-4" />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
@@ -47,11 +53,11 @@ export function PresetActions() {
             <Download className="mr-2 h-4 w-4" />
             Download Template
           </DropdownMenuItem>
-          <DropdownMenuItem className="">
+          <DropdownMenuItem>
             <Link
               href={routes.settings.path}
               passHref
-              className="flex mr-2 w-full"
+              className="flex mr-2 w-full items-center"
             >
               <Settings className="mr-2 h-4 w-4" />
               Settings
