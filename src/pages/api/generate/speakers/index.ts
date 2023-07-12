@@ -1,4 +1,4 @@
-import generateBulkCertificatesForParticipantsHandler from '@/services/handlers/generate/participants/generateBulkCertificatesForParticipantsHandler';
+import generateBulkCertificatesForSpeakersHandler from '@/services/handlers/generate/speakers/generateBulkCertificatesForSpeakersHandler';
 import methodNaHandler from '@/services/handlers/methodNaHandler';
 import { NextApiRequest, NextApiResponse } from 'next';
 
@@ -8,7 +8,7 @@ export default async function handler(
 ) {
   switch (req.method) {
     case 'POST':
-      return generateBulkCertificatesForParticipantsHandler(req, res);
+      return generateBulkCertificatesForSpeakersHandler(req, res);
     default:
       return methodNaHandler(req, res);
   }

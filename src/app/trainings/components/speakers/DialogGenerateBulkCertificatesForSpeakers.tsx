@@ -1,5 +1,4 @@
-'use client';
-
+import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
@@ -9,48 +8,30 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { Row } from '@tanstack/react-table';
-import { Download, FileText, MoreHorizontal } from 'lucide-react';
-
-import { Button } from '@/components/ui/button';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
-
+import { Download, FileText } from 'lucide-react';
+import { ParticipantDetailsT, SpeakerDetailsT, TrainingDetailsT } from '@/types/types';
 import useTrainingInfoStore from '@/store/useTrainingInfoStore';
-import { ParticipantDetailsT, SpeakerDetailsT } from '@/types/types';
-
-import useSettingsStore from '@/store/useSettingsStore';
-import { TrainingDetailsT } from '@/types/types';
-import { saveAs } from 'file-saver';
 import { useCallback, useState } from 'react';
+import useSettingsStore from '@/store/useSettingsStore';
+import { saveAs } from 'file-saver';
 
-interface DataTableRowActionsProps<TData> {
-  row: Row<TData>;
-}
+type DialogGenerateBulkProps = {
+  participants: ParticipantDetailsT[];
+  trainingData: TrainingDetailsT;
+};
+
 interface GenerateCertificateRequest {
   url: string;
-  participantData: ParticipantDetailsT;
+  speakers: SpeakerDetailsT[];
   trainingData: TrainingDetailsT;
 }
 
-interface GenerateCertificateResponse {
-  certificateFile: string;
-}
-
-type CertificateGeneratorProps = {
-  participant?: ParticipantDetailsT;
-  speaker?: SpeakerDetailsT;
-};
-
-async function generateCertificateApiRequest(
+async function generateBulkCertificateApiRequest(
   requestData: GenerateCertificateRequest
 ): Promise<Blob> {
   console.log(requestData);
-  const response = await fetch('/api/google-drive-file/participant', {
+
+  const response = await fetch('/api/generate/speakers', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -65,56 +46,46 @@ async function generateCertificateApiRequest(
   return response.blob();
 }
 
-function DocumentGeneratorForParticipant({
-  participant,
-  speaker,
-}: CertificateGeneratorProps) {
-  const { trainingInfo, setParticipant } = useTrainingInfoStore();
-  const { documentForParticipantsUrl } = useSettingsStore();
+export default function DialogGenerateBulkCertificatesForSpeakers() {
+  const { speakers, trainingInfo } = useTrainingInfoStore();
+  const { documentForSpeakersUrl } = useSettingsStore();
   const [certificateURL, setCertificateURL] = useState<string | null>(null);
   const [isGenerating, setIsGenerating] = useState<boolean>(false);
 
-  const handleGenerateCertificate = useCallback(async () => {
+  const handleGenerateBulkCertificates = useCallback(async () => {
     try {
       setIsGenerating(true);
 
       const requestData: GenerateCertificateRequest = {
-        url: documentForParticipantsUrl,
-        participantData: participant!,
+        url: documentForSpeakersUrl,
+        speakers: speakers!,
         trainingData: trainingInfo,
       };
 
-      const blob = await generateCertificateApiRequest(requestData);
+      const blob = await generateBulkCertificateApiRequest(requestData);
 
       // Create a temporary URL for the blob
       const tempURL = URL.createObjectURL(blob);
+
+      console.log(tempURL);
       setCertificateURL(tempURL);
     } catch (error) {
       // Handle the error
     } finally {
       setIsGenerating(false);
     }
-  }, [documentForParticipantsUrl, participant, trainingInfo]);
-
-  const handleCloseDialog = useCallback(() => {
-    // Clean up the temporary URL when the dialog is closed
-    if (certificateURL) {
-      URL.revokeObjectURL(certificateURL);
-      setCertificateURL(null);
-    }
-  }, [certificateURL]);
+  }, [documentForSpeakersUrl, speakers, trainingInfo]);
 
   // Function to handle the download event for the "Download Certificate" button
-  const handleDownloadCertificate = () => {
+  const handleDownloadCertificates = () => {
     if (certificateURL) {
-      const fileName = `${trainingInfo.title.toLowerCase()}-certificate.docx`;
+      const fileName = `${trainingInfo.title}-certificates-for-speaker/s.zip`;
 
       fetch(certificateURL)
         .then((response) => response.blob())
         .then((blob) => {
           // Set the correct content type and encoding for the response
-          const contentType =
-            'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+          const contentType = 'application/zip';
           const encoding = 'UTF-8';
 
           const file = new File([blob], fileName, { type: contentType });
@@ -132,33 +103,21 @@ function DocumentGeneratorForParticipant({
   return (
     <>
       <Dialog>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button
-              variant="ghost"
-              className="flex h-8 w-8 p-0 data-[state=open]:bg-muted"
-            >
-              <MoreHorizontal className="h-4 w-4" />
-              <span className="sr-only">Open menu</span>
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuItem>
-              <DialogTrigger
-                className="flex items-center"
-                onClick={handleGenerateCertificate}
-              >
-                <FileText className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
-                Generate Certificate
-              </DialogTrigger>
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-        <DialogContent>
+        <DialogTrigger asChild>
+          <Button
+            size="sm"
+            className="ml-auto h-8"
+            onClick={handleGenerateBulkCertificates}
+          >
+            <FileText className="mr-2 h-4 w-4" />
+            Generate Certificates
+          </Button>
+        </DialogTrigger>
+        <DialogContent className="sm:max-w-[475px]">
           <DialogHeader>
-            <DialogTitle>Generated Certificate</DialogTitle>
+            <DialogTitle>Generate Certificates</DialogTitle>
             <DialogDescription>
-              Certificate for {participant?.participant!}
+              Generate certificates for speaker/s in the table.
             </DialogDescription>
           </DialogHeader>
 
@@ -174,7 +133,7 @@ function DocumentGeneratorForParticipant({
                   <p>Sorry, the certificate could not be displayed.</p>
                 </object> */}
                 <span className="text-2xl font-medium">
-                  Certificate generated
+                  Certificates generated
                 </span>
               </div>
             </>
@@ -182,7 +141,7 @@ function DocumentGeneratorForParticipant({
             <>
               <div className="flex items-center justify-center h-40">
                 <span className="text-2xl font-medium text-muted-foreground/70">
-                  Generating certificate...
+                  Generating certificates...
                 </span>
               </div>
             </>
@@ -200,7 +159,7 @@ function DocumentGeneratorForParticipant({
                     Re-generate Certificate
                   </Button> */}
                   {/* Render the "Download Certificate" button */}
-                  <Button size="sm" onClick={handleDownloadCertificate}>
+                  <Button size="sm" onClick={handleDownloadCertificates}>
                     <Download className="mr-2 h-3.5 w-3.5" />
                     Download Certificate
                   </Button>
@@ -214,5 +173,3 @@ function DocumentGeneratorForParticipant({
     </>
   );
 }
-
-export default DocumentGeneratorForParticipant;

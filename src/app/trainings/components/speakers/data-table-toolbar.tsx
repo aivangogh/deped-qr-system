@@ -7,7 +7,7 @@ import { Filter } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { DataTableViewOptions } from './data-table-view-options';
-import DialogGenerateBulkPDF from '../participants/DialogGenerateBulkCertificatesForParticipants';
+import DialogGenerateBulkCertificatesForSpeakers from './DialogGenerateBulkCertificatesForSpeakers';
 
 interface DataTableToolbarProps<TData> {
   table: Table<TData>;
@@ -61,7 +61,7 @@ export function DataTableToolbar<TData>({
       </div>
 
       <div className="flex items-center space-x-2">
-        <DialogGenerateBulkPDF />
+        <DialogGenerateBulkCertificatesForSpeakers />
         <DataTableViewOptions table={table} />
       </div>
     </div>

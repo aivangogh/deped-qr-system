@@ -1,15 +1,13 @@
 import { Button } from '@/components/ui/button';
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from '@/components/ui/alert-dialog';
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
 import { Download, FileText } from 'lucide-react';
 import { ParticipantDetailsT, TrainingDetailsT } from '@/types/types';
 import useTrainingInfoStore from '@/store/useTrainingInfoStore';
@@ -81,7 +79,7 @@ export default function DialogGenerateBulkCertificatesForParticipants() {
   // Function to handle the download event for the "Download Certificate" button
   const handleDownloadCertificates = () => {
     if (certificateURL) {
-      const fileName = `${trainingInfo.title.toLocaleLowerCase()}-certificate.zip`;
+      const fileName = `${trainingInfo.title}-certificates-for-participants.zip`;
 
       fetch(certificateURL)
         .then((response) => response.blob())
@@ -104,10 +102,9 @@ export default function DialogGenerateBulkCertificatesForParticipants() {
 
   return (
     <>
-      <AlertDialog>
-        <AlertDialogTrigger asChild>
+      <Dialog>
+        <DialogTrigger asChild>
           <Button
-            variant="secondary"
             size="sm"
             className="ml-auto h-8"
             onClick={handleGenerateBulkCertificates}
@@ -115,14 +112,14 @@ export default function DialogGenerateBulkCertificatesForParticipants() {
             <FileText className="mr-2 h-4 w-4" />
             Generate Certificates
           </Button>
-        </AlertDialogTrigger>
-        <AlertDialogContent className="sm:max-w-[475px]">
-          <AlertDialogHeader>
-            <AlertDialogTitle>Generate Certificates</AlertDialogTitle>
-            <AlertDialogDescription>
-              Generate certificates for all trainees in the table.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
+        </DialogTrigger>
+        <DialogContent className="sm:max-w-[475px]">
+          <DialogHeader>
+            <DialogTitle>Generate Certificates</DialogTitle>
+            <DialogDescription>
+              Generate certificates for all participants in the table.
+            </DialogDescription>
+          </DialogHeader>
 
           {certificateURL ? (
             <>
@@ -150,7 +147,7 @@ export default function DialogGenerateBulkCertificatesForParticipants() {
             </>
           )}
 
-          <AlertDialogFooter>
+          <DialogFooter>
             {certificateURL && (
               <>
                 <div className="flex space-x-2">
@@ -170,9 +167,9 @@ export default function DialogGenerateBulkCertificatesForParticipants() {
                 {/* <QRCode value={certificateFile} /> */}
               </>
             )}
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </>
   );
 }

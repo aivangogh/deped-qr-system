@@ -86,9 +86,15 @@ dependencies:
   docx:
     specifier: ^8.2.0
     version: 8.2.0
+  docx-merger:
+    specifier: ^1.2.2
+    version: 1.2.2
   docx-templates:
     specifier: ^4.11.1
     version: 4.11.1
+  docxtemplater:
+    specifier: ^3.37.12
+    version: 3.37.12
   eslint:
     specifier: 8.43.0
     version: 8.43.0
@@ -785,7 +791,7 @@ packages:
       '@types/react':
         optional: true
     dependencies:
-      '@babel/runtime': 7.22.5
+      '@babel/runtime': 7.22.6
       '@types/react': 18.2.14
       react: 18.2.0
     dev: false
@@ -2180,6 +2186,11 @@ packages:
       '@xtuc/long': 4.2.2
     dev: true
 
+  /@xmldom/xmldom@0.8.8:
+    resolution: {integrity: sha512-0LNz4EY8B/8xXY86wMrQ4tz6zEHZv9ehFMJPm8u2gq5lQ71cfRKdaKyxfJAx5aUoyzx0qzgURblTisPGgz3d+Q==}
+    engines: {node: '>=10.0.0'}
+    dev: false
+
   /@xtuc/ieee754@1.2.0:
     resolution: {integrity: sha512-DX8nKgqcGwsc0eJSqYt5lwP4DH5FlHnmuWWBRy7X0NcaGR0ZtuyeESgMwTYVEtxmsNGY+qit4QYT/MIYTOTPeA==}
     dev: true
@@ -2904,6 +2915,13 @@ packages:
       esutils: 2.0.3
     dev: false
 
+  /docx-merger@1.2.2:
+    resolution: {integrity: sha512-hHfswb8pxq/zsY59N+Keigie4xhfgNe4rDCFTQtcVoKOLAgG5aEz1a1fkG8VuGPS2vqCuxS9x5hxW6i1SPBbSw==}
+    dependencies:
+      jszip: 2.7.0
+      xmldom: 0.1.31
+    dev: false
+
   /docx-templates@4.11.1:
     resolution: {integrity: sha512-9fYBrm3cid5Xm7DwfvZhXio9Sqd++JoGRxpKAW8vIcfDKw3IdVr7I00iB29ezjv4g95IY2LY5ZqKryV+8vDJGQ==}
     engines: {node: '>=6'}
@@ -2923,6 +2941,13 @@ packages:
       nanoid: 4.0.2
       xml: 1.0.1
       xml-js: 1.6.11
+    dev: false
+
+  /docxtemplater@3.37.12:
+    resolution: {integrity: sha512-KX+5dNZ1Nu0+6Tr2XNldmw9uHCyUn/ei0Uuaa6P37drgGFIoRiVHgMjKDzIaa32qd4u0sbHnYYJ+yWTwSDujLw==}
+    engines: {node: '>=0.10'}
+    dependencies:
+      '@xmldom/xmldom': 0.8.8
     dev: false
 
   /ecdsa-sig-formatter@1.0.11:
@@ -4139,6 +4164,12 @@ packages:
       array.prototype.flat: 1.3.1
       object.assign: 4.1.4
       object.values: 1.1.6
+    dev: false
+
+  /jszip@2.7.0:
+    resolution: {integrity: sha512-JIsRKRVC3gTRo2vM4Wy9WBC3TRcfnIZU8k65Phi3izkvPH975FowRYtKGT6PxevA0XnJ/yO8b0QwV0ydVyQwfw==}
+    dependencies:
+      pako: 1.0.11
     dev: false
 
   /jszip@3.10.1:
@@ -5961,6 +5992,12 @@ packages:
 
   /xml@1.0.1:
     resolution: {integrity: sha512-huCv9IH9Tcf95zuYCsQraZtWnJvBtLVE0QHMOs8bWyZAFZNDcYjsPq1nEx8jKA9y+Beo9v+7OBPRisQTjinQMw==}
+    dev: false
+
+  /xmldom@0.1.31:
+    resolution: {integrity: sha512-yS2uJflVQs6n+CyjHoaBmVSqIDevTAWrzMmjG1Gc7h1qQ7uVozNhEPJAwZXWyGQ/Gafo3fCwrcaokezLPupVyQ==}
+    engines: {node: '>=0.1'}
+    deprecated: Deprecated due to CVE-2021-21366 resolved in 0.5.0
     dev: false
 
   /y18n@4.0.3:
