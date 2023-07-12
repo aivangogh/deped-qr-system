@@ -9,10 +9,10 @@ export default function Navbar() {
     <>
       <div className="w-full flex justify-between">
         <div className="flex space-x-2">
-          <Image src={DepedLogo} width={50} height={50} alt="DepEd Logo" />
+          <Image src={DepedLogo} width={44} height={44} alt="DepEd Logo" />
 
           <Link href="/" passHref className="flex items-center">
-            <h2 className="text-3xl font-bold tracking-tight">
+            <h2 className="text-lg font-bold  tracking-normal">
               Training QR System
             </h2>
           </Link>
