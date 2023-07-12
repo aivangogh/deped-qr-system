@@ -13,19 +13,21 @@ type SettingsT = {
   documentForParticipantsDirectUrl: string;
   documentForSpeakersUrl: string;
   documentForSpeakersDirectUrl: string;
+  driveFolderUrl: string;
   setExcelUrl: (url: string) => void;
   setExcelDirectUrl: (directUrl: string) => void;
   setDocumentsForParticipantsUrl: (url: string) => void;
   setDocumentsForParticipantsDirectUrl: (directUrl: string) => void;
   setDocumentsForSpeakersUrl: (url: string) => void;
   setDocumentsForSpeakersDirectUrl: (directUrl: string) => void;
+  setDriveFolderUrl: (driveFolderUrl: string) => void;
   resetTemplate: () => void;
 };
 
 const defaultExcelSettings = {
-  url: 'https://docs.google.com/spreadsheets/d/1vZsa6pFv6oCnsTnOoZp_Pnft1l8pyR51/edit?usp=drive_link&ouid=111981708478442355980&rtpof=true&sd=true',
+  url: 'https://docs.google.com/spreadsheets/d/1mjQ0Ix8WFLnSKJo_5fGTYNeR9rZIiwCn/edit?usp=sharing&ouid=117631688372439328232&rtpof=true&sd=true',
   directUrl:
-    'https://drive.google.com/uc?export=download&id=1vZsa6pFv6oCnsTnOoZp_Pnft1l8pyR51',
+    'https://drive.google.com/uc?export=download&id=1mjQ0Ix8WFLnSKJo_5fGTYNeR9rZIiwCn',
 };
 
 const defaultDocumentForParticipantsSettings = {
@@ -40,6 +42,9 @@ const defaultDocumentForSpeakersSettings = {
     'https://drive.google.com/uc?export=download&id=1_Kqj8YOZS1_itslnfPiHcuDxaDGab3vA',
 };
 
+const defaultDriveFolderUrl =
+  'https://drive.google.com/drive/folders/1eE0iCZcxFGCocxHDkhbTdVK0Knrf-3ue?usp=sharing';
+
 const useSettingsStore = create<SettingsT>()(
   persist(
     (set) => ({
@@ -51,6 +56,7 @@ const useSettingsStore = create<SettingsT>()(
       documentForSpeakersUrl: defaultDocumentForSpeakersSettings.url,
       documentForSpeakersDirectUrl:
         defaultDocumentForSpeakersSettings.directUrl,
+      driveFolderUrl: defaultDriveFolderUrl,
       setExcelUrl: (url) => set({ excelUrl: url }),
       setExcelDirectUrl: (directUrl) => set({ excelDirectUrl: directUrl }),
       setDocumentsForParticipantsUrl: (url) =>
@@ -60,6 +66,7 @@ const useSettingsStore = create<SettingsT>()(
       setDocumentsForSpeakersUrl: (url) => set({ documentForSpeakersUrl: url }),
       setDocumentsForSpeakersDirectUrl: (directUrl) =>
         set({ documentForSpeakersDirectUrl: directUrl }),
+      setDriveFolderUrl: (driveFolderUrl) => set({ driveFolderUrl }),
       resetTemplate: () =>
         set({
           excelUrl: defaultExcelSettings.url,

@@ -17,6 +17,10 @@ const sidebarNavItems = [
     title: routes.settings.subroutes.excelTemplate.name,
     href: routes.settings.subroutes.excelTemplate.path,
   },
+  {
+    title: routes.settings.subroutes.driveFolder.name,
+    href: routes.settings.subroutes.driveFolder.path,
+  },
 ];
 
 interface SettingsLayoutProps {

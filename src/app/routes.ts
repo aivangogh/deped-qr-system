@@ -11,6 +11,10 @@ export const routes = {
         path: '/settings/excel',
         name: 'Excel Template',
       },
+      driveFolder: {
+        path: '/settings/drive-folder',
+        name: 'Drive Folder',
+      },
     },
   },
 };
