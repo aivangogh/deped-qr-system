@@ -19,7 +19,7 @@ type TrainingInfoT = {
 };
 
 const defaultTrainingInfo: TrainingDetailsT = {
-  trainingId: 'Invalid ID',
+  trainingId: '',
   title: '',
   date: {
     start: new Date(),

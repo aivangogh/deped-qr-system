@@ -74,11 +74,15 @@ export function EventDetails({ data }: { data: TrainingDetailsT }) {
         <div className="space-y-4">
           <div className="grid w-full max-w-sm items-center gap-1.5">
             <Label htmlFor="programHolder">Program Holder:</Label>
-            <Input type="text" id="programHolder" />
+            <Input type="text" id="programHolder" placeholder="Type here..." />
           </div>
           <div className="grid w-full max-w-sm items-center gap-1.5">
             <Label htmlFor="nameOfProgramHolder">Name of Program Holder:</Label>
-            <Input type="text" id="nameOfProgramHolder" />
+            <Input
+              type="text"
+              id="nameOfProgramHolder"
+              placeholder="Type here..."
+            />
           </div>
         </div>
 
