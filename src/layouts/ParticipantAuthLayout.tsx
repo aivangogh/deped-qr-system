@@ -12,7 +12,7 @@ export default function ParticipantAuthLayout({
   return (
     <>
       <div className="w-full">
-        <div className="sticky top-0 z-40 border-b container py-2 px-12 bg-white">
+        <div className="sticky top-0 z-40 border-b container py-2 bg-white">
           <ParticipantNavbar />
         </div>
 

@@ -1,7 +1,7 @@
 'use client';
 
 import { Row } from '@tanstack/react-table';
-import DocumentGeneratorForSpeaker from '@/app/trainings/components/speakers/DocumentGeneratorForSpeaker';
+import DocumentGeneratorForSpeaker from './DocumentGeneratorForSpeaker';
 import { SpeakerDetailsT } from '@/types/types';
 
 interface DataTableRowActionsProps<TData> {

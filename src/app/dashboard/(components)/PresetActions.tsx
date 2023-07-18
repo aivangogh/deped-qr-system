@@ -7,7 +7,6 @@ import {
   Settings,
   Settings2,
 } from 'lucide-react';
-import { navRoutes } from '../routes';
 
 import {
   AlertDialog,
@@ -31,6 +30,7 @@ import useSettingsStore from '@/store/useSettingsStore';
 import useTrainingInfoStore from '@/store/useTrainingInfoStore';
 import Link from 'next/link';
 import { useState } from 'react';
+import { navRoutes } from '@/app/routes';
 
 export function PresetActions() {
   const [open, setIsOpen] = useState<boolean>(false);
@@ -43,7 +43,7 @@ export function PresetActions() {
     <>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="outline" size="sm">
+          <Button variant="ghost" size="sm">
             <span className="sr-only">Actions</span>
             <Settings2 className="h-4 w-4" />
           </Button>

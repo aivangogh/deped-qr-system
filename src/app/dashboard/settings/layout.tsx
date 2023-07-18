@@ -1,5 +1,3 @@
-import { navRoutes } from '../routes';
-
 export const metadata = {
   title: `${navRoutes.settings.name} | DepEd: Training QR System`,
   description: "DepEd's Training QR System",
@@ -7,6 +5,7 @@ export const metadata = {
 
 import { Separator } from '@/components/ui/separator';
 import { SidebarNav } from './(components)/SidebarNav';
+import { navRoutes } from '@/app/routes';
 
 const sidebarNavItems = [
   {

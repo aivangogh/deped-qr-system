@@ -17,7 +17,7 @@ import { TrainingInfoT } from '@/types/types';
 import prettierJson from '@/utils/prettierJson';
 import { FileSpreadsheet } from 'lucide-react';
 import { useState } from 'react';
-import { parseExcelToJson } from '../../../utils/parseExcelToJson';
+import { parseExcelToJson } from '../../../../utils/parseExcelToJson';
 import ExcelToJson from './ExcelToJson';
 
 export function DialogFileUpload() {

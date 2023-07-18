@@ -1,8 +1,8 @@
 'use client';
 
 import { Row } from '@tanstack/react-table';
-import DocumentGenerator from '@/app/trainings/components/participants/DocumentGeneratorForParticipant';
 import { ParticipantDetailsT } from '@/types/types';
+import DocumentGenerator from './DocumentGeneratorForParticipant';
 
 interface DataTableRowActionsProps<TData> {
   row: Row<TData>;

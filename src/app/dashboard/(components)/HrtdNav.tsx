@@ -1,3 +1,4 @@
+import { navRoutes } from '@/app/routes';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import {
@@ -11,11 +12,12 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import getInitials from '@/utils/getInitials';
-import { ArrowRight, LogOut } from 'lucide-react';
+import { LogOut, Settings } from 'lucide-react';
 import { useSession } from 'next-auth/react';
 import { signOut } from 'next-auth/react';
+import Link from 'next/link';
 
-export function UserNav() {
+export function HrtdNav() {
   const { data: session } = useSession();
 
   return (
@@ -41,11 +43,17 @@ export function UserNav() {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
+          {/* <DropdownMenuItem>Enroll</DropdownMenuItem> */}
           <DropdownMenuItem>
-            <ArrowRight className="mr-2 h-4 w-4" />
-            Enroll
+            <Link
+              href={navRoutes.settings.path}
+              passHref
+              className="flex mr-2 w-full items-center"
+            >
+              <Settings className="mr-2 h-4 w-4" />
+              Settings
+            </Link>
           </DropdownMenuItem>
-          {/* <DropdownMenuItem>Settings</DropdownMenuItem> */}
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={() => signOut()}>

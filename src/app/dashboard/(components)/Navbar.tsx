@@ -1,9 +1,10 @@
 import Image from 'next/image';
-import DepedLogo from '../../../public/images/deped-logo.png';
+import DepedLogo from '../../../../public/images/deped-logo.png';
 import { DialogFileUpload } from './FileUploader/dialog-file-upload';
 import { PresetActions } from './PresetActions';
 import Link from 'next/link';
-import { navRoutes } from '../routes';
+import { HrtdNav } from '@/app/dashboard/(components)/HrtdNav';
+import { navRoutes } from '@/app/routes';
 
 export default function Navbar() {
   return (
@@ -23,8 +24,9 @@ export default function Navbar() {
           </Link>
         </div>
         <div className="flex items-center space-x-2">
-          <DialogFileUpload />
-          <PresetActions />
+          {/* <DialogFileUpload />
+          <PresetActions /> */}
+          <HrtdNav />
         </div>
       </div>
     </>

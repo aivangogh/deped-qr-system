@@ -11,7 +11,16 @@ export default function ParticipantLayout({
   children: React.ReactNode;
 }) {
   const router = useRouter();
-  const { data: session } = useSession();
+  const { data: session, status } = useSession({
+    required: true,
+    onUnauthenticated() {
+      router.push(authRoutes.signIn.path);
+    },
+  });
+
+  if (status === 'loading') {
+    return <div>Loading...</div>;
+  }
 
   if (!session) {
     return <div>Unauthorize</div>;

@@ -1,9 +1,9 @@
-import TrainingInfo from "../trainings/TrainingInfo";
+import Trainings from './(trainings)/trainings';
 
 export default function DashboardPage() {
   return (
     <div className="container pt-4">
-      <TrainingInfo />
+      <Trainings />
     </div>
   );
 }

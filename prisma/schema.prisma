@@ -68,18 +68,31 @@ model VerificationToken {
   @@map("verificationtokens")
 }
 
+model ResetToken {
+  identifier String   @id @default(auto()) @map("_id") @db.ObjectId
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+  @@map("resettokens")
+}
+
 model Training {
-  id                  String           @id @default(auto()) @map("_id") @db.ObjectId
-  traningId           String           @unique @db.ObjectId
-  createdAt           DateTime         @default(now())
-  updatedAt           DateTime         @updatedAt
-  title               String
-  DateOfTraining      DateOfTraining[]
-  hours               Int
-  programHolder       String
-  nameOfProgramHolder String
-  speaker             Speaker[]
-  participant         Participant[]
+  id             String           @id @default(auto()) @map("_id") @db.ObjectId
+  trainingCount  Int?             @unique
+  trainingCode   String           @unique @db.ObjectId
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+  title          String
+  DateOfTraining DateOfTraining[]
+  hours          Int
+  venue          String
+  issuedOn       DateTime
+  issuedAt       DateTime
+  paps           String
+  validUntil     DateTime
+  speaker        Speaker[]
+  participant    Participant[]
 }
 
 model DateOfTraining {

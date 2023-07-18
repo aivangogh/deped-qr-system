@@ -1,7 +1,7 @@
 'use client';
 
+import Navbar from '@/app/dashboard/(components)/Navbar';
 import SiteFooter from '@/components/layouts/SiteFooter';
-import Navbar from '../app/components/Navbar';
 import { ScrollArea } from '@/components/ui/scroll-area';
 
 export default function HrtdAuthLayout({
@@ -12,7 +12,7 @@ export default function HrtdAuthLayout({
   return (
     <>
       <div className="w-full">
-        <div className="sticky top-0 z-40 border-b container py-2 px-12 bg-white">
+        <div className="sticky top-0 z-40 border-b container py-2 bg-white">
           <Navbar />
         </div>
 
