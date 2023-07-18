@@ -77,18 +77,8 @@ export function EventDetails({ data }: { data: TrainingDetailsT }) {
 
   function onSubmit(data: AccountFormValues) {
     toast({
-      title: 'You submitted the following values:',
-      description: (
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      ),
-    });
-  }
-
-  function handleSave() {
-    toast({
-      description: 'Training details saved successfully!',
+      title: 'Training details saved successfully!',
+      description: 'Working in progress...',
     });
   }
 
@@ -98,7 +88,10 @@ export function EventDetails({ data }: { data: TrainingDetailsT }) {
         <span className="text-3xl font-bold">Training Details</span>
       </div>
       <Form {...form}>
-        <div className="flex space-x-20">
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="flex space-x-20"
+        >
           <div className="space-y-4">
             <div className="grid w-full max-w-sm items-center gap-1.5">
               <Label htmlFor="trainingId">Training ID:</Label>
@@ -160,12 +153,16 @@ export function EventDetails({ data }: { data: TrainingDetailsT }) {
           </div>
 
           <div className="space-y-4 flex items-end">
-            <Button size="sm" variant="secondary" onClick={handleSave} type="submit">
+            <Button
+              size="sm"
+              variant="secondary"
+              type="submit"
+            >
               <Save className="mr-2 h-4 w-4" />
               Update Details
             </Button>
           </div>
-        </div>
+        </form>
       </Form>
     </>
   );

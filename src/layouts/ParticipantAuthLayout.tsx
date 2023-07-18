@@ -1,13 +1,19 @@
+'use client';
+
+import ParticipantNavbar from '@/app/participant/(components)/ParticipantNavbar';
 import SiteFooter from '@/components/layouts/SiteFooter';
-import Navbar from '../components/Navbar';
 import { ScrollArea } from '@/components/ui/scroll-area';
 
-export default function AppLayout({ children }: { children: React.ReactNode }) {
+export default function ParticipantAuthLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <>
       <div className="w-full">
         <div className="sticky top-0 z-40 border-b container py-2 px-12 bg-white">
-          <Navbar />
+          <ParticipantNavbar />
         </div>
 
         <ScrollArea>{children}</ScrollArea>

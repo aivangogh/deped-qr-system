@@ -3,6 +3,7 @@ import DepedLogo from '../../../public/images/deped-logo.png';
 import { DialogFileUpload } from './FileUploader/dialog-file-upload';
 import { PresetActions } from './PresetActions';
 import Link from 'next/link';
+import { navRoutes } from '../routes';
 
 export default function Navbar() {
   return (
@@ -11,7 +12,11 @@ export default function Navbar() {
         <div className="flex space-x-2">
           <Image src={DepedLogo} width={44} height={44} alt="DepEd Logo" />
 
-          <Link href="/" passHref className="flex items-center">
+          <Link
+            href={navRoutes.home.path}
+            passHref
+            className="flex items-center"
+          >
             <h2 className="text-lg font-bold  tracking-normal">
               Training QR System
             </h2>

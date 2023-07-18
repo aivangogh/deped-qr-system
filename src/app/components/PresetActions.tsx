@@ -7,7 +7,7 @@ import {
   Settings,
   Settings2,
 } from 'lucide-react';
-import { routes } from '../routes';
+import { navRoutes } from '../routes';
 
 import {
   AlertDialog,
@@ -55,7 +55,7 @@ export function PresetActions() {
           </DropdownMenuItem>
           <DropdownMenuItem>
             <Link
-              href={routes.settings.path}
+              href={navRoutes.settings.path}
               passHref
               className="flex mr-2 w-full items-center"
             >

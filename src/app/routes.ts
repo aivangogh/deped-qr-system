@@ -1,4 +1,16 @@
-export const routes = {
+export const navRoutes = {
+  home: {
+    path: '/',
+    label: 'Home',
+  },
+  dashboard: {
+    path: '/dashboard',
+    label: 'Dashboard',
+  },
+  participant: {
+    path: '/participant',
+    label: 'Participant',
+  },
   settings: {
     path: '/settings',
     name: 'Settings',
@@ -16,5 +28,16 @@ export const routes = {
         name: 'Drive Folder',
       },
     },
+  },
+};
+
+export const authRoutes = {
+  signIn: {
+    path: '/sign-in',
+    label: 'Sign In',
+  },
+  signUp: {
+    path: '/sign-up',
+    label: 'Sign Up',
   },
 };

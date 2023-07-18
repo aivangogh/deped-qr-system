@@ -1,10 +1,11 @@
-"use client";
+'use client';
 
-import AppLayout from "@/app/layouts/AppLayout";
-import { Toaster } from "@/components/ui/toaster";
-import React from "react";
-import { QueryClient, QueryClientProvider } from "react-query";
-import { ReactQueryDevtools } from "react-query/devtools";
+import AppLayout from '@/layouts/HrtdAuthLayout';
+import { Toaster } from '@/components/ui/toaster';
+import React from 'react';
+import { QueryClient, QueryClientProvider } from 'react-query';
+import { ReactQueryDevtools } from 'react-query/devtools';
+import NextAuthProvider from '@/layouts/NextAuthProvider';
 
 const queryClient = new QueryClient();
 
@@ -15,8 +16,10 @@ export default function QueryClientProviderContext({
 }) {
   return (
     <QueryClientProvider client={queryClient}>
-      <AppLayout> {children} </AppLayout>
-      <Toaster />
+      <NextAuthProvider>
+        {children}
+        <Toaster />
+      </NextAuthProvider>
       <ReactQueryDevtools />
     </QueryClientProvider>
   );

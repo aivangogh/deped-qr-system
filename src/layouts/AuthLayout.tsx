@@ -1,13 +1,15 @@
 'use client';
 
+import { authRoutes, navRoutes } from '@/app/routes';
 import { useSession } from 'next-auth/react';
-import TrainingInfo from './trainings/TrainingInfo';
-import { authRoutes, navRoutes } from './routes';
 import { useRouter } from 'next/navigation';
 
-export default function Home() {
+export default function AuthLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const router = useRouter();
-
   const { data: session, status } = useSession({
     required: true,
     onUnauthenticated() {
@@ -17,6 +19,10 @@ export default function Home() {
 
   if (status === 'loading') {
     return <div>Loading...</div>;
+  }
+
+  if (!session) {
+    return <div>Unauthorized</div>;
   }
 
   if (session && session.user.role === 'hrtd') {

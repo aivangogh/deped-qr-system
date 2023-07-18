@@ -1,7 +1,7 @@
-import { routes } from '../routes';
+import { navRoutes } from '../routes';
 
 export const metadata = {
-  title: `${routes.settings.name} | DepEd: Training QR System`,
+  title: `${navRoutes.settings.name} | DepEd: Training QR System`,
   description: "DepEd's Training QR System",
 };
 
@@ -10,16 +10,16 @@ import { SidebarNav } from './(components)/SidebarNav';
 
 const sidebarNavItems = [
   {
-    title: routes.settings.subroutes.documentTemplate.name,
-    href: routes.settings.subroutes.documentTemplate.path,
+    title: navRoutes.settings.subroutes.documentTemplate.name,
+    href: navRoutes.settings.subroutes.documentTemplate.path,
   },
   {
-    title: routes.settings.subroutes.excelTemplate.name,
-    href: routes.settings.subroutes.excelTemplate.path,
+    title: navRoutes.settings.subroutes.excelTemplate.name,
+    href: navRoutes.settings.subroutes.excelTemplate.path,
   },
   {
-    title: routes.settings.subroutes.driveFolder.name,
-    href: routes.settings.subroutes.driveFolder.path,
+    title: navRoutes.settings.subroutes.driveFolder.name,
+    href: navRoutes.settings.subroutes.driveFolder.path,
   },
 ];
 
