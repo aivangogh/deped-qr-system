@@ -3,9 +3,18 @@ import { TrainingsT } from '@/types/trainings';
 import { NextResponse } from 'next/server';
 
 export async function GET() {
-  const tranings = prisma.training.findMany();
-
-  return NextResponse.json({ data: tranings }, { status: 200 });
+  await prisma.training
+    .findMany()
+    .then((res) => {
+      return NextResponse.json({
+        data: res,
+        status: 200,
+        message: 'Trainings found',
+      });
+    })
+    .catch((err) => {
+      return NextResponse.json({ status: 500, error: err });
+    });
 }
 
 export async function POST(request: Request) {
@@ -17,6 +26,7 @@ export async function POST(request: Request) {
     issuedOn,
     issuedAt,
     paps,
+    validUntil,
   } = (await request.json()) as TrainingsT;
 
   const newTraining: TrainingsT = {
@@ -31,13 +41,19 @@ export async function POST(request: Request) {
     issuedAt: new Date(issuedAt),
     paps,
     trainingCode: await generateTrainingCode(),
-    validUntil: new Date(issuedAt),
+    validUntil: new Date(validUntil),
   };
 
-  await prisma.training.create({
-    data: newTraining,
-  });
-  return NextResponse.json({});
+  await prisma.training
+    .create({
+      data: newTraining,
+    })
+    .then((res) => {
+      return NextResponse.json({ status: 201, message: 'Training created' });
+    })
+    .catch((err) => {
+      return NextResponse.json({ status: 500, error: err });
+    });
 }
 
 async function generateTrainingCode(): Promise<string> {

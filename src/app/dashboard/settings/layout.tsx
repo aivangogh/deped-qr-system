@@ -1,24 +1,24 @@
 export const metadata = {
-  title: `${navRoutes.settings.name} | DepEd: Training QR System`,
+  title: `${dashboardRoutes.settings.label} | DepEd: Training QR System`,
   description: "DepEd's Training QR System",
 };
 
 import { Separator } from '@/components/ui/separator';
 import { SidebarNav } from './(components)/SidebarNav';
-import { navRoutes } from '@/app/routes';
+import { dashboardRoutes, navRoutes } from '@/app/routes';
 
 const sidebarNavItems = [
   {
-    title: navRoutes.settings.subroutes.documentTemplate.name,
-    href: navRoutes.settings.subroutes.documentTemplate.path,
+    title: dashboardRoutes.settings.subroutes.documentTemplate.label,
+    href: dashboardRoutes.settings.subroutes.documentTemplate.path,
   },
   {
-    title: navRoutes.settings.subroutes.excelTemplate.name,
-    href: navRoutes.settings.subroutes.excelTemplate.path,
+    title: dashboardRoutes.settings.subroutes.excelTemplate.label,
+    href: dashboardRoutes.settings.subroutes.excelTemplate.path,
   },
   {
-    title: navRoutes.settings.subroutes.driveFolder.name,
-    href: navRoutes.settings.subroutes.driveFolder.path,
+    title: dashboardRoutes.settings.subroutes.driveFolder.label,
+    href: dashboardRoutes.settings.subroutes.driveFolder.path,
   },
 ];
 

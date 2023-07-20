@@ -1,4 +1,4 @@
-import { navRoutes } from '@/app/routes';
+import { dashboardRoutes, navRoutes } from '@/app/routes';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import {
@@ -46,7 +46,7 @@ export function HrtdNav() {
           {/* <DropdownMenuItem>Enroll</DropdownMenuItem> */}
           <DropdownMenuItem>
             <Link
-              href={navRoutes.settings.path}
+              href={dashboardRoutes.settings.path}
               passHref
               className="flex mr-2 w-full items-center"
             >

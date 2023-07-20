@@ -12,3 +12,5 @@ export type TrainingsT = {
   trainingCode: string;
   validUntil: Date;
 };
+
+export type UpdateTrainingT = Omit<TrainingsT, 'trainingCode'>;

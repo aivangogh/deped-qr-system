@@ -22,9 +22,9 @@ export function DataTableToolbar<TData>({
     <div className="flex items-center justify-between">
       <div className="flex flex-1 items-center space-x-2">
         <div className="flex items-center">
-          <Filter className="mr-2 h-4 w-4" />
+          {/* <Filter className="mr-2 h-4 w-4" /> */}
           <Input
-            placeholder="Filter participant..."
+            placeholder="Search by keyword"
             value={
               (table.getColumn('participant')?.getFilterValue() as string) ?? ''
             }

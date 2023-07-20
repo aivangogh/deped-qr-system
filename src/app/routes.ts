@@ -1,3 +1,4 @@
+import AddTraining from './dashboard/add-training/page';
 export const navRoutes = {
   home: {
     path: '/',
@@ -11,21 +12,28 @@ export const navRoutes = {
     path: '/participant',
     label: 'Participant',
   },
+};
+
+export const dashboardRoutes = {
+  addTraining: {
+    path: '/dashboard/add-training',
+    label: 'Add Training',
+  },
   settings: {
     path: '/settings',
-    name: 'Settings',
+    label: 'Settings',
     subroutes: {
       documentTemplate: {
         path: '/settings',
-        name: 'Document Template',
+        label: 'Document Template',
       },
       excelTemplate: {
         path: '/settings/excel',
-        name: 'Excel Template',
+        label: 'Excel Template',
       },
       driveFolder: {
         path: '/settings/drive-folder',
-        name: 'Drive Folder',
+        label: 'Drive Folder',
       },
     },
   },

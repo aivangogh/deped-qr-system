@@ -1,7 +1,6 @@
 'use client';
 
 import { useSession } from 'next-auth/react';
-import TrainingInfo from './trainings/TrainingInfo';
 import { authRoutes, navRoutes } from './routes';
 import { useRouter } from 'next/navigation';
 

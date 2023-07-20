@@ -3,11 +3,11 @@
 import {
   Download,
   ListRestart,
-  MoreHorizontal,
   Settings,
-  Settings2,
+  Settings2
 } from 'lucide-react';
 
+import { dashboardRoutes } from '@/app/routes';
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -30,7 +30,6 @@ import useSettingsStore from '@/store/useSettingsStore';
 import useTrainingInfoStore from '@/store/useTrainingInfoStore';
 import Link from 'next/link';
 import { useState } from 'react';
-import { navRoutes } from '@/app/routes';
 
 export function PresetActions() {
   const [open, setIsOpen] = useState<boolean>(false);
@@ -55,7 +54,7 @@ export function PresetActions() {
           </DropdownMenuItem>
           <DropdownMenuItem>
             <Link
-              href={navRoutes.settings.path}
+              href={dashboardRoutes.settings.path}
               passHref
               className="flex mr-2 w-full items-center"
             >
