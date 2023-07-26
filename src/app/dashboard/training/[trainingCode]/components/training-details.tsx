@@ -9,9 +9,8 @@ import * as z from 'zod';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { TrainingDetailsT } from '@/types/types';
-import { CalendarDateRangePicker } from './date-range-picker';
+import { CalendarDateRangePicker } from './event-info/date-range-picker';
 import { Button } from '@/components/ui/button';
-import { Training } from '../data/columns';
 import { Save } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
 import {
@@ -23,6 +22,10 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
+import { TrainingT } from '@/types/training';
+import { Training } from '@prisma/client';
+import { PresetActions } from '../../../(components)/PresetActions';
+import { DialogFileUpload } from '@/app/dashboard/(components)/FileUploader/dialog-file-upload';
 
 const accountFormSchema = z.object({
   titleOfTraining: z
@@ -63,7 +66,7 @@ const defaultValues: Partial<AccountFormValues> = {
   // dob: new Date("2023-01-23"),
 };
 
-export function EventDetails({ data }: { data: TrainingDetailsT }) {
+export function TrainingDetails({ data }: { data: Training }) {
   const { toast } = useToast();
   const [date, setDate] = React.useState<DateRange | undefined>({
     from: new Date(2023, 0, 20),
@@ -84,8 +87,12 @@ export function EventDetails({ data }: { data: TrainingDetailsT }) {
 
   return (
     <>
-      <div>
+      <div className="flex justify-between">
         <span className="text-3xl font-bold">Training Details</span>
+        <div className="space-x-2">
+          <DialogFileUpload />
+          <PresetActions />
+        </div>
       </div>
       <Form {...form}>
         <form
@@ -94,11 +101,11 @@ export function EventDetails({ data }: { data: TrainingDetailsT }) {
         >
           <div className="space-y-4">
             <div className="grid w-full max-w-sm items-center gap-1.5">
-              <Label htmlFor="trainingId">Training ID:</Label>
+              <Label htmlFor="trainingCode">Training Code:</Label>
               <Input
                 type="text"
-                id="trainingId"
-                value={data.trainingId}
+                id="trainingCode"
+                value={data.trainingCode!}
                 readOnly
                 className="cursor-default"
               />
@@ -117,7 +124,12 @@ export function EventDetails({ data }: { data: TrainingDetailsT }) {
           <div className="space-y-4">
             <div className="grid w-full max-w-sm items-center gap-1.5">
               <Label htmlFor="numberOfHours">Date of Training:</Label>
-              <CalendarDateRangePicker dateData={data.date} />
+              <CalendarDateRangePicker
+                dateData={{
+                  from: data.dateFrom,
+                  to: data.dateTo,
+                }}
+              />
             </div>
             <div className="grid w-full max-w-sm items-center gap-1.5">
               <Label htmlFor="numberOfHours">Number of hours:</Label>
@@ -125,7 +137,7 @@ export function EventDetails({ data }: { data: TrainingDetailsT }) {
                 type="number"
                 id="numberOfHours"
                 placeholder="24"
-                value={data.hours}
+                value={data.numberOfHours ? data.numberOfHours : 0}
                 readOnly
                 className="cursor-default"
               />
@@ -153,11 +165,7 @@ export function EventDetails({ data }: { data: TrainingDetailsT }) {
           </div>
 
           <div className="space-y-4 flex items-end">
-            <Button
-              size="sm"
-              variant="secondary"
-              type="submit"
-            >
+            <Button size="sm" variant="secondary" type="submit">
               <Save className="mr-2 h-4 w-4" />
               Update Details
             </Button>

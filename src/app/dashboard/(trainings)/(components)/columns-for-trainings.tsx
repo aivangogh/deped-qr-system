@@ -2,11 +2,13 @@
 
 import { ColumnDef } from '@tanstack/react-table';
 
-import { TrainingsT } from '@/types/trainings';
+import { TrainingsT, TrainingsWithPapT } from '@/types/trainings';
 import { DataTableColumnHeader } from './data-table-column-header';
 import { DataTableRowActions } from './data-table-row-actions';
+import { Training } from '@prisma/client';
+import { TrainingT } from '@/types/training';
 
-export const columnsForTrainings: ColumnDef<TrainingsT>[] = [
+export const columnsForTrainings: ColumnDef<TrainingT>[] = [
   // {
   //   id: 'select',
   //   header: ({ table }) => (
@@ -55,7 +57,7 @@ export const columnsForTrainings: ColumnDef<TrainingsT>[] = [
     },
   },
   {
-    accessorKey: 'date',
+    accessorKey: 'dateFrom',
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Date" />
     ),
@@ -63,7 +65,7 @@ export const columnsForTrainings: ColumnDef<TrainingsT>[] = [
       return (
         <div className="flex space-x-2">
           <span className="max-w-[150px] truncate font-medium">
-            {row.getValue('date')}
+            {new Date(row.getValue('dateFrom')).toLocaleDateString()}
           </span>
         </div>
       );
@@ -85,15 +87,15 @@ export const columnsForTrainings: ColumnDef<TrainingsT>[] = [
     },
   },
   {
-    accessorKey: 'paps',
+    accessorKey: 'pap.pap',
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="PAPs" />
+      <DataTableColumnHeader column={column} title="PAP" />
     ),
     cell: ({ row }) => {
       return (
         <div className="flex space-x-2">
           <span className="max-w-[60px] font-medium">
-            {row.getValue('paps')}
+            {row.getValue('pap.pap')}
           </span>
         </div>
       );

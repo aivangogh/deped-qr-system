@@ -9,7 +9,11 @@ type CreatePapType = {
 
 export async function GET() {
   try {
-    const paps = await prisma.pap.findMany();
+    const paps = await prisma.pap.findMany({
+      orderBy: {
+        createdAt: 'desc',
+      },
+    });
 
     return NextResponse.json({
       data: paps,

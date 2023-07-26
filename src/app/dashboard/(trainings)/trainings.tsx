@@ -7,9 +7,23 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { dashboardRoutes, navRoutes } from '@/app/routes';
 import { Plus } from 'lucide-react';
+import { useQuery } from 'react-query';
+import { Training } from '@prisma/client';
+import { getTrainings } from '@/services/fetch/trainings';
+import { TrainingsT, TrainingsWithPapT } from '@/types/trainings';
+import { TrainingT } from '@/types/training';
 
 export default function Trainings() {
-  const { trainings } = useTrainingsStore();
+  const { trainings, setTrainings } = useTrainingsStore();
+
+  useQuery({
+    queryKey: 'trainings',
+    queryFn: () => getTrainings(),
+    onSuccess: ({ data }: { data: TrainingT[] }) => {
+      console.log(data);
+      setTrainings(data);
+    },
+  });
 
   return (
     <>

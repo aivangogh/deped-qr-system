@@ -64,16 +64,24 @@ import { PapsT } from '@/types/paps';
 import usePapsStore from '@/store/usePapsStore';
 import { useEffect } from 'react';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { CreateTrainingT } from '@/types/trainings';
+import { createTraining } from '@/services/fetch/trainings';
 
 const TrainingFormSchema = z.object({
   title: z.string().min(2, {
     message: 'Username must be at least 2 characters.',
   }),
-  date: z.date({
-    required_error: 'Please select a date and time',
-    invalid_type_error: "That's not a date!",
+  date: z.object({
+    from: z.date({
+      required_error: 'Please select a date and time',
+      invalid_type_error: "That's not a date!",
+    }),
+    to: z.date({
+      required_error: 'Please select a date and time',
+      invalid_type_error: "That's not a date!",
+    }),
   }),
-  numberOfHours: z.number().int().positive(),
+  numberOfHours: z.coerce.number().positive(),
   venue: z.string().min(2, {
     message: 'Venue must be at least 2 characters.',
   }),
@@ -81,15 +89,12 @@ const TrainingFormSchema = z.object({
     required_error: 'Please select a date and time',
     invalid_type_error: "That's not a date!",
   }),
-  issuedAt: z.date({
-    required_error: 'Please select a date and time',
+  issuedAt: z.string({
+    required_error: 'Please select must be at least 2 characters.',
     invalid_type_error: "That's not a date!",
   }),
-  paps: z.string({
+  papId: z.string({
     required_error: 'Please select at least one PAP',
-  }),
-  trainingCode: z.string().min(13, {
-    message: 'Training code must be at least 13 characters.',
   }),
   validUntil: z.date({
     required_error: 'Please select a date and time',
@@ -106,7 +111,7 @@ const PapFormSchema = z.object({
 export default function AddTrainingForm() {
   const router = useRouter();
   const { toast } = useToast();
-  const { paps, setPaps } = usePapsStore();
+  const { paps, setPaps, addPap } = usePapsStore();
 
   const trainingForm = useForm<z.infer<typeof TrainingFormSchema>>({
     resolver: zodResolver(TrainingFormSchema),
@@ -124,15 +129,38 @@ export default function AddTrainingForm() {
     },
   });
 
+  const addTrainingMutation = useMutation({
+    mutationKey: ['new-training'],
+    mutationFn: (formData: CreateTrainingT) => {
+      return createTraining(formData);
+    },
+    onSuccess({ data }) {
+      console.log(data);
+      // addPap(data);
+
+      toast({
+        title: 'Training created',
+        description: 'Training created successfully',
+      });
+    },
+    onError() {
+      addTrainingMutation.reset();
+      toast({
+        title: 'Something went wrong',
+        description: 'Training was not created. Please try again.',
+      });
+    },
+  });
+
   const papMutation = useMutation({
-    mutationKey: ['paps'],
+    mutationKey: ['new-pap'],
     mutationFn: (formData: PapsT) => {
       // console.log(formData);
       return createPap(formData);
     },
     onSuccess({ data }) {
       console.log(data);
-      setPaps(data);
+      addPap(data);
 
       toast({
         title: 'PAP created',
@@ -150,14 +178,7 @@ export default function AddTrainingForm() {
 
   function onSubmitTraining(data: z.infer<typeof TrainingFormSchema>) {
     console.log(data);
-    toast({
-      title: 'You submitted the following values:',
-      description: (
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      ),
-    });
+    addTrainingMutation.mutate(data);
   }
 
   function onSubmitPap(data: z.infer<typeof PapFormSchema>) {
@@ -187,7 +208,10 @@ export default function AddTrainingForm() {
                         name="title"
                         render={({ field }) => (
                           <FormItem className="grid">
-                            <FormLabel>Title</FormLabel>
+                            <FormLabel>
+                              Title
+                              <span className="text-red-500"> *</span>
+                            </FormLabel>
                             <FormControl>
                               <Input
                                 placeholder="Type here..."
@@ -203,50 +227,101 @@ export default function AddTrainingForm() {
                         )}
                       />
 
-                      <FormField
-                        control={trainingForm.control}
-                        name="date"
-                        render={({ field }) => (
-                          <FormItem className="grid">
-                            <FormLabel>Date</FormLabel>
-                            <Popover>
-                              <PopoverTrigger asChild>
-                                <FormControl>
-                                  <Button
-                                    variant={'outline'}
-                                    className={cn(
-                                      'w-[240px] pl-3 text-left font-normal',
-                                      !field.value && 'text-muted-foreground'
-                                    )}
-                                  >
-                                    {field.value ? (
-                                      format(field.value, 'PPP')
-                                    ) : (
-                                      <span>Pick a date</span>
-                                    )}
-                                    <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                                  </Button>
-                                </FormControl>
-                              </PopoverTrigger>
-                              <PopoverContent
-                                className="w-auto p-0"
-                                align="start"
-                              >
-                                <Calendar
-                                  mode="single"
-                                  selected={field.value}
-                                  onSelect={field.onChange}
-                                  initialFocus
-                                />
-                              </PopoverContent>
-                            </Popover>
-                            <FormDescription>
-                              Lorem ipsum dolor sit amet consectetur adipisicing
-                            </FormDescription>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
+                      <div className="flex space-x-4">
+                        <FormField
+                          control={trainingForm.control}
+                          name="date.from"
+                          render={({ field }) => (
+                            <FormItem className="grid">
+                              <FormLabel>
+                                Date From{' '}
+                                <span className="text-red-500"> *</span>
+                              </FormLabel>
+                              <Popover>
+                                <PopoverTrigger asChild>
+                                  <FormControl>
+                                    <Button
+                                      variant={'outline'}
+                                      className={cn(
+                                        'w-[240px] pl-3 text-left font-normal',
+                                        !field.value && 'text-muted-foreground'
+                                      )}
+                                    >
+                                      {field.value ? (
+                                        format(field.value, 'PPP')
+                                      ) : (
+                                        <span>Pick a date</span>
+                                      )}
+                                      <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                                    </Button>
+                                  </FormControl>
+                                </PopoverTrigger>
+                                <PopoverContent
+                                  className="w-auto p-0"
+                                  align="start"
+                                >
+                                  <Calendar
+                                    mode="single"
+                                    selected={field.value}
+                                    onSelect={field.onChange}
+                                    initialFocus
+                                  />
+                                </PopoverContent>
+                              </Popover>
+                              <FormDescription>
+                                Training starts on the first day.
+                              </FormDescription>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        <FormField
+                          control={trainingForm.control}
+                          name="date.to"
+                          render={({ field }) => (
+                            <FormItem className="grid">
+                              <FormLabel>
+                                Date To <span className="text-red-500"> *</span>
+                              </FormLabel>
+                              <Popover>
+                                <PopoverTrigger asChild>
+                                  <FormControl>
+                                    <Button
+                                      variant={'outline'}
+                                      className={cn(
+                                        'w-[240px] pl-3 text-left font-normal',
+                                        !field.value && 'text-muted-foreground'
+                                      )}
+                                    >
+                                      {field.value ? (
+                                        format(field.value, 'PPP')
+                                      ) : (
+                                        <span>Pick a date</span>
+                                      )}
+                                      <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                                    </Button>
+                                  </FormControl>
+                                </PopoverTrigger>
+                                <PopoverContent
+                                  className="w-auto p-0"
+                                  align="start"
+                                >
+                                  <Calendar
+                                    mode="single"
+                                    selected={field.value}
+                                    onSelect={field.onChange}
+                                    initialFocus
+                                  />
+                                </PopoverContent>
+                              </Popover>
+                              <FormDescription>
+                                Training ends on the last day.
+                              </FormDescription>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
 
                       <FormField
                         control={trainingForm.control}
@@ -255,7 +330,11 @@ export default function AddTrainingForm() {
                           <FormItem className="grid">
                             <FormLabel>No. of hours</FormLabel>
                             <FormControl>
-                              <Input placeholder="Type here..." {...field} />
+                              <Input
+                                placeholder="Type here..."
+                                type="number"
+                                {...field}
+                              />
                             </FormControl>
                             <FormDescription>
                               Lorem ipsum dolor sit.
@@ -270,7 +349,9 @@ export default function AddTrainingForm() {
                         name="venue"
                         render={({ field }) => (
                           <FormItem className="grid">
-                            <FormLabel>Venue</FormLabel>
+                            <FormLabel>
+                              Venue <span className="text-red-500"> *</span>
+                            </FormLabel>
                             <FormControl>
                               <Input placeholder="Type here..." {...field} />
                             </FormControl>
@@ -287,7 +368,9 @@ export default function AddTrainingForm() {
                         name="issuedOn"
                         render={({ field }) => (
                           <FormItem className="grid">
-                            <FormLabel>Issued On</FormLabel>
+                            <FormLabel>
+                              Issued On <span className="text-red-500"> *</span>
+                            </FormLabel>
                             <Popover>
                               <PopoverTrigger asChild>
                                 <FormControl>
@@ -315,10 +398,6 @@ export default function AddTrainingForm() {
                                   mode="single"
                                   selected={field.value}
                                   onSelect={field.onChange}
-                                  disabled={(date) =>
-                                    date > new Date() ||
-                                    date < new Date('1900-01-01')
-                                  }
                                   initialFocus
                                 />
                               </PopoverContent>
@@ -336,40 +415,18 @@ export default function AddTrainingForm() {
                         name="issuedAt"
                         render={({ field }) => (
                           <FormItem className="grid">
-                            <FormLabel>Issued At</FormLabel>
-                            <Popover>
-                              <PopoverTrigger asChild>
-                                <FormControl>
-                                  <Button
-                                    variant={'outline'}
-                                    className={cn(
-                                      'w-[240px] pl-3 text-left font-normal',
-                                      !field.value && 'text-muted-foreground'
-                                    )}
-                                  >
-                                    {field.value ? (
-                                      format(field.value, 'PPP')
-                                    ) : (
-                                      <span>Pick a date</span>
-                                    )}
-                                    <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                                  </Button>
-                                </FormControl>
-                              </PopoverTrigger>
-                              <PopoverContent
-                                className="w-auto p-0"
-                                align="start"
-                              >
-                                <Calendar
-                                  mode="single"
-                                  selected={field.value}
-                                  onSelect={field.onChange}
-                                  initialFocus
-                                />
-                              </PopoverContent>
-                            </Popover>
+                            <FormLabel>
+                              Issued At <span className="text-red-500"> *</span>
+                            </FormLabel>
+                            <FormControl>
+                              <Input
+                                placeholder="Type here..."
+                                type="text"
+                                {...field}
+                              />
+                            </FormControl>
                             <FormDescription>
-                              Lorem ipsum dolor sit amet consectetur adipisicing
+                              Lorem ipsum dolor sit.
                             </FormDescription>
                             <FormMessage />
                           </FormItem>
@@ -378,11 +435,12 @@ export default function AddTrainingForm() {
 
                       <FormField
                         control={trainingForm.control}
-                        name="paps"
+                        name="papId"
                         render={({ field }) => (
                           <FormItem className="grid">
                             <FormLabel>
-                              Project, Activities and Projects (PAPs)
+                              Project, Activities and Projects (PAPs){' '}
+                              <span className="text-red-500"> *</span>
                             </FormLabel>
                             <FormControl>
                               <Select
@@ -429,7 +487,7 @@ export default function AddTrainingForm() {
                         )}
                       />
 
-                      <FormField
+                      {/* <FormField
                         control={trainingForm.control}
                         name="trainingCode"
                         render={({ field }) => (
@@ -449,14 +507,17 @@ export default function AddTrainingForm() {
                             <FormMessage />
                           </FormItem>
                         )}
-                      />
+                      /> */}
 
                       <FormField
                         control={trainingForm.control}
                         name="validUntil"
                         render={({ field }) => (
                           <FormItem className="grid">
-                            <FormLabel>Date Time Validity</FormLabel>
+                            <FormLabel>
+                              Date Time Validity{' '}
+                              <span className="text-red-500"> *</span>
+                            </FormLabel>
                             <Popover>
                               <PopoverTrigger asChild>
                                 <FormControl>
@@ -503,7 +564,16 @@ export default function AddTrainingForm() {
                 <Button variant="ghost" onClick={() => router.back()}>
                   Cancel
                 </Button>
-                <Button type="submit">Submit</Button>
+                <Button type="submit" disabled={addTrainingMutation.isLoading}>
+                  {addTrainingMutation.isLoading ? (
+                    <>
+                      <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
+                      Submitting...
+                    </>
+                  ) : (
+                    'Submit'
+                  )}
+                </Button>
               </CardFooter>
             </form>
           </Form>

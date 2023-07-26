@@ -50,7 +50,7 @@ export function DialogFileUpload() {
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Button size="sm" className="ml-auto h-8">
+        <Button size="sm" variant="secondary" className="ml-auto h-8">
           <FileSpreadsheet className="mr-2 h-4 w-4" />
           Import Excel
         </Button>

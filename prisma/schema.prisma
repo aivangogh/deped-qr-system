@@ -79,40 +79,40 @@ model ResetToken {
 
 model Training {
   id             String           @id @default(auto()) @map("_id") @db.ObjectId
-  trainingCount  Int?             @unique
-  trainingCode   String           @unique @db.ObjectId
+  trainingCode   String           @unique
   createdAt      DateTime         @default(now())
   updatedAt      DateTime         @updatedAt
   title          String
-  DateOfTraining DateOfTraining[]
-  hours          Int?
+  dateFrom       DateTime
+  dateTo         DateTime
+  numberOfHours  Int?
   venue          String
   issuedOn       DateTime?
-  issuedAt       DateTime?
-  paps           String
+  issuedAt       String?
   validUntil     DateTime
   speaker        Speaker[]
   participant    Participant[]
-  PAPs           Pap[]
+  pap            Pap              @relation(fields: [papId], references: [papId])
+  papId          String
+  DateOfTraining DateOfTraining[]
 }
 
 model Pap {
-  id          String    @id @default(auto()) @map("_id") @db.ObjectId
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-  papId       String    @unique
+  id          String     @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  papId       String     @unique
   description String?
   pap         String
-  Training    Training? @relation(fields: [trainingId], references: [id])
-  trainingId  String?   @db.ObjectId
+  Training    Training[]
 }
 
 model DateOfTraining {
   id         String   @id @default(auto()) @map("_id") @db.ObjectId
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
-  start      DateTime
-  end        DateTime
+  from       DateTime
+  to         DateTime
   trainingId String   @db.ObjectId
   training   Training @relation(fields: [trainingId], references: [id])
 }

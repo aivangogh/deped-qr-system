@@ -1,9 +1,9 @@
+import { CreateTrainingT } from '@/types/trainings';
 import axios from 'axios';
-import { create } from 'zustand';
 
-export async function getPaps() {
+export async function getTrainings() {
   try {
-    const { data } = await axios.get('/api/paps');
+    const { data } = await axios.get(`/api/trainings`);
     return data;
   } catch (error) {
     throw error;
@@ -12,7 +12,7 @@ export async function getPaps() {
 
 export async function getTraining(trainingCode: string) {
   try {
-    const { data } = await axios.get(`/api/training/${trainingCode}`);
+    const { data } = await axios.get(`/api/trainings/${trainingCode}`);
     return data;
   } catch (error) {
     throw error;
@@ -25,7 +25,7 @@ export async function updateTraining(
 ) {
   try {
     const { data } = await axios.put(
-      `/api/training/${trainingCode}`,
+      `/api/trainings/${trainingCode}`,
       updateTraining
     );
     return data;
@@ -34,9 +34,10 @@ export async function updateTraining(
   }
 }
 
-export async function createTraining(training: any) {
+export async function createTraining(training: CreateTrainingT) {
   try {
-    const { data } = await axios.post(`/api/training`, training);
+    console.log(training);
+    const { data } = await axios.post(`/api/trainings`, training);
     return data;
   } catch (error) {
     throw error;

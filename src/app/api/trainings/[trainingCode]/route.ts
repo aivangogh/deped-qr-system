@@ -6,22 +6,29 @@ export async function GET(
   request: Request,
   { params }: { params: { trainingCode: string } }
 ) {
-  await prisma.training
-    .findUnique({
+  try {
+    const training = await prisma.training.findUnique({
       where: {
         trainingCode: params.trainingCode,
       },
-    })
-    .then((res) => {
-      return NextResponse.json({
-        data: res,
-        status: 200,
-        message: 'Training found',
-      });
-    })
-    .catch((err) => {
-      return NextResponse.json({ status: 500, error: err });
+      include: {
+        pap: {
+          select: {
+            pap: true,
+            papId: true,
+          },
+        },
+      },
     });
+
+    return NextResponse.json({
+      data: training,
+      status: 200,
+      message: 'Training found',
+    });
+  } catch (error) {
+    return NextResponse.json({ status: 500, error });
+  }
 }
 
 export async function PUT(
@@ -31,11 +38,11 @@ export async function PUT(
   const {
     title,
     date: { from, to },
-    hours,
+    numberOfHours,
     venue,
     issuedOn,
     issuedAt,
-    paps,
+    papId,
     validUntil,
   } = (await request.json()) as UpdateTrainingT;
 
@@ -45,11 +52,11 @@ export async function PUT(
       from: new Date(from),
       to: new Date(to),
     },
-    hours,
+    numberOfHours,
     venue,
     issuedOn: new Date(issuedOn),
-    issuedAt: new Date(issuedAt),
-    paps,
+    issuedAt,
+    papId,
     validUntil: new Date(validUntil),
   };
 

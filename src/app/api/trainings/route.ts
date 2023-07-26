@@ -3,60 +3,63 @@ import { TrainingsT } from '@/types/trainings';
 import { NextResponse } from 'next/server';
 
 export async function GET() {
-  await prisma.training
-    .findMany()
-    .then((res) => {
-      return NextResponse.json({
-        data: res,
-        status: 200,
-        message: 'Trainings found',
-      });
-    })
-    .catch((err) => {
-      return NextResponse.json({ status: 500, error: err });
+  try {
+    const trainings = await prisma.training.findMany({
+      include: {
+        pap: {
+          select: {
+            pap: true,
+            papId: true,
+          },
+        },
+      },
     });
+
+    return NextResponse.json({
+      data: trainings,
+      status: 200,
+      message: 'Trainings found',
+    });
+  } catch (err) {
+    return NextResponse.json({ status: 500, error: err });
+  }
 }
 
 export async function POST(request: Request) {
-  const {
-    title,
-    date: { from, to },
-    hours,
-    venue,
-    issuedOn,
-    issuedAt,
-    paps,
-    validUntil,
-  } = (await request.json()) as TrainingsT;
+  try {
+    const {
+      title,
+      date: { from, to },
+      numberOfHours,
+      venue,
+      issuedOn,
+      issuedAt,
+      papId,
+      validUntil,
+    } = (await request.json()) as TrainingsT;
 
-  const newTraining: TrainingsT = {
-    title,
-    date: {
-      from: new Date(from),
-      to: new Date(to),
-    },
-    hours,
-    venue,
-    issuedOn: new Date(issuedOn),
-    issuedAt: new Date(issuedAt),
-    paps,
-    trainingCode: await generateTrainingCode(),
-    validUntil: new Date(validUntil),
-  };
-
-  await prisma.training
-    .create({
-      data: newTraining,
-    })
-    .then((res) => {
-      return NextResponse.json({ status: 201, message: 'Training created' });
-    })
-    .catch((err) => {
-      return NextResponse.json({ status: 500, error: err });
+    await prisma.training.create({
+      data: {
+        title,
+        dateFrom: new Date(from),
+        dateTo: new Date(to),
+        numberOfHours,
+        venue,
+        issuedOn: new Date(issuedOn),
+        issuedAt,
+        papId,
+        trainingCode: await generateTrainingCode(),
+        validUntil: new Date(validUntil),
+      },
     });
+
+    return NextResponse.json({ status: 201, message: 'Training created' });
+  } catch (err) {
+    return NextResponse.json({ status: 500, error: err });
+  }
 }
 
-async function generateTrainingCode(): Promise<string> {
+async function generateTrainingCode() {
   const trainingsCount = await prisma.training.count();
   const count = trainingsCount + 1;
 

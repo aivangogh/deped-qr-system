@@ -15,8 +15,8 @@ import {
 } from '@/components/ui/popover';
 
 type DateType = {
-  start: Date;
-  end: Date;
+  from: Date;
+  to: Date;
 };
 
 export function CalendarDateRangePicker({
@@ -33,8 +33,8 @@ export function CalendarDateRangePicker({
 
   React.useEffect(() => {
     setDate({
-      from: new Date(dateData.start),
-      to: new Date(dateData.end),
+      from: new Date(dateData.from),
+      to: new Date(dateData.to),
     });
   }, [dateData]);
 

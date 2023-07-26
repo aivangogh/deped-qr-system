@@ -1,11 +1,6 @@
 'use client';
 
-import {
-  Download,
-  ListRestart,
-  Settings,
-  Settings2
-} from 'lucide-react';
+import { Download, ListRestart, Settings, Settings2 } from 'lucide-react';
 
 import { dashboardRoutes } from '@/app/routes';
 import {
@@ -42,8 +37,7 @@ export function PresetActions() {
     <>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="ghost" size="sm">
-            <span className="sr-only">Actions</span>
+          <Button variant="outline" size="sm">
             <Settings2 className="h-4 w-4" />
           </Button>
         </DropdownMenuTrigger>
@@ -52,7 +46,7 @@ export function PresetActions() {
             <Download className="mr-2 h-4 w-4" />
             Download Template
           </DropdownMenuItem>
-          <DropdownMenuItem>
+          {/* <DropdownMenuItem>
             <Link
               href={dashboardRoutes.settings.path}
               passHref
@@ -61,7 +55,7 @@ export function PresetActions() {
               <Settings className="mr-2 h-4 w-4" />
               Settings
             </Link>
-          </DropdownMenuItem>
+          </DropdownMenuItem> */}
           <DropdownMenuSeparator />
           <DropdownMenuItem
             onSelect={() => setShowDeleteDialog(true)}

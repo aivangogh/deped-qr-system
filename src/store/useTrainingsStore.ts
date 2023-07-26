@@ -1,17 +1,19 @@
-import { TrainingsT } from '@/types/trainings';
+import { TrainingT } from '@/types/training';
+import { Training } from '@prisma/client';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
 type TrainingsDetailsT = {
-  trainings: TrainingsT[];
-  setTrainings: (trainings: TrainingsT[]) => void;
+  trainings: TrainingT[];
+  setTrainings: (trainings: TrainingT[]) => void;
 };
 
-const useTrainingInfoStore = create<TrainingsDetailsT>()(
+const useTrainingsStore = create<TrainingsDetailsT>()(
   persist(
     (set) => ({
       trainings: [],
       setTrainings: (trainings) => set({ trainings }),
+      
     }),
     {
       name: 'trainings',
@@ -19,4 +21,4 @@ const useTrainingInfoStore = create<TrainingsDetailsT>()(
   )
 );
 
-export default useTrainingInfoStore;
+export default useTrainingsStore;

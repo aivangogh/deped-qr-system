@@ -1,4 +1,4 @@
-import { Training } from '../training/data/columns';
+import { Training } from '../training/[trainingCode]/components/data/columns';
 import AddTrainingForm from './(components)/add-training-form';
 
 export default function AddTraining() {
