@@ -14,6 +14,18 @@ export const navRoutes = {
   },
 };
 
+export const participantRoutes = {
+  participant: {
+    path: '/participant',
+    label: 'Participant',
+  },
+  participantDetails: {
+    path: '/participant/details',
+    label: 'Participant Details',
+  }
+};
+
+
 export const dashboardRoutes = {
   addTraining: {
     path: '/dashboard/add-training',

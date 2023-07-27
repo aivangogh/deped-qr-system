@@ -2,8 +2,8 @@
 
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import { authRoutes, navRoutes } from '../routes';
 import HrtdAuthLayout from '@/layouts/HrtdAuthLayout';
+import { navRoutes, authRoutes } from '@/app/routes';
 
 export default function HrtdLayout({
   children,

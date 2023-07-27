@@ -7,9 +7,16 @@ declare module 'next-auth' {
    */
   interface Session {
     user: {
-      // /** The user's postal address. */
-      // address: string;
+      id: string;
       role: 'participant' | 'hrtd';
+      position: string;
+      school: string;
+      phone: string;
+      isSubmitted: boolean;
+      // Add other optional properties as needed (e.g., name, email, image, etc.)
+      name?: string | null;
+      email?: string | null;
+      image?: string | null;
     } & DefaultSession['user'];
   }
 

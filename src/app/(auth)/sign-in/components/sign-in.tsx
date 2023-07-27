@@ -34,7 +34,7 @@ export function SignIn() {
             Google
           </Button>
         </div>
-        <div className="relative">
+        {/* <div className="relative">
           <div className="absolute inset-0 flex items-center">
             <span className="w-full border-t" />
           </div>
@@ -49,11 +49,11 @@ export function SignIn() {
         <div className="grid gap-2">
           <Label htmlFor="password">Password</Label>
           <Input id="password" type="password" />
-        </div>
+        </div> */}
       </CardContent>
-      <CardFooter>
+      {/* <CardFooter>
         <Button className="w-full">Continue</Button>
-      </CardFooter>
+      </CardFooter> */}
     </Card>
   );
 }
