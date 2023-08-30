@@ -1,7 +1,7 @@
 import { Training } from '../app/trainings/data/columns';
 
 export type TrainingDetailsT = {
-  trainingId: string;
+  trainingCode: string;
   title: string;
   date: {
     start: Date;
@@ -16,6 +16,7 @@ export type TrainingDetailsT = {
 export type SpeakerDetailsT = {
   speakerId?: string;
   speaker: string;
+  trainingId?: string;
 };
 
 export type ParticipantDetailsT = {
@@ -25,10 +26,11 @@ export type ParticipantDetailsT = {
   school: string;
   contact: string;
   email: string;
+  trainingId?: string;
 };
 
 export type TrainingInfoT = {
   training: TrainingDetails;
-  speaker: SpeakerDetailsT[];
+  speakers: SpeakerDetailsT[];
   participants: ParticipantDetails[];
 };

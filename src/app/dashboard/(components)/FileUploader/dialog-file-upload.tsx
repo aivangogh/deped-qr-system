@@ -20,8 +20,10 @@ import { useState } from 'react';
 import { parseExcelToJson } from '../../../../utils/parseExcelToJson';
 import ExcelToJson from './ExcelToJson';
 import { importXlsxFile } from '@/services/fetch/import-xlsx-file';
+import useTrainingStore from '@/store/useTrainingStore';
 
 export function DialogFileUpload() {
+  const { training } = useTrainingStore();
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const [formattedJsonData, setFormattedJsonData] =
     useState<TrainingInfoT | null>(null);
@@ -31,7 +33,7 @@ export function DialogFileUpload() {
 
   const handleSetTrainingInfo = async () => {
     try {
-      const data = await importXlsxFile(uploadedFile!);
+      const data = await importXlsxFile(training.trainingCode, uploadedFile!);
       // const parsedData = prettierJson(data);
 
       console.log(data);

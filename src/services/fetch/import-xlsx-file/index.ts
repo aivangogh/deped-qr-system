@@ -1,13 +1,14 @@
 import axios from 'axios';
 
-export async function importXlsxFile(xlsxFile: File) {
+export async function importXlsxFile(trainingCode: string, xlsxFile: File) {
   try {
     const file = new FormData();
     file.set('xlsx-file', xlsxFile);
 
-
-    console.log('Importing XLSX file:', xlsxFile);
-    const { data } = await axios.post(`/api/import-xlsx-file`, file);
+    const { data } = await axios.post(
+      `/api/import-xlsx-file/${trainingCode}`,
+      file
+    );
     return data;
   } catch (error) {
     throw error;
