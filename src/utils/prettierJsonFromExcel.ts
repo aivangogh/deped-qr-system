@@ -1,6 +1,3 @@
-// Purpose: Prettify the JSON data extracted from the spreadsheet.
-//          Removing null and empty array after parsing the data.
-
 import {
   ParticipantDetailsT,
   SpeakerDetailsT,
@@ -8,7 +5,6 @@ import {
   TrainingInfoT,
 } from '@/types/types';
 
-// Function to convert Excel text date to JS Date
 function excelTextToDate(excelTextDate: any): Date {
   const excelDate = Number(excelTextDate);
   if (isNaN(excelDate)) {
@@ -20,36 +16,33 @@ function excelTextToDate(excelTextDate: any): Date {
   return date;
 }
 
-export default function prettierJson(parsedData: any) {
-  // Define the column names and their respective indexes
+export function prettierTrainingDetails(parsedData: any) {
   const columnNames = {
     title: 0,
     dateStart: 1,
     dateEnd: 2,
     hours: 3,
-    speaker: 4,
-    participants: 0,
-    position: 1,
-    school: 2,
-    contact: 3,
-    email: 4,
   };
 
-  // Extract the training details
   const trainingDetails: TrainingDetailsT = {
     trainingId: 'T00001',
-    title: parsedData[2][columnNames.title],
+    title: parsedData[columnNames.title],
     date: {
-      start: excelTextToDate(parsedData[2][columnNames.dateStart]),
-      end: excelTextToDate(parsedData[2][columnNames.dateEnd]),
+      start: excelTextToDate(parsedData[columnNames.dateStart]),
+      end: excelTextToDate(parsedData[columnNames.dateEnd]),
     },
-    hours: parsedData[2][columnNames.hours],
-    speaker: parsedData[2][columnNames.speaker],
+    hours: parsedData[columnNames.hours],
   };
 
-  // Extract the speaker details
+  return trainingDetails;
+}
+
+export function prettierSpeakerDetails(speakers: any) {
+  const columnNames = {
+    speaker: 0,
+  };
+
   let speakerDetails: SpeakerDetailsT[] = [];
-  const speakers = parsedData[2][columnNames.speaker];
   if (Array.isArray(speakers)) {
     speakerDetails = speakers.map((speaker: any) => ({
       speakerId: 'T00001S1',
@@ -59,23 +52,48 @@ export default function prettierJson(parsedData: any) {
     speakerDetails = [{ speakerId: 'T00001S1', speaker: speakers }];
   }
 
-  // Extract the participant details
+  return speakerDetails;
+}
+
+export function prettierParticipantDetails(parsedData: any) {
+  const columnNames = {
+    participants: 0,
+    position: 1,
+    school: 2,
+    contact: 3,
+    email: 4,
+  };
+
   const participants: ParticipantDetailsT[] = parsedData
-    .slice(7) // Starting from the row with participant data
-    .map((row: Array<ParticipantDetailsT[]>) => ({
+    .map((row: any) => ({
       participantId: `T00001P1`,
       participant: row[columnNames.participants],
       position: row[columnNames.position],
       school: row[columnNames.school],
       contact: row[columnNames.contact],
       email: row[columnNames.email],
-    }));
+    }))
+    .filter(
+      (participant: ParticipantDetailsT) =>
+        participant.participant.trim() !== ''
+    );
 
-  // Format the data object
+  return participants;
+}
+
+export default function prettierJsonFromExcel(
+  trainingData: any,
+  speakersData: any,
+  participantsData: any
+) {
+  const trainingDetails = prettierTrainingDetails(trainingData);
+  const speakerDetails = prettierSpeakerDetails(speakersData[1]); // Assuming the speaker data is in the first column
+  const participants = prettierParticipantDetails(participantsData.slice(2)); // Starting from the row with participant data
+
   const formattedData: TrainingInfoT = {
     training: trainingDetails,
-    speaker: speakerDetails, // Speaker is an array
-    participants, // Filter out empty rows
+    speaker: speakerDetails,
+    participants,
   };
 
   return formattedData;

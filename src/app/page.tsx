@@ -5,17 +5,17 @@ import { authRoutes, navRoutes } from './routes';
 import { useRouter } from 'next/navigation';
 
 export default function Home() {
+  const { data: session, status } = useSession();
   const router = useRouter();
 
-  const { data: session, status } = useSession({
-    required: true,
-    onUnauthenticated() {
-      router.push(authRoutes.signIn.path);
-    },
-  });
+  console.log(session);
 
   if (status === 'loading') {
     return <div>Loading...</div>;
+  }
+
+  if (!session) {
+    router.replace(authRoutes.signIn.path);
   }
 
   if (session && session.user.role === 'hrtd') {

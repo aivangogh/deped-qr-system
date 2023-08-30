@@ -87,7 +87,7 @@ export const columnsForTrainings: ColumnDef<TrainingT>[] = [
     },
   },
   {
-    accessorKey: 'pap.pap',
+    accessorKey: 'pap',
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="PAP" />
     ),
@@ -95,7 +95,7 @@ export const columnsForTrainings: ColumnDef<TrainingT>[] = [
       return (
         <div className="flex space-x-2">
           <span className="max-w-[60px] font-medium">
-            {row.getValue('pap.pap')}
+            {row.getLeafRows().length}
           </span>
         </div>
       );

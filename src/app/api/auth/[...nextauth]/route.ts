@@ -1,6 +1,7 @@
+import { authRoutes } from '@/app/routes';
 import { prisma } from '@/lib/prisma';
 import { PrismaAdapter } from '@next-auth/prisma-adapter';
-import NextAuth, { Awaitable, User } from 'next-auth';
+import NextAuth, { User } from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google';
 
 type ExpectedUserType = {
@@ -17,14 +18,21 @@ type ExpectedUserType = {
 };
 
 async function findUserByEmailDomain(email: string): Promise<User | null> {
-  return prisma.user.findFirst({
+  const user = await prisma.user.findFirst({
     where: {
       email: {
         endsWith: '@student.buksu.edu.ph',
-        equals: email,
       },
     },
   });
+
+  console.log(`User: ${user}`);
+
+  if (!user) {
+    return null;
+  }
+
+  return user;
 }
 
 const handler = NextAuth({
@@ -41,38 +49,17 @@ const handler = NextAuth({
     strategy: 'jwt',
   },
   callbacks: {
-    async signIn({ user, account, profile, email, credentials }) {
-      if (
-        account?.provider === 'google' &&
-        profile?.email?.endsWith('@student.buksu.edu.ph')
-      ) {
-        return Promise.resolve(true);
-      } else {
-        return Promise.resolve(false);
-      }
-    },
     async jwt({ token, user, account }) {
       return { ...token, ...user, ...account };
     },
     async session({ session, token, user }) {
-      // Check if there's already an existing user with the same email domain
-      if (user && user.email && user.email.endsWith('@student.buksu.edu.ph')) {
-        const existingUser = await findUserByEmailDomain(user.email);
-        if (existingUser) {
-          // If an existing user is found, merge the accounts into a single session
-          session.user = token as any;
-        }
-      } else {
-        // For other users (not ending with @student.buksu.edu.ph),
-        // simply add them to the session as is
-        session.user = token as any;
-      }
+      session.user = token as any;
       return session;
     },
   },
   secret: process.env.NEXTAUTH_SECRET,
   pages: {
-    signIn: '/sign-in',
+    signIn: authRoutes.signIn.path,
   },
 });
 

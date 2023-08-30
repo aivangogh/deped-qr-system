@@ -21,6 +21,15 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
+import {
   Form,
   FormControl,
   FormDescription,
@@ -30,12 +39,12 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import {
   Select,
   SelectContent,
@@ -44,28 +53,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog';
-import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/components/ui/use-toast';
 import { cn } from '@/lib/utils';
-import { navRoutes } from '@/app/routes';
-import { useRouter } from 'next/navigation';
-import { Mutation, useMutation, useQuery } from 'react-query';
 import { createPap, getPaps } from '@/services/fetch/paps';
-import { PapsT } from '@/types/paps';
-import usePapsStore from '@/store/usePapsStore';
-import { useEffect } from 'react';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { CreateTrainingT } from '@/types/trainings';
 import { createTraining } from '@/services/fetch/trainings';
+import usePapsStore from '@/store/usePapsStore';
+import { PapsT } from '@/types/paps';
+import { CreateTrainingT } from '@/types/trainings';
+import { useRouter } from 'next/navigation';
+import { useMutation, useQuery } from 'react-query';
 
 const TrainingFormSchema = z.object({
   title: z.string().min(2, {
@@ -126,6 +122,7 @@ export default function AddTrainingForm() {
     queryFn: () => getPaps(),
     onSuccess({ data }) {
       setPaps(data);
+      console.log(data);
     },
   });
 
@@ -455,7 +452,7 @@ export default function AddTrainingForm() {
                                 <SelectContent>
                                   {/* TODO: Fetch PAPs here  */}
                                   {paps.length > 0 ? (
-                                    <ScrollArea className="h-72">
+                                    <ScrollArea className="max-h-72 min-h-fit">
                                       {paps.map(({ papId, pap }) => (
                                         <SelectItem key={papId} value={papId}>
                                           {pap}
@@ -472,7 +469,7 @@ export default function AddTrainingForm() {
                                   <SelectSeparator />
                                   <DialogTrigger asChild>
                                     <Button variant="ghost" className="w-full">
-                                      <PlusCircledIcon className="mr-2 h-5 w-5" />
+                                      <PlusCircledIcon className="mr-2 h-4 w-4" />
                                       Add PAP
                                     </Button>
                                   </DialogTrigger>

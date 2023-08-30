@@ -1,26 +1,19 @@
-import { read, utils, WorkBook, WorkSheet } from 'xlsx';
+import { utils, read, WorkSheet, WorkBook } from 'xlsx';
 
-export const parseExcelToJson = (file: File): Promise<any> => {
-  console.log('Parsing Excel file:', file.name);
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
+export const parseExcelToJson = async (
+  fileBuffer: ArrayBuffer,
+  sheetIndex: number
+): Promise<any[]> => {
+  try {
+    const workbook: WorkBook = read(fileBuffer, { type: 'buffer' });
 
-    reader.onload = (e: ProgressEvent<FileReader>) => {
-      const data = new Uint8Array(e.target?.result as ArrayBuffer);
-      const workbook: WorkBook = read(data, { type: 'array' });
+    const worksheet: WorkSheet =
+      workbook.Sheets[workbook.SheetNames[sheetIndex]];
 
-      const worksheet: WorkSheet = workbook.Sheets[workbook.SheetNames[0]];
-      const jsonData = utils.sheet_to_json(worksheet, { header: 1 });
+    const jsonData = utils.sheet_to_json(worksheet, { header: 1 });
 
-      console.log('Parsed JSON data:', jsonData);
-      resolve(jsonData);
-    };
-
-    reader.onerror = (error) => {
-      console.error('Error reading file:', error);
-      reject(error);
-    };
-
-    reader.readAsArrayBuffer(file);
-  });
+    return jsonData;
+  } catch (error: any) {
+    throw new Error(`Error parsing Excel file: ${error.message}`);
+  }
 };

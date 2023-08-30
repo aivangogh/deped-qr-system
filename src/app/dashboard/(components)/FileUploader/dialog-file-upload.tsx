@@ -14,11 +14,12 @@ import {
 import { Button } from '@/components/ui/button';
 import useTrainingInfoStore from '@/store/useTrainingInfoStore';
 import { TrainingInfoT } from '@/types/types';
-import prettierJson from '@/utils/prettierJson';
+import prettierJson from '@/utils/prettierJsonFromExcel';
 import { FileSpreadsheet } from 'lucide-react';
 import { useState } from 'react';
 import { parseExcelToJson } from '../../../../utils/parseExcelToJson';
 import ExcelToJson from './ExcelToJson';
+import { importXlsxFile } from '@/services/fetch/import-xlsx-file';
 
 export function DialogFileUpload() {
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
@@ -30,14 +31,14 @@ export function DialogFileUpload() {
 
   const handleSetTrainingInfo = async () => {
     try {
-      const data = await parseExcelToJson(uploadedFile!);
-      const parsedData = prettierJson(data);
+      const data = await importXlsxFile(uploadedFile!);
+      // const parsedData = prettierJson(data);
 
-      console.log(parsedData);
+      console.log(data);
 
-      setTrainingInfo(parsedData.training);
-      setSpeakers(parsedData.speaker);
-      setParticipants(parsedData.participants);
+      setTrainingInfo(data.training);
+      setSpeakers(data.speaker);
+      setParticipants(data.participants);
     } catch (error) {
       console.error('Error parsing Excel:', error);
     }

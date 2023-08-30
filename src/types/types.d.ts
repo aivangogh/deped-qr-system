@@ -8,7 +8,7 @@ export type TrainingDetailsT = {
     end: Date;
   };
   hours: number;
-  speaker: string;
+  speaker?: string;
   programHolder?: string;
   nameOfProgramHolder?: string;
 };

@@ -1,3 +1,4 @@
+import { Role } from '@prisma/client';
 import NextAuth, { DefaultSession } from 'next-auth';
 import { JWT } from 'next-auth/jwt';
 
@@ -8,11 +9,11 @@ declare module 'next-auth' {
   interface Session {
     user: {
       id: string;
-      role: 'participant' | 'hrtd';
-      position: string;
-      school: string;
-      phone: string;
-      isSubmitted: boolean;
+      role?: Role;
+      position?: string;
+      school?: string;
+      phone?: string;
+      isSubmitted?: boolean;
       // Add other optional properties as needed (e.g., name, email, image, etc.)
       name?: string | null;
       email?: string | null;
