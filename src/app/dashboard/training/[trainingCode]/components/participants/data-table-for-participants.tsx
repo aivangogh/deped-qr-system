@@ -70,7 +70,7 @@ export function DataTableForParticipants<TData, TValue>({
   return (
     <>
       <div>
-        <span className="text-3xl font-bold">Participants</span>
+        <span className="text-2xl font-bold">Participants</span>
       </div>
       <div className="space-y-4">
         <DataTableToolbar table={table} />

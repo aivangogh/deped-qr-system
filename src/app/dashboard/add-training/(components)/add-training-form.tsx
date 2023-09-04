@@ -67,19 +67,20 @@ const TrainingFormSchema = z.object({
   title: z.string().min(2, {
     message: 'Username must be at least 2 characters.',
   }),
-  date: z.object({
-    from: z.date({
-      required_error: 'Please select a date and time',
-      invalid_type_error: "That's not a date!",
-    }),
-    to: z.date({
-      required_error: 'Please select a date and time',
-      invalid_type_error: "That's not a date!",
-    }),
+  dateFrom: z.date({
+    required_error: 'Please select a date and time',
+    invalid_type_error: "That's not a date!",
+  }),
+  dateTo: z.date({
+    required_error: 'Please select a date and time',
+    invalid_type_error: "That's not a date!",
   }),
   numberOfHours: z.coerce.number().positive(),
   venue: z.string().min(2, {
     message: 'Venue must be at least 2 characters.',
+  }),
+  addressOfTheVenue: z.string().min(2, {
+    message: 'Address of the venue must be at least 2 characters.',
   }),
   issuedOn: z.date({
     required_error: 'Please select a date and time',
@@ -227,7 +228,7 @@ export default function AddTrainingForm() {
                       <div className="flex space-x-4">
                         <FormField
                           control={trainingForm.control}
-                          name="date.from"
+                          name="dateFrom"
                           render={({ field }) => (
                             <FormItem className="grid">
                               <FormLabel>
@@ -274,7 +275,7 @@ export default function AddTrainingForm() {
                         />
                         <FormField
                           control={trainingForm.control}
-                          name="date.to"
+                          name="dateTo"
                           render={({ field }) => (
                             <FormItem className="grid">
                               <FormLabel>
@@ -348,6 +349,32 @@ export default function AddTrainingForm() {
                           <FormItem className="grid">
                             <FormLabel>
                               Venue <span className="text-red-500"> *</span>
+                              <span className="opacity-80 italic text-sm">
+                                (New People’s Hall, 3rd Floor, New City Hall)
+                              </span>
+                            </FormLabel>
+                            <FormControl>
+                              <Input placeholder="Type here..." {...field} />
+                            </FormControl>
+                            <FormDescription>
+                              Lorem ipsum dolor sit amet.
+                            </FormDescription>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={trainingForm.control}
+                        name="addressOfTheVenue"
+                        render={({ field }) => (
+                          <FormItem className="grid">
+                            <FormLabel>
+                              Address of the training
+                              <span className="text-red-500"> *</span>
+                              <span className="opacity-80 italic text-sm">
+                                (Malaybalay City, Bukidnon)
+                              </span>
                             </FormLabel>
                             <FormControl>
                               <Input placeholder="Type here..." {...field} />

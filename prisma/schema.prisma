@@ -83,23 +83,24 @@ model ResetToken {
 }
 
 model Training {
-  id             String           @id @default(auto()) @map("_id") @db.ObjectId
-  trainingCode   String           @unique
-  createdAt      DateTime         @default(now())
-  updatedAt      DateTime         @updatedAt
-  title          String
-  dateFrom       DateTime
-  dateTo         DateTime
-  numberOfHours  Int?
-  venue          String
-  issuedOn       DateTime?
-  issuedAt       String?
-  validUntil     DateTime
-  speaker        Speaker[]
-  participant    Participant[]
-  pap            Pap              @relation(fields: [papId], references: [papId])
-  papId          String
-  DateOfTraining DateOfTraining[]
+  id                String           @id @default(auto()) @map("_id") @db.ObjectId
+  trainingCode      String           @unique
+  createdAt         DateTime         @default(now())
+  updatedAt         DateTime         @updatedAt
+  title             String
+  dateFrom          DateTime
+  dateTo            DateTime
+  numberOfHours     Int?
+  venue             String
+  addressOfTheVenue String
+  issuedOn          DateTime?
+  issuedAt          String?
+  validUntil        DateTime
+  speaker           Speaker[]
+  participant       Participant[]
+  pap               Pap              @relation(fields: [papId], references: [papId])
+  papId             String
+  DateOfTraining    DateOfTraining[]
 }
 
 model Pap {

@@ -14,40 +14,19 @@ import useTrainingInfoStore from '@/store/useTrainingInfoStore';
 import { useCallback, useState } from 'react';
 import useSettingsStore from '@/store/useSettingsStore';
 import { saveAs } from 'file-saver';
+import { GenerateCertificatesRequestForParticipants } from '@/types/generate-pdf';
+import useParticipantStore from '@/store/useParticipantStore';
+import { generateBulkCertificatesForParticipants } from '@/services/fetch/generatePdf';
+import useTrainingStore from '@/store/useTrainingStore';
 
 type DialogGenerateBulkProps = {
   participants: ParticipantDetailsT[];
   trainingData: TrainingDetailsT;
 };
 
-interface GenerateCertificateRequest {
-  url: string;
-  participants: ParticipantDetailsT[];
-  trainingData: TrainingDetailsT;
-}
-
-async function generateBulkCertificateApiRequest(
-  requestData: GenerateCertificateRequest
-): Promise<Blob> {
-  console.log(requestData);
-
-  const response = await fetch('/api/generate/participants', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(requestData),
-  });
-
-  if (!response.ok) {
-    throw new Error('Failed to generate certificate');
-  }
-
-  return response.blob();
-}
-
 export default function DialogGenerateBulkCertificatesForParticipants() {
-  const { participants, trainingInfo } = useTrainingInfoStore();
+  const { training } = useTrainingStore();
+  const { participants } = useParticipantStore();
   const { documentForParticipantsUrl } = useSettingsStore();
   const [certificateURL, setCertificateURL] = useState<string | null>(null);
   const [isGenerating, setIsGenerating] = useState<boolean>(false);
@@ -56,13 +35,13 @@ export default function DialogGenerateBulkCertificatesForParticipants() {
     try {
       setIsGenerating(true);
 
-      const requestData: GenerateCertificateRequest = {
+      const requestData: GenerateCertificatesRequestForParticipants = {
         url: documentForParticipantsUrl,
         participants: participants!,
-        trainingData: trainingInfo,
+        training: training,
       };
 
-      const blob = await generateBulkCertificateApiRequest(requestData);
+      const blob = await generateBulkCertificatesForParticipants(requestData);
 
       // Create a temporary URL for the blob
       const tempURL = URL.createObjectURL(blob);
@@ -74,12 +53,12 @@ export default function DialogGenerateBulkCertificatesForParticipants() {
     } finally {
       setIsGenerating(false);
     }
-  }, [documentForParticipantsUrl, participants, trainingInfo]);
+  }, [documentForParticipantsUrl, participants, training]);
 
   // Function to handle the download event for the "Download Certificate" button
   const handleDownloadCertificates = () => {
     if (certificateURL) {
-      const fileName = `${trainingInfo.title}-certificates-for-participants.zip`;
+      const fileName = `${training.title}-certificates-for-participants.zip`;
 
       fetch(certificateURL)
         .then((response) => response.blob())

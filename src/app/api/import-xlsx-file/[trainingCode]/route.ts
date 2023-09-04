@@ -48,12 +48,15 @@ export async function POST(
       data: participants,
     });
 
+    console.log(_speakers);
+    console.log(_participants);
+
     return NextResponse.json({
       success: true,
       data: {
         training: training,
-        speakers: _speakers,
-        participants: _participants,
+        speakers: speakers,
+        participants: participants,
       },
     });
 

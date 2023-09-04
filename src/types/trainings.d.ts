@@ -2,12 +2,11 @@ import { Training } from '@prisma/client';
 
 export type TrainingsT = {
   title: string;
-  date: {
-    from: Date;
-    to: Date;
-  };
+  dateFrom: Date;
+  dateTo: Date;
   numberOfHours: number;
   venue: string;
+  addressOfTheVenue: string;
   issuedOn: Date;
   issuedAt: string;
   papId: string;

@@ -35,9 +35,11 @@ export async function PUT(
 ) {
   const {
     title,
-    date: { from, to },
+    dateFrom,
+    dateTo,
     numberOfHours,
     venue,
+    addressOfTheVenue,
     issuedOn,
     issuedAt,
     papId,
@@ -46,12 +48,11 @@ export async function PUT(
 
   const updateTraining: UpdateTrainingT = {
     title,
-    date: {
-      from: new Date(from),
-      to: new Date(to),
-    },
+    dateFrom: new Date(dateFrom),
+    dateTo: new Date(dateTo),
     numberOfHours,
     venue,
+    addressOfTheVenue,
     issuedOn: new Date(issuedOn),
     issuedAt,
     papId,

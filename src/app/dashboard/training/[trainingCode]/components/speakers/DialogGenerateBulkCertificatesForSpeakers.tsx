@@ -8,46 +8,28 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { Download, FileCheck2, FileText, RefreshCw } from 'lucide-react';
-import { ParticipantDetailsT, SpeakerDetailsT, TrainingDetailsT } from '@/types/types';
-import useTrainingInfoStore from '@/store/useTrainingInfoStore';
-import { useCallback, useState } from 'react';
+import {
+  generateBulkCertificatesForSpeakers
+} from '@/services/fetch/generatePdf';
 import useSettingsStore from '@/store/useSettingsStore';
+import useSpeakerStore from '@/store/useSpeakerStore';
+import useTrainingStore from '@/store/useTrainingStore';
+import {
+  GenerateCertificatesRequestForSpeakers
+} from '@/types/generate-pdf';
+import { ParticipantDetailsT, TrainingDetailsT } from '@/types/types';
 import { saveAs } from 'file-saver';
+import { Download, FileCheck2, FileText, RefreshCw } from 'lucide-react';
+import { useCallback, useState } from 'react';
 
 type DialogGenerateBulkProps = {
   participants: ParticipantDetailsT[];
   trainingData: TrainingDetailsT;
 };
 
-interface GenerateCertificateRequest {
-  url: string;
-  speakers: SpeakerDetailsT[];
-  trainingData: TrainingDetailsT;
-}
-
-async function generateBulkCertificateApiRequest(
-  requestData: GenerateCertificateRequest
-): Promise<Blob> {
-  console.log(requestData);
-
-  const response = await fetch('/api/generate/speakers', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(requestData),
-  });
-
-  if (!response.ok) {
-    throw new Error('Failed to generate certificate');
-  }
-
-  return response.blob();
-}
-
 export default function DialogGenerateBulkCertificatesForSpeakers() {
-  const { speakers, trainingInfo } = useTrainingInfoStore();
+  const { training } = useTrainingStore();
+  const { speakers } = useSpeakerStore();
   const { documentForSpeakersUrl } = useSettingsStore();
   const [certificateURL, setCertificateURL] = useState<string | null>(null);
   const [isGenerating, setIsGenerating] = useState<boolean>(false);
@@ -56,13 +38,13 @@ export default function DialogGenerateBulkCertificatesForSpeakers() {
     try {
       setIsGenerating(true);
 
-      const requestData: GenerateCertificateRequest = {
+      const requestData: GenerateCertificatesRequestForSpeakers = {
         url: documentForSpeakersUrl,
         speakers: speakers!,
-        trainingData: trainingInfo,
+        training: training,
       };
 
-      const blob = await generateBulkCertificateApiRequest(requestData);
+      const blob = await generateBulkCertificatesForSpeakers(requestData);
 
       // Create a temporary URL for the blob
       const tempURL = URL.createObjectURL(blob);
@@ -74,12 +56,12 @@ export default function DialogGenerateBulkCertificatesForSpeakers() {
     } finally {
       setIsGenerating(false);
     }
-  }, [documentForSpeakersUrl, speakers, trainingInfo]);
+  }, [documentForSpeakersUrl, speakers, training]);
 
   // Function to handle the download event for the "Download Certificate" button
   const handleDownloadCertificates = () => {
     if (certificateURL) {
-      const fileName = `${trainingInfo.title}-certificates-for-speaker/s.zip`;
+      const fileName = `${training.title}-certificates-for-speaker/s.zip`;
 
       fetch(certificateURL)
         .then((response) => response.blob())
@@ -132,7 +114,7 @@ export default function DialogGenerateBulkCertificatesForSpeakers() {
                 >
                   <p>Sorry, the certificate could not be displayed.</p>
                 </object> */}
-                <FileCheck2 size={40} color="green"/>
+                <FileCheck2 size={40} color="green" />
                 <span className="text-2xl font-medium">
                   Certificates generated
                 </span>
@@ -163,7 +145,7 @@ export default function DialogGenerateBulkCertificatesForSpeakers() {
                   {/* Render the "Download Certificate" button */}
                   <Button size="sm" onClick={handleDownloadCertificates}>
                     <Download className="mr-2 h-3.5 w-3.5" />
-                    Download Certificate
+                    Download Certificates
                   </Button>
                 </div>
                 {/* <QRCode value={certificateFile} /> */}

@@ -9,8 +9,9 @@ import {
 } from '@/types/types';
 import { DataTableColumnHeader } from './data-table-column-header';
 import { DataTableRowActions } from './data-table-row-actions';
+import { Speaker } from '@prisma/client';
 
-export const columnsForSpeakers: ColumnDef<SpeakerDetailsT>[] = [
+export const columnsForSpeakers: ColumnDef<Speaker>[] = [
   // {
   //   id: 'select',
   //   header: ({ table }) => (

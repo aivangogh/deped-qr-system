@@ -1,25 +1,26 @@
 import { downloadTemplateFromGoogleDrive } from '@/services/api/google-drive-file/downloadTemplateFromGoogleDrive';
-import { ParticipantDetailsT, TrainingDetailsT } from '@/types/types';
+import { GenerateCertificatesRequestForParticipants } from '@/types/generate-pdf';
+import {
+  formatDatesToDateRange,
+  generateDayLabel,
+  generateMonthYearLabel,
+} from '@/utils/formatDates';
 import { getFileIdFromGoogleDriveLink } from '@/utils/getFileIdFromGoogleDriveLink';
+import archiver from 'archiver';
+import createReport from 'docx-templates';
 import { NextApiRequest, NextApiResponse } from 'next';
 import QRCode from 'qrcode';
-import createReport from 'docx-templates';
-import archiver from 'archiver';
-import { Readable } from 'stream';
 
 export default async function generateBulkCertificatesForParticipantsHandler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const { url, participants, trainingData } = req.body as {
-    url: string;
-    participants: ParticipantDetailsT[];
-    trainingData: TrainingDetailsT;
-  };
+  const { url, participants, training } =
+    req.body as GenerateCertificatesRequestForParticipants;
 
   const fileId = getFileIdFromGoogleDriveLink(url);
 
-  console.log(fileId);
+  console.log('TRAINING', training);
 
   const templateBuffer = await downloadTemplateFromGoogleDrive(fileId!);
 
@@ -30,7 +31,7 @@ export default async function generateBulkCertificatesForParticipantsHandler(
     for (const participant of participants) {
       const additionalJsContext = {
         qrCode: async () => {
-          const qrCodeData = `Title of training: ${trainingData.title}\nParticipant: ${participant.participant}\nSchool: ${participant.school}\nPosition: ${participant.position}`;
+          const qrCodeData = `Title of training: ${training.title}\nParticipant: ${participant.participant}\nSchool: ${participant.school}\nPosition: ${participant.position}`;
           const qrCodeImage = await QRCode.toDataURL(qrCodeData);
           const data = qrCodeImage.slice('data:image/png;base64,'.length);
           return { width: 3, height: 3, data, extension: '.png' };
@@ -44,12 +45,20 @@ export default async function generateBulkCertificatesForParticipantsHandler(
           name_of_participant: participant.participant,
           position: participant.position,
           school_name: participant.school,
-          title_of_training: trainingData.title,
+          title_of_training: training.title,
+          venue: training.venue,
+          address_of_the_venue: training.addressOfTheVenue,
+          date_range: formatDatesToDateRange(
+            training.dateFrom,
+            training.dateTo
+          ),
+          nth_day: generateDayLabel(training.issuedOn),
+          month_year: generateMonthYearLabel(training.issuedOn),
         },
         additionalJsContext,
       });
 
-      const fileName = `${participant.participant.toLocaleLowerCase()}-certificate.docx`;
+      const fileName = `${participant.participant?.toLocaleLowerCase()}-certificate.docx`;
 
       certificates.push({ fileName, buffer: Buffer.from(buffer) });
     }

@@ -17,6 +17,7 @@ const useTrainingStore = create<TrainingDetailsT>((set) => ({
     dateTo: new Date(),
     numberOfHours: 0,
     venue: '',
+    addressOfTheVenue: '',
     issuedOn: new Date(),
     issuedAt: '',
     validUntil: new Date(),

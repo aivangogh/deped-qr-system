@@ -32,18 +32,14 @@ export function DialogFileUpload() {
     useTrainingInfoStore();
 
   const handleSetTrainingInfo = async () => {
-    try {
-      const data = await importXlsxFile(training.trainingCode, uploadedFile!);
-      // const parsedData = prettierJson(data);
-
-      console.log(data);
-
-      setTrainingInfo(data.training);
-      setSpeakers(data.speaker);
-      setParticipants(data.participants);
-    } catch (error) {
-      console.error('Error parsing Excel:', error);
-    }
+    await importXlsxFile(training.trainingCode, uploadedFile!).then(
+      ({ data }) => {
+        console.log(data);
+        setTrainingInfo(data.training);
+        setSpeakers(data.speaker);
+        setParticipants(data.participants);
+      }
+    );
   };
 
   const handleFileUpload = (file: File) => {
@@ -53,7 +49,7 @@ export function DialogFileUpload() {
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Button size="sm" variant="secondary" className="ml-auto h-8">
+        <Button variant="secondary" className="ml-auto h-8">
           <FileSpreadsheet className="mr-2 h-4 w-4" />
           Import Excel
         </Button>

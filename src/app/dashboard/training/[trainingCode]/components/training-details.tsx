@@ -143,6 +143,7 @@ export function TrainingDetails({ data }: { data: Training }) {
               />
             </div>
           </div>
+          
           <div className="space-y-4">
             <div className="grid w-full max-w-sm items-center gap-1.5">
               <Label htmlFor="programHolder">Program Holder:</Label>

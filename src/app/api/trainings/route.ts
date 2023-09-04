@@ -29,9 +29,11 @@ export async function POST(request: Request) {
   try {
     const {
       title,
-      date: { from, to },
+      dateFrom,
+      dateTo,
       numberOfHours,
       venue,
+      addressOfTheVenue,
       issuedOn,
       issuedAt,
       papId,
@@ -40,15 +42,16 @@ export async function POST(request: Request) {
 
     await prisma.training.create({
       data: {
-        title,
-        dateFrom: new Date(from),
-        dateTo: new Date(to),
+        title: title.trim(),
+        dateFrom: new Date(dateFrom),
+        dateTo: new Date(dateTo),
         numberOfHours,
-        venue,
+        venue: venue.trim(),
+        addressOfTheVenue: addressOfTheVenue.trim(),
         issuedOn: new Date(issuedOn),
-        issuedAt,
+        issuedAt: issuedAt.trim(),
         papId,
-        trainingCode: await generateTrainingCode(),
+        trainingCode: (await generateTrainingCode()).trim(),
         validUntil: new Date(validUntil),
       },
     });

@@ -1,6 +1,6 @@
 'use client';
 
-import { Download, ListRestart, Settings, Settings2 } from 'lucide-react';
+import { Download, ListRestart, Settings, MoreVertical } from 'lucide-react';
 
 import { dashboardRoutes } from '@/app/routes';
 import {
@@ -37,8 +37,8 @@ export function PresetActions() {
     <>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="outline" size="sm">
-            <Settings2 className="h-4 w-4" />
+          <Button variant="ghost" size="icon">
+            <MoreVertical className="h-4 w-4" />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">

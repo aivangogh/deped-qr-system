@@ -22,29 +22,32 @@ export const participantRoutes = {
   participantDetails: {
     path: '/participant/details',
     label: 'Participant Details',
-  }
+  },
 };
 
-
 export const dashboardRoutes = {
+  dashboard: {
+    path: '/dashboard',
+    label: 'Dashboard',
+  },
   addTraining: {
     path: '/dashboard/add-training',
     label: 'Add Training',
   },
   settings: {
-    path: '/settings',
+    path: '/dashboard/settings',
     label: 'Settings',
     subroutes: {
       documentTemplate: {
-        path: '/settings',
+        path: '/dashboard/settings',
         label: 'Document Template',
       },
       excelTemplate: {
-        path: '/settings/excel',
+        path: '/dashboard/settings/excel',
         label: 'Excel Template',
       },
       driveFolder: {
-        path: '/settings/drive-folder',
+        path: '/dashboard/settings/drive-folder',
         label: 'Drive Folder',
       },
     },

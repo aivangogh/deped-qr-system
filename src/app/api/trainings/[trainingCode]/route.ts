@@ -18,11 +18,32 @@ export async function GET(
             papId: true,
           },
         },
+        speaker: true,
+        participant: true,
       },
     });
 
     return NextResponse.json({
-      data: training,
+      data: {
+        training: {
+          id: training?.id,
+          trainingCode: training?.trainingCode,
+          createdAt: training?.createdAt,
+          updatedAt: training?.updatedAt,
+          title: training?.title,
+          dateFrom: training?.dateFrom,
+          dateTo: training?.dateTo,
+          numberOfHours: training?.numberOfHours,
+          venue: training?.venue,
+          addressOfTheVenue: training?.addressOfTheVenue,
+          issuedOn: training?.issuedOn,
+          issuedAt: training?.issuedAt,
+          validUntil: training?.validUntil,
+          papId: training?.papId,
+        },
+        speakers: training?.speaker,
+        participants: training?.participant,
+      },
       status: 200,
       message: 'Training found',
     });
@@ -37,9 +58,11 @@ export async function PUT(
 ) {
   const {
     title,
-    date: { from, to },
+    dateFrom,
+    dateTo,
     numberOfHours,
     venue,
+    addressOfTheVenue,
     issuedOn,
     issuedAt,
     papId,
@@ -48,12 +71,11 @@ export async function PUT(
 
   const updateTraining: UpdateTrainingT = {
     title,
-    date: {
-      from: new Date(from),
-      to: new Date(to),
-    },
+    dateFrom,
+    dateTo,
     numberOfHours,
     venue,
+    addressOfTheVenue,
     issuedOn: new Date(issuedOn),
     issuedAt,
     papId,
