@@ -15,8 +15,7 @@ export default function HrtdAuthLayout({
         <div className="sticky top-0 z-40 border-b container py-2 bg-white">
           <Navbar />
         </div>
-
-        <ScrollArea>{children}</ScrollArea>
+        {children}
         <div>
           <SiteFooter />
         </div>

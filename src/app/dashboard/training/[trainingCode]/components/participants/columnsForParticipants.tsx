@@ -121,6 +121,9 @@ export const columnsForParticipants: ColumnDef<Participant>[] = [
   },
   {
     id: 'actions',
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Actions" />
+    ),
     cell: ({ row }) => <DataTableRowActions row={row} />,
   },
 ];

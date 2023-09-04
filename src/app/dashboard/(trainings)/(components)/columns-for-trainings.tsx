@@ -117,9 +117,9 @@ export const columnsForTrainings: ColumnDef<TrainingT>[] = [
   //   },
   // },
   {
-    id: 'action',
+    id: 'actions',
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Action" />
+      <DataTableColumnHeader column={column} title="Actions" />
     ),
     cell: ({ row }) => <DataTableRowActions row={row} />,
   },

@@ -20,6 +20,7 @@ import Link from 'next/link';
 import { dashboardRoutes } from '@/app/routes';
 import { DialogFileUpload } from '@/app/dashboard/(components)/FileUploader/dialog-file-upload';
 import { PresetActions } from '../../(components)/PresetActions';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 export default function TrainingPage({
   params,
@@ -43,34 +44,33 @@ export default function TrainingPage({
 
   return (
     <div className="grid grid-cols-4">
-      <div className="container col-span-3 h-full flex-1 flex-col space-y-8 mt-4 mb-8">
-        {/* <TrainingDetails data={training} />
-        <Separator /> */}
-        <div className="flex justify-between">
-          <div className="mb-4 flex items-center space-x-1 text-sm text-muted-foreground">
-            <Link
-              href={dashboardRoutes.dashboard.path}
-              className="overflow-hidden text-ellipsis whitespace-nowrap hover:text-foreground hover:underline"
-            >
-              {dashboardRoutes.dashboard.label}
-            </Link>
-            <ChevronRight className="h-4 w-4" />
-            <div className="font-medium text-foreground">
-              {training.trainingCode}
+      <div className="container col-span-3 h-full flex-1 flex-col space-y-4 my-4">
+          <div className="flex justify-between">
+            <div className="mb-4 flex items-center space-x-1 text-sm text-muted-foreground">
+              <Link
+                href={dashboardRoutes.dashboard.path}
+                className="overflow-hidden text-ellipsis whitespace-nowrap hover:text-foreground hover:underline"
+              >
+                {dashboardRoutes.dashboard.label}
+              </Link>
+              <ChevronRight className="h-4 w-4" />
+              <div className="font-medium text-foreground">
+                {training.trainingCode}
+              </div>
+            </div>
+            <div className="space-x-2">
+              <DialogFileUpload />
+              <PresetActions />
             </div>
           </div>
-          <div className="space-x-2">
-            <DialogFileUpload />
-            <PresetActions />
-          </div>
-        </div>
-        <DataTableForSpeakers data={speakers} columns={columnsForSpeakers} />
-        <Separator />
-        <DataTableForParticipants
-          data={participants}
-          columns={columnsForParticipants}
-        />
+          <DataTableForSpeakers data={speakers} columns={columnsForSpeakers} />
+          <Separator />
+          <DataTableForParticipants
+            data={participants}
+            columns={columnsForParticipants}
+          />
       </div>
+  
 
       <TrainingSidebar />
     </div>
