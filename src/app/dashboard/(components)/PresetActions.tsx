@@ -25,11 +25,16 @@ import useSettingsStore from '@/store/useSettingsStore';
 import useTrainingInfoStore from '@/store/useTrainingInfoStore';
 import Link from 'next/link';
 import { useState } from 'react';
+import useTrainingStore from '@/store/useTrainingStore';
+import useParticipantStore from '@/store/useParticipantStore';
+import useSpeakerStore from '@/store/useSpeakerStore';
 
 export function PresetActions() {
   const [open, setIsOpen] = useState<boolean>(false);
   const [showDeleteDialog, setShowDeleteDialog] = useState<boolean>(false);
-  const { resetInfo } = useTrainingInfoStore();
+  const { resetTraining } = useTrainingStore();
+  const { resetSpeakers } = useSpeakerStore();
+  const { resetParticipants } = useParticipantStore();
   const [showDownloadDialog, setShowDownloadDialog] = useState<boolean>(false);
   const { excelDirectUrl } = useSettingsStore();
 
@@ -80,7 +85,10 @@ export function PresetActions() {
             <Button
               variant="destructive"
               onClick={() => {
-                resetInfo();
+                resetTraining();
+                resetSpeakers();
+                resetParticipants();
+                
                 setShowDeleteDialog(false);
                 toast({
                   description: 'This imported data has been deleted.',

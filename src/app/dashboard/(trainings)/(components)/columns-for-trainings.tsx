@@ -86,21 +86,23 @@ export const columnsForTrainings: ColumnDef<TrainingT>[] = [
       );
     },
   },
-  {
-    accessorKey: 'pap',
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="PAP" />
-    ),
-    cell: ({ row }) => {
-      return (
-        <div className="flex space-x-2">
-          <span className="max-w-[60px] font-medium">
-            {row.getLeafRows().length}
-          </span>
-        </div>
-      );
-    },
-  },
+  // {
+  //   accessorKey: 'pap',
+  //   header: ({ column }) => (
+  //     <DataTableColumnHeader column={column} title="PAP" />
+  //   ),
+  //   cell: ({ row }) => {
+  //     return (
+  //       <div className="flex space-x-2">
+  //         <span className="max-w-[60px] font-medium">
+  //           {
+  //             row.getLeafRows().map((row) => {return row.getValue('pap')})
+  //           }
+  //         </span>
+  //       </div>
+  //     );
+  //   },
+  // },
   // {
   //   accessorKey: 'email',
   //   header: ({ column }) => (

@@ -40,6 +40,7 @@ export async function GET(
           issuedAt: training?.issuedAt,
           validUntil: training?.validUntil,
           papId: training?.papId,
+          pap: training?.pap.pap,
         },
         speakers: training?.speaker,
         participants: training?.participant,

@@ -10,6 +10,7 @@ export type TrainingsT = {
   issuedOn: Date;
   issuedAt: string;
   papId: string;
+  pap?: string;
   trainingCode: string;
   validUntil: Date;
 };
@@ -21,5 +22,5 @@ export type TrainingsWithPapT = Training & {
   };
 };
 
-export type CreateTrainingT = Omit<TrainingsT, 'trainingCode'>;
-export type UpdateTrainingT = Omit<TrainingsT, 'trainingCode'>;
+export type CreateTrainingT = Omit<TrainingsT, 'trainingCode' | 'pap'>;
+export type UpdateTrainingT = Omit<TrainingsT, 'trainingCode' | 'pap'>;
