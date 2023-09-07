@@ -1,6 +1,6 @@
 export function formatDatesToDateRange(
-  startDateStr: string,
-  endDateStr: string
+  startDateStr: Date,
+  endDateStr: Date
 ): string {
   const startDate = new Date(startDateStr);
   const endDate = new Date(endDateStr);
@@ -41,7 +41,7 @@ function getDaySuffix(day: number): string {
   }
 }
 
-export function generateMonthYearLabel(dateStr: string): string {
+export function generateMonthYearLabel(dateStr: Date): string {
   const date = new Date(dateStr);
   const month = date.toLocaleDateString('en-US', { month: 'long' });
   const year = date.getFullYear();

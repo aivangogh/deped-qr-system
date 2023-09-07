@@ -7,16 +7,25 @@ import createReport from 'docx-templates';
 import { writeFileSync } from 'fs';
 import { Readable } from 'stream';
 import { pipeline } from 'stream/promises';
+import { Participant } from '@prisma/client';
+import { TrainingsT } from '@/types/trainings';
+import {
+  formatDatesToDateRange,
+  generateDayLabel,
+  generateMonthYearLabel,
+} from '@/utils/formatDates';
 
 export default async function generateCertificateForParticipant(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const { url, participantData, trainingData } = req.body as {
+  const { url, participant, training } = req.body as {
     url: string;
-    participantData: ParticipantDetailsT;
-    trainingData: TrainingDetailsT;
+    participant: Participant;
+    training: TrainingsT;
   };
+
+  console.log({ url, participant, training });
 
   const fileId = getFileIdFromGoogleDriveLink(url!);
 
@@ -26,7 +35,7 @@ export default async function generateCertificateForParticipant(
 
   const additionalJsContext = {
     qrCode: async () => {
-      const qrCodeData = `Title of training: ${trainingData.title}\nParticipant: ${participantData.participant}\nSchool: ${participantData.school}\nPosition: ${participantData.position}`;
+      const qrCodeData = `Title of training: ${training.title}\nParticipant: ${participant.participant}\nSchool: ${participant.school}\nPosition: ${participant.position}`;
       const qrCodeImage = await QRCode.toDataURL(qrCodeData);
       const data = qrCodeImage.slice('data:image/png;base64,'.length);
       return { width: 3, height: 3, data, extension: '.png' };
@@ -37,15 +46,20 @@ export default async function generateCertificateForParticipant(
     template: templateBuffer,
     cmdDelimiter: ['{', '}'],
     data: {
-      name_of_participant: participantData.participant,
-      position: participantData.position,
-      school_name: participantData.school,
-      title_of_training: trainingData.title,
+      name_of_participant: participant.participant!,
+      position: participant.position!,
+      school_name: participant.school!,
+      title_of_training: training.title!,
+      venue: training.venue!,
+      address_of_the_venue: training.addressOfTheVenue!,
+      date_range: formatDatesToDateRange(training.dateFrom, training.dateTo),
+      nth_day: generateDayLabel(training.issuedOn),
+      month_year: generateMonthYearLabel(training.issuedOn),
     },
     additionalJsContext,
   });
 
-  const fileName = `${participantData.participant.toLocaleLowerCase()}-certificate.docx`; // Specify the desired file name and extension
+  const fileName = `${participant.participant?.toLocaleLowerCase()}-certificate.docx`; // Specify the desired file name and extension
 
   // Set the response headers
   res.setHeader('Content-Disposition', `attachment; filename="${fileName}"`);

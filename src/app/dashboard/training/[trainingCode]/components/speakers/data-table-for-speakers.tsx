@@ -69,8 +69,8 @@ export function DataTableForSpeakers<TData, TValue>({
 
   return (
     <>
-      <div className='space-y-4'>
-        <span className="text-2xl font-bold">Speaker/s</span>
+      <div className="space-y-4">
+        <span className="text-2xl font-bold">Speakers</span>
 
         <div className="space-y-4">
           <DataTableToolbar table={table} />

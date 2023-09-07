@@ -7,15 +7,18 @@ import createReport from 'docx-templates';
 import { writeFileSync } from 'fs';
 import { Readable } from 'stream';
 import { pipeline } from 'stream/promises';
+import { Speaker } from '@prisma/client';
+import { TrainingsT } from '@/types/trainings';
+import { formatDatesToDateRange, generateDayLabel, generateMonthYearLabel } from '@/utils/formatDates';
 
 export default async function generateCertificateForSpeaker(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const { url, speakerData, trainingData } = req.body as {
+  const { url, speaker, training } = req.body as {
     url: string;
-    speakerData: SpeakerDetailsT;
-    trainingData: TrainingDetailsT;
+    speaker: Speaker;
+    training: TrainingsT;
   };
 
   const fileId = getFileIdFromGoogleDriveLink(url!);
@@ -26,7 +29,7 @@ export default async function generateCertificateForSpeaker(
 
   const additionalJsContext = {
     qrCode: async () => {
-      const qrCodeData = `Title of training: ${trainingData.title}\nSpeaker: ${speakerData.speaker}`;
+      const qrCodeData = `Title of training: ${training.title}\nSpeaker: ${speaker.speaker}`;
       const qrCodeImage = await QRCode.toDataURL(qrCodeData);
       const data = qrCodeImage.slice('data:image/png;base64,'.length);
       return { width: 3, height: 3, data, extension: '.png' };
@@ -37,15 +40,20 @@ export default async function generateCertificateForSpeaker(
     template: templateBuffer,
     cmdDelimiter: ['{', '}'],
     data: {
-      name_of_speaker: speakerData.speaker,
-      title_of_training: trainingData.title,
+      name_of_speaker: speaker.speaker,
+      title_of_training: training.title,
+      venue: training.venue,
+      address_of_the_venue: training.addressOfTheVenue,
+      date_range: formatDatesToDateRange(training.dateFrom, training.dateTo),
+      nth_day: generateDayLabel(training.issuedOn),
+      month_year: generateMonthYearLabel(training.issuedOn),
     },
     additionalJsContext,
   });
 
   // writeFileSync('certificate.docx', buffer);
 
-  const fileName = `${speakerData.speaker.toLocaleLowerCase()}-certificate.docx`; // Specify the desired file name and extension
+  const fileName = `${speaker.speaker?.toLocaleLowerCase()}-certificate.docx`; // Specify the desired file name and extension
 
   // Set the response headers
   res.setHeader('Content-Disposition', `attachment; filename="${fileName}"`);

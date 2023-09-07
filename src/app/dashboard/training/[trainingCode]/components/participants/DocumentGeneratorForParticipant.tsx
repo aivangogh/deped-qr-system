@@ -27,14 +27,15 @@ import useSettingsStore from '@/store/useSettingsStore';
 import { TrainingDetailsT } from '@/types/types';
 import { saveAs } from 'file-saver';
 import { useCallback, useState } from 'react';
+import { Participant } from '@prisma/client';
 
 interface DataTableRowActionsProps<TData> {
   row: Row<TData>;
 }
 interface GenerateCertificateRequest {
   url: string;
-  participantData: ParticipantDetailsT;
-  trainingData: TrainingDetailsT;
+  participant: Participant;
+  training: TrainingDetailsT;
 }
 
 interface GenerateCertificateResponse {
@@ -42,7 +43,7 @@ interface GenerateCertificateResponse {
 }
 
 type CertificateGeneratorProps = {
-  participant?: ParticipantDetailsT;
+  participant?: Participant;
   speaker?: SpeakerDetailsT;
 };
 
@@ -80,8 +81,8 @@ function DocumentGeneratorForParticipant({
 
       const requestData: GenerateCertificateRequest = {
         url: documentForParticipantsUrl,
-        participantData: participant!,
-        trainingData: trainingInfo,
+        participant: participant!,
+        training: trainingInfo,
       };
 
       const blob = await generateCertificateApiRequest(requestData);

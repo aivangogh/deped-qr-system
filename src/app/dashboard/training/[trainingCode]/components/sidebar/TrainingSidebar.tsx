@@ -12,6 +12,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet';
+import UpdateTraining from './UpdateTraining';
 
 export default function TrainingSidebar() {
   const { training } = useTrainingStore();
@@ -114,15 +115,7 @@ export default function TrainingSidebar() {
           </div> */}
           </div>
         </div>
-        <SheetContent>
-          <SheetHeader>
-            <SheetTitle>Edit Training Details</SheetTitle>
-            <SheetDescription>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam
-            </SheetDescription>
-          </SheetHeader>
-          <div className="mt-4 ">EDIT</div>
-        </SheetContent>
+        <UpdateTraining />
       </Sheet>
     </>
   );
