@@ -56,7 +56,7 @@ model User {
   school        String?
   contactNumber String?
   isSubmitted   Boolean       @default(false)
-  role          Role          @default(participant)
+  role          Role          @default(hrtd)
   accounts      Account[]
   sessions      Session[]
   Participant   Participant[]
