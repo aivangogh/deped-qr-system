@@ -12,7 +12,6 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
-import useTrainingInfoStore from '@/store/useTrainingInfoStore';
 import { TrainingInfoT } from '@/types/types';
 import prettierJson from '@/utils/prettierJsonFromExcel';
 import { FileSpreadsheet } from 'lucide-react';
@@ -21,23 +20,25 @@ import { parseExcelToJson } from '../../../../utils/parseExcelToJson';
 import ExcelToJson from './ExcelToJson';
 import { importXlsxFile } from '@/services/fetch/import-xlsx-file';
 import useTrainingStore from '@/store/useTrainingStore';
+import useParticipantStore from '@/store/useParticipantStore';
+import useSpeakerStore from '@/store/useSpeakerStore';
 
 export function DialogFileUpload() {
   const { training } = useTrainingStore();
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const [formattedJsonData, setFormattedJsonData] =
     useState<TrainingInfoT | null>(null);
-
-  const { setTrainingInfo, setParticipants, setSpeakers } =
-    useTrainingInfoStore();
+  const { setTraining } = useTrainingStore();
+  const { setParticipants } = useParticipantStore();
+  const { setSpeakers } = useSpeakerStore();
 
   const handleSetTrainingInfo = async () => {
     await importXlsxFile(training.trainingCode, uploadedFile!).then(
       ({ data }) => {
         console.log(data);
-        setTrainingInfo(data.training);
-        setSpeakers(data.speaker);
-        setParticipants(data.participants);
+        // setTraining(data.training);
+        setSpeakers(data.speaker!);
+        setParticipants(data.participants!);
       }
     );
   };

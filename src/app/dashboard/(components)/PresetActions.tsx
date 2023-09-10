@@ -22,27 +22,78 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { toast } from '@/components/ui/use-toast';
 import useSettingsStore from '@/store/useSettingsStore';
-import useTrainingInfoStore from '@/store/useTrainingInfoStore';
 import Link from 'next/link';
 import { useState } from 'react';
 import useTrainingStore from '@/store/useTrainingStore';
 import useParticipantStore from '@/store/useParticipantStore';
 import useSpeakerStore from '@/store/useSpeakerStore';
+import { deleteSpeakers } from '@/services/fetch/speakers';
+import { deleteParticipants } from '@/services/fetch/participants';
+
+async function deleteSpeakersPromise(trainingCode: string): Promise<boolean> {
+  return new Promise((resolve, reject) => {
+    deleteSpeakers(trainingCode)
+      .then((res) => {
+        if (res.status === 200) resolve(true);
+      })
+      .catch(() => {
+        reject(false);
+      });
+  });
+}
+
+async function deleteParticipantsPromise(
+  trainingCode: string
+): Promise<boolean> {
+  return new Promise((resolve, reject) => {
+    deleteParticipants(trainingCode)
+      .then((res) => {
+        if (res.status === 200) resolve(true);
+      })
+      .catch(() => {
+        reject(false);
+      });
+  });
+}
 
 export function PresetActions() {
   const [open, setIsOpen] = useState<boolean>(false);
   const [showDeleteDialog, setShowDeleteDialog] = useState<boolean>(false);
+  const { training } = useTrainingStore();
   const { resetTraining } = useTrainingStore();
   const { resetSpeakers } = useSpeakerStore();
   const { resetParticipants } = useParticipantStore();
   const [showDownloadDialog, setShowDownloadDialog] = useState<boolean>(false);
   const { excelDirectUrl } = useSettingsStore();
 
+  const resetDataHandler = async () => {
+    const res = await Promise.all([
+      deleteSpeakersPromise(training.trainingCode),
+      deleteParticipantsPromise(training.trainingCode),
+    ]);
+
+    if (res[0] && res[1] === true) {
+      resetTraining();
+      resetSpeakers();
+      resetParticipants();
+
+      setShowDeleteDialog(false);
+
+      toast({
+        description: 'This imported data has been deleted.',
+      });
+    } else {
+      toast({
+        description: 'Something went wrong. Please try again.',
+      });
+    }
+  };
+
   return (
     <>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="ghost" size="icon">
+          <Button variant="ghost" size="sm" className="ml-auto h-8">
             <MoreVertical className="h-4 w-4" />
           </Button>
         </DropdownMenuTrigger>
@@ -63,8 +114,9 @@ export function PresetActions() {
           </DropdownMenuItem> */}
           <DropdownMenuSeparator />
           <DropdownMenuItem
-            onSelect={() => setShowDeleteDialog(true)}
             className="text-red-600"
+            onSelect={() => setShowDeleteDialog(true)}
+            onClick={resetDataHandler}
           >
             <ListRestart className="mr-2 h-4 w-4" />
             Reset Data
@@ -82,19 +134,7 @@ export function PresetActions() {
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <Button
-              variant="destructive"
-              onClick={() => {
-                resetTraining();
-                resetSpeakers();
-                resetParticipants();
-                
-                setShowDeleteDialog(false);
-                toast({
-                  description: 'This imported data has been deleted.',
-                });
-              }}
-            >
+            <Button variant="destructive" onClick={resetDataHandler}>
               Reset
             </Button>
           </AlertDialogFooter>

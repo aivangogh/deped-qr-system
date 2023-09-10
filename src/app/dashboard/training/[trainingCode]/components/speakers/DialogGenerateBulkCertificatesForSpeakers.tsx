@@ -8,24 +8,14 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import {
-  generateBulkCertificatesForSpeakers
-} from '@/services/fetch/generatePdf';
+import { generateBulkCertificatesForSpeakers } from '@/services/fetch/generatePdf';
 import useSettingsStore from '@/store/useSettingsStore';
 import useSpeakerStore from '@/store/useSpeakerStore';
 import useTrainingStore from '@/store/useTrainingStore';
-import {
-  GenerateCertificatesRequestForSpeakers
-} from '@/types/generate-pdf';
-import { ParticipantDetailsT, TrainingDetailsT } from '@/types/types';
+import { GenerateCertificatesRequestForSpeakers } from '@/types/generate-pdf';
 import { saveAs } from 'file-saver';
 import { Download, FileCheck2, FileText, RefreshCw } from 'lucide-react';
 import { useCallback, useState } from 'react';
-
-type DialogGenerateBulkProps = {
-  participants: ParticipantDetailsT[];
-  trainingData: TrainingDetailsT;
-};
 
 export default function DialogGenerateBulkCertificatesForSpeakers() {
   const { training } = useTrainingStore();
@@ -88,6 +78,7 @@ export default function DialogGenerateBulkCertificatesForSpeakers() {
         <DialogTrigger asChild>
           <Button
             size="sm"
+            variant="secondary"
             className="ml-auto h-8"
             onClick={handleGenerateBulkCertificates}
           >

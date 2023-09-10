@@ -8,21 +8,14 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { Download, FileCheck2, FileText, RefreshCw } from 'lucide-react';
-import { ParticipantDetailsT, TrainingDetailsT } from '@/types/types';
-import useTrainingInfoStore from '@/store/useTrainingInfoStore';
-import { useCallback, useState } from 'react';
-import useSettingsStore from '@/store/useSettingsStore';
-import { saveAs } from 'file-saver';
-import { GenerateCertificatesRequestForParticipants } from '@/types/generate-pdf';
-import useParticipantStore from '@/store/useParticipantStore';
 import { generateBulkCertificatesForParticipants } from '@/services/fetch/generatePdf';
+import useParticipantStore from '@/store/useParticipantStore';
+import useSettingsStore from '@/store/useSettingsStore';
 import useTrainingStore from '@/store/useTrainingStore';
-
-type DialogGenerateBulkProps = {
-  participants: ParticipantDetailsT[];
-  trainingData: TrainingDetailsT;
-};
+import { GenerateCertificatesRequestForParticipants } from '@/types/generate-pdf';
+import { saveAs } from 'file-saver';
+import { Download, FileCheck2, FileText, RefreshCw } from 'lucide-react';
+import { useCallback, useState } from 'react';
 
 export default function DialogGenerateBulkCertificatesForParticipants() {
   const { training } = useTrainingStore();
@@ -85,6 +78,7 @@ export default function DialogGenerateBulkCertificatesForParticipants() {
         <DialogTrigger asChild>
           <Button
             size="sm"
+            variant="secondary"
             className="ml-auto h-8"
             onClick={handleGenerateBulkCertificates}
           >

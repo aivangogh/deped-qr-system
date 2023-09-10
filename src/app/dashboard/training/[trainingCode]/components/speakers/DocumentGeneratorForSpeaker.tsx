@@ -9,9 +9,13 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { Row } from '@tanstack/react-table';
-import { Download, FileCheck2, FileText, MoreHorizontal, RefreshCw } from 'lucide-react';
-
+import {
+  Download,
+  FileCheck2,
+  FileText,
+  MoreHorizontal,
+  RefreshCw,
+} from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -19,55 +23,16 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-
-import useTrainingInfoStore from '@/store/useTrainingInfoStore';
-import { SpeakerDetailsT } from '@/types/types';
-
+import { generateBulkCertificatesForSpeaker } from '@/services/fetch/generatePdf';
 import useSettingsStore from '@/store/useSettingsStore';
-import { TrainingDetailsT } from '@/types/types';
+import useTrainingStore from '@/store/useTrainingStore';
+import { GenerateCertificatesRequestForSpeaker } from '@/types/generate-pdf';
+import { Speaker } from '@prisma/client';
 import { saveAs } from 'file-saver';
 import { useCallback, useState } from 'react';
 
-interface DataTableRowActionsProps<TData> {
-  row: Row<TData>;
-}
-interface GenerateCertificateRequest {
-  url: string;
-  speakerData: SpeakerDetailsT;
-  trainingData: TrainingDetailsT;
-}
-
-interface GenerateCertificateResponse {
-  certificateFile: string;
-}
-
-type CertificateGeneratorProps = {
-  speaker: SpeakerDetailsT;
-};
-
-async function generateCertificateApiRequest(
-  requestData: GenerateCertificateRequest
-): Promise<Blob> {
-  console.log(requestData);
-  const response = await fetch('/api/google-drive-file/speaker', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(requestData),
-  });
-
-  if (!response.ok) {
-    throw new Error('Failed to generate certificate');
-  }
-
-  return response.blob();
-}
-
-function DocumentGeneratorForSpeaker({
-  speaker,
-}: CertificateGeneratorProps) {
-  const { trainingInfo, setParticipant } = useTrainingInfoStore();
+function DocumentGeneratorForSpeaker(speaker: Speaker) {
+  const { training } = useTrainingStore();
   const { documentForSpeakersUrl } = useSettingsStore();
   const [certificateURL, setCertificateURL] = useState<string | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
@@ -76,13 +41,13 @@ function DocumentGeneratorForSpeaker({
     try {
       setIsGenerating(true);
 
-      const requestData: GenerateCertificateRequest = {
+      const requestData: GenerateCertificatesRequestForSpeaker = {
         url: documentForSpeakersUrl,
-        speakerData: speaker!,
-        trainingData: trainingInfo,
+        speaker: speaker!,
+        training: training,
       };
 
-      const blob = await generateCertificateApiRequest(requestData);
+      const blob = await generateBulkCertificatesForSpeaker(requestData);
 
       // Create a temporary URL for the blob
       const tempURL = URL.createObjectURL(blob);
@@ -92,7 +57,7 @@ function DocumentGeneratorForSpeaker({
     } finally {
       setIsGenerating(false);
     }
-  }, [documentForSpeakersUrl, speaker, trainingInfo]);
+  }, [documentForSpeakersUrl, speaker, training]);
 
   const handleCloseDialog = useCallback(() => {
     // Clean up the temporary URL when the dialog is closed
@@ -105,7 +70,7 @@ function DocumentGeneratorForSpeaker({
   // Function to handle the download event for the "Download Certificate" button
   const handleDownloadCertificate = () => {
     if (certificateURL) {
-      const fileName = `${speaker?.speaker.toLowerCase()}-certificate.docx`;
+      const fileName = `${speaker.speaker?.toLowerCase()}-certificate.docx`;
 
       fetch(certificateURL)
         .then((response) => response.blob())
@@ -171,7 +136,7 @@ function DocumentGeneratorForSpeaker({
                 >
                   <p>Sorry, the certificate could not be displayed.</p>
                 </object> */}
-                <FileCheck2 size={40} color="green"/>
+                <FileCheck2 size={40} color="green" />
                 <span className="text-2xl font-medium">
                   Certificate generated
                 </span>

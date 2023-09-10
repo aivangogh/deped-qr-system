@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { DataTableViewOptions } from './data-table-view-options';
 import DialogGenerateBulkCertificatesForSpeakers from './DialogGenerateBulkCertificatesForSpeakers';
+import SendViaEmailSpeakers from './SendViaEmailSpeakers';
 
 interface DataTableToolbarProps<TData> {
   table: Table<TData>;
@@ -61,6 +62,7 @@ export function DataTableToolbar<TData>({
       </div>
 
       <div className="flex items-center space-x-2">
+        <SendViaEmailSpeakers />
         <DialogGenerateBulkCertificatesForSpeakers />
         <DataTableViewOptions table={table} />
       </div>

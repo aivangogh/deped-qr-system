@@ -1,13 +1,9 @@
 'use client';
 
 import { ColumnDef } from '@tanstack/react-table';
-
-import { Checkbox } from '@/components/ui/checkbox';
-
+import { Participant } from '@prisma/client';
 import { DataTableColumnHeader } from './data-table-column-header';
 import { DataTableRowActions } from './data-table-row-actions';
-import { ParticipantDetailsT, TrainingDetailsT } from '@/types/types';
-import { Participant } from '@prisma/client';
 
 export const columnsForParticipants: ColumnDef<Participant>[] = [
   // {

@@ -50,7 +50,7 @@ export function prettierSpeakerDetails(trainingCode: string, parsedData: any) {
     .map((row: any, index: number) => ({
       speakerId: `${trainingCode}S${index + 1}`,
       speaker: row[columnNames.speakers].trim(),
-      trainingId: trainingCode,
+      trainingCode: trainingCode,
     }));
 
   return speakers;
@@ -80,7 +80,7 @@ export function prettierParticipantDetails(
       school: row[columnNames.school],
       contact: row[columnNames.contact],
       email: row[columnNames.email],
-      trainingId: trainingCode,
+      trainingCode: trainingCode,
     }));
 
   return participants;

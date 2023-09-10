@@ -9,8 +9,13 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { Row } from '@tanstack/react-table';
-import { Download, FileCheck2, FileText, MoreHorizontal, RefreshCw } from 'lucide-react';
+import {
+  Download,
+  FileCheck2,
+  FileText,
+  MoreHorizontal,
+  RefreshCw,
+} from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -20,57 +25,16 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 
-import useTrainingInfoStore from '@/store/useTrainingInfoStore';
-import { ParticipantDetailsT, SpeakerDetailsT } from '@/types/types';
-
+import { generateBulkCertificatesForParticipant } from '@/services/fetch/generatePdf';
 import useSettingsStore from '@/store/useSettingsStore';
-import { TrainingDetailsT } from '@/types/types';
+import useTrainingStore from '@/store/useTrainingStore';
+import { GenerateCertificatesRequestForParticipant } from '@/types/generate-pdf';
+import { Participant } from '@prisma/client';
 import { saveAs } from 'file-saver';
 import { useCallback, useState } from 'react';
-import { Participant } from '@prisma/client';
 
-interface DataTableRowActionsProps<TData> {
-  row: Row<TData>;
-}
-interface GenerateCertificateRequest {
-  url: string;
-  participant: Participant;
-  training: TrainingDetailsT;
-}
-
-interface GenerateCertificateResponse {
-  certificateFile: string;
-}
-
-type CertificateGeneratorProps = {
-  participant?: Participant;
-  speaker?: SpeakerDetailsT;
-};
-
-async function generateCertificateApiRequest(
-  requestData: GenerateCertificateRequest
-): Promise<Blob> {
-  console.log(requestData);
-  const response = await fetch('/api/google-drive-file/participant', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(requestData),
-  });
-
-  if (!response.ok) {
-    throw new Error('Failed to generate certificate');
-  }
-
-  return response.blob();
-}
-
-function DocumentGeneratorForParticipant({
-  participant,
-  speaker,
-}: CertificateGeneratorProps) {
-  const { trainingInfo, setParticipant } = useTrainingInfoStore();
+function DocumentGeneratorForParticipant(participant: Participant) {
+  const { training } = useTrainingStore();
   const { documentForParticipantsUrl } = useSettingsStore();
   const [certificateURL, setCertificateURL] = useState<string | null>(null);
   const [isGenerating, setIsGenerating] = useState<boolean>(false);
@@ -79,13 +43,13 @@ function DocumentGeneratorForParticipant({
     try {
       setIsGenerating(true);
 
-      const requestData: GenerateCertificateRequest = {
+      const requestData: GenerateCertificatesRequestForParticipant = {
         url: documentForParticipantsUrl,
         participant: participant!,
-        training: trainingInfo,
+        training: training,
       };
 
-      const blob = await generateCertificateApiRequest(requestData);
+      const blob = await generateBulkCertificatesForParticipant(requestData);
 
       // Create a temporary URL for the blob
       const tempURL = URL.createObjectURL(blob);
@@ -95,7 +59,7 @@ function DocumentGeneratorForParticipant({
     } finally {
       setIsGenerating(false);
     }
-  }, [documentForParticipantsUrl, participant, trainingInfo]);
+  }, [documentForParticipantsUrl, participant, training]);
 
   const handleCloseDialog = useCallback(() => {
     // Clean up the temporary URL when the dialog is closed
@@ -108,7 +72,7 @@ function DocumentGeneratorForParticipant({
   // Function to handle the download event for the "Download Certificate" button
   const handleDownloadCertificate = () => {
     if (certificateURL) {
-      const fileName = `${trainingInfo.title.toLowerCase()}-certificate.docx`;
+      const fileName = `${training.title.toLowerCase()}-certificate.docx`;
 
       fetch(certificateURL)
         .then((response) => response.blob())
