@@ -63,4 +63,12 @@ export const authRoutes = {
     path: '/sign-up',
     label: 'Sign Up',
   },
+  singOut: {
+    path: '/sign-out',
+    label: 'Sign Out',
+  },
+  error:{
+    path: '/error',
+    label: 'Error',
+  }
 };

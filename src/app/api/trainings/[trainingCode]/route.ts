@@ -97,3 +97,21 @@ export async function PUT(
       return NextResponse.json({ status: 500, error: err });
     });
 }
+
+export async function DELETE(
+  request: Request,
+  { params }: { params: { trainingCode: string } }
+) {
+  try {
+    console.log(params.trainingCode);
+    const training = await prisma.training.delete({
+      where: {
+        trainingCode: params.trainingCode,
+      },
+    });
+
+    return NextResponse.json({ status: 200, message: 'Training deleted' });
+  } catch (error) {
+    return NextResponse.json({ status: 500, error });
+  }
+}

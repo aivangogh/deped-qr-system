@@ -43,3 +43,13 @@ export async function createTraining(training: CreateTrainingT) {
     throw error;
   }
 }
+
+export async function deleteTraining(trainingCode: string) {
+  console.log(trainingCode);
+  try {
+    const { data } = await axios.delete(`/api/trainings/${trainingCode}`);
+    return data;
+  } catch (error) {
+    throw error;
+  }
+}

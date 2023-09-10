@@ -62,6 +62,7 @@ import { PapsT } from '@/types/paps';
 import { CreateTrainingT } from '@/types/trainings';
 import { useRouter } from 'next/navigation';
 import { useMutation, useQuery } from 'react-query';
+import { dashboardRoutes } from '@/app/routes';
 
 const TrainingFormSchema = z.object({
   title: z.string().min(2, {
@@ -135,6 +136,7 @@ export default function AddTrainingForm() {
     onSuccess({ data }) {
       console.log(data);
       // addPap(data);
+      router.replace(dashboardRoutes.dashboard.path);
 
       toast({
         title: 'Training created',
