@@ -1,27 +1,21 @@
 'use client';
 
-import useTrainingInfoStore from '@/store/useTrainingInfoStore';
-import { columnsForParticipants } from './components/participants/columnsForParticipants';
-import { DataTableForParticipants } from './components/participants/data-table-for-participants';
-import { columnsForSpeakers } from './components/speakers/columnsForSpeakers';
-import { DataTableForSpeakers } from './components/speakers/data-table-for-speakers';
-import { Separator } from '@/components/ui/separator';
-import { useQuery } from 'react-query';
+import { DialogFileUpload } from '@/app/dashboard/(components)/FileUploader/dialog-file-upload';
+import { dashboardRoutes } from '@/app/routes';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { getTraining } from '@/services/fetch/trainings';
-import { Training } from '@prisma/client';
-import { TrainingDetails } from './components/training-details';
-import useTrainingStore from '@/store/useTrainingStore';
-import useSpeakerStore from '@/store/useSpeakerStore';
 import useParticipantStore from '@/store/useParticipantStore';
-import { set } from 'date-fns';
-import TrainingSidebar from './components/sidebar/TrainingSidebar';
+import useSpeakerStore from '@/store/useSpeakerStore';
+import useTrainingStore from '@/store/useTrainingStore';
 import { ChevronRight } from 'lucide-react';
 import Link from 'next/link';
-import { dashboardRoutes } from '@/app/routes';
-import { DialogFileUpload } from '@/app/dashboard/(components)/FileUploader/dialog-file-upload';
+import { useQuery } from 'react-query';
 import { PresetActions } from '../../(components)/PresetActions';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { columnsForParticipants } from './components/participants/columnsForParticipants';
+import { DataTableForParticipants } from './components/participants/data-table-for-participants';
+import TrainingSidebar from './components/sidebar/TrainingSidebar';
+import { columnsForSpeakers } from './components/speakers/columnsForSpeakers';
+import { DataTableForSpeakers } from './components/speakers/data-table-for-speakers';
 
 export default function TrainingPage({
   params,

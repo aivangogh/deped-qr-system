@@ -29,11 +29,15 @@ import { generateBulkCertificatesForParticipant } from '@/services/fetch/generat
 import useSettingsStore from '@/store/useSettingsStore';
 import useTrainingStore from '@/store/useTrainingStore';
 import { GenerateCertificatesRequestForParticipant } from '@/types/generate-pdf';
-import { Participant } from '@prisma/client';
 import { saveAs } from 'file-saver';
 import { useCallback, useState } from 'react';
+import { Participant } from '@prisma/client';
 
-function DocumentGeneratorForParticipant(participant: Participant) {
+export function DocumentGeneratorForParticipant({
+  participant,
+}: {
+  participant: Participant;
+}) {
   const { training } = useTrainingStore();
   const { documentForParticipantsUrl } = useSettingsStore();
   const [certificateURL, setCertificateURL] = useState<string | null>(null);
@@ -181,5 +185,3 @@ function DocumentGeneratorForParticipant(participant: Participant) {
     </>
   );
 }
-
-export default DocumentGeneratorForParticipant;

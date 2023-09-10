@@ -1,9 +1,8 @@
 'use client';
 
 import { Row } from '@tanstack/react-table';
-import { ParticipantDetailsT } from '@/types/types'
-import DocumentGenerator from './DocumentGeneratorForParticipant';
 import { Participant } from '@prisma/client';
+import { DocumentGeneratorForParticipant } from './DocumentGeneratorForParticipant';
 
 interface DataTableRowActionsProps<TData> {
   row: Row<TData>;
@@ -16,7 +15,7 @@ export function DataTableRowActions<TData>({
 
   return (
     <>
-      <DocumentGenerator participant={participant} />
+      <DocumentGeneratorForParticipant participant={participant!} />
     </>
   );
 }

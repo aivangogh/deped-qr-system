@@ -31,7 +31,7 @@ import { Speaker } from '@prisma/client';
 import { saveAs } from 'file-saver';
 import { useCallback, useState } from 'react';
 
-function DocumentGeneratorForSpeaker(speaker: Speaker) {
+function DocumentGeneratorForSpeaker({ speaker }: { speaker: Speaker }) {
   const { training } = useTrainingStore();
   const { documentForSpeakersUrl } = useSettingsStore();
   const [certificateURL, setCertificateURL] = useState<string | null>(null);

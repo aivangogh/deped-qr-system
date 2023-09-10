@@ -22,7 +22,7 @@ export async function POST(request: Request) {
 
     const participant = await prisma.participant.create({
       data: {
-        trainingId: training.id,
+        trainingCode: training.id,
         userId: id,
       },
     });
