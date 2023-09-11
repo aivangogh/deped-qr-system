@@ -39,7 +39,7 @@ export const dashboardNavRoutes = [
 export const dashboardRoutes = {
   dashboard: {
     path: '/dashboard/trainings',
-    label: 'Trainigs',
+    label: 'Trainings',
   },
   budgetAllocation: {
     path: '/dashboard/budget-allocation',

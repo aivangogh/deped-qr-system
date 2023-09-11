@@ -4,6 +4,7 @@ import { useSession } from 'next-auth/react';
 import { authRoutes, navRoutes } from '../routes';
 import HrtdAuthLayout from '@/layouts/HrtdAuthLayout';
 import { useRouter } from 'next/navigation';
+import LoadingSpinner from '@/components/LoadingSpinner';
 
 export default function HrtdLayout({
   children,
@@ -14,7 +15,7 @@ export default function HrtdLayout({
   const { data: session, status } = useSession();
 
   if (status === 'loading') {
-    return <div>Loading...</div>;
+    return <LoadingSpinner />;
   }
 
   if (!session) {

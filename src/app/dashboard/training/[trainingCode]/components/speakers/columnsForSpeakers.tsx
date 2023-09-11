@@ -57,7 +57,21 @@ export const columnsForSpeakers: ColumnDef<Speaker>[] = [
       );
     },
   },
-
+  {
+    accessorKey: 'email',
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Email" />
+    ),
+    cell: ({ row }) => {
+      return (
+        <div className="flex space-x-2">
+          <span className="max-w-[100px] font-medium">
+            {row.getValue('email')}
+          </span>
+        </div>
+      );
+    },
+  },
   {
     id: 'actions',
     header: ({ column }) => (
