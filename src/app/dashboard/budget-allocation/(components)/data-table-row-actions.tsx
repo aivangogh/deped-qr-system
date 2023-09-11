@@ -89,12 +89,12 @@ export function DataTableRowActions<TData>({
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-[160px]">
-            <DropdownMenuItem
-              onClick={() => router.push(`/dashboard/training/${trainingCode}`)}
-            >
-              <ExternalLink className="mr-2 h-4 w-4" />
-              View
-            </DropdownMenuItem>
+            <Link href={`/dashboard/training/${trainingCode}`} target="_blank">
+              <DropdownMenuItem>
+                <ExternalLink className="mr-2 h-4 w-4" />
+                View
+              </DropdownMenuItem>
+            </Link>
 
             <AlertDialogTrigger asChild>
               <DropdownMenuItem className="text-red-600">

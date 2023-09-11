@@ -1,9 +1,10 @@
-import Trainings from './(trainings)/trainings';
+'use client';
+
+import { useRouter } from 'next/navigation';
+import { dashboardRoutes } from '../routes';
 
 export default function DashboardPage() {
-  return (
-    <div className="container pt-4">
-      <Trainings />
-    </div>
-  );
+  const router = useRouter();
+
+  router.push(dashboardRoutes.dashboard.path);
 }

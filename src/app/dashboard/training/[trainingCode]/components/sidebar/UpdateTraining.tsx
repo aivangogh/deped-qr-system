@@ -44,6 +44,7 @@ import {
 import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
 import { Calendar } from '@/components/ui/calendar';
+import useOfficesStore from '@/store/useOfficesStore';
 
 const trainingFormSchema = z.object({
   titleOfTraining: z
@@ -62,7 +63,7 @@ const trainingFormSchema = z.object({
     required_error: 'Please select a date and time',
     invalid_type_error: "That's not a date!",
   }),
-  papId: z.string(),
+  officeId: z.string(),
   numberOfHours: z.number(),
   venue: z.string().min(2, {
     message: 'Name must be at least 2 characters.',
@@ -82,6 +83,7 @@ const defaultValues: Partial<TrainingFormValues> = {
 export default function UpdateTraining() {
   const { toast } = useToast();
   const { paps, setPaps } = usePapsStore();
+  const { offices, setOffices } = useOfficesStore()
   const { training } = useTrainingStore();
 
   useQuery({
@@ -233,22 +235,22 @@ export default function UpdateTraining() {
                 <div className="grid w-full max-w-sm items-center gap-1.5">
                   <FormField
                     control={form.control}
-                    name="papId"
+                    name="officeId"
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>
-                          Project, Activities and Projects (PAPs):
+                          Implementing Office
                         </FormLabel>
-                        <Select value={training.papId!}>
+                        <Select value={training.officeId!}>
                           <FormControl>
                             <SelectTrigger className="w-[180px]">
-                              <SelectValue placeholder="Select a PAP" />
+                              <SelectValue placeholder="Select a Office" />
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
-                            {paps.map(({ papId, pap }) => (
-                              <SelectItem key={papId} value={papId}>
-                                {pap}
+                            {offices.map(({ officeId, office }) => (
+                              <SelectItem key={officeId} value={officeId}>
+                                {office}
                               </SelectItem>
                             ))}
                           </SelectContent>

@@ -1,15 +1,15 @@
 import { prisma } from '@/lib/prisma';
-import { TrainingsT } from '@/types/trainings';
+import { CreateTrainingT } from '@/types/trainings';
 import { NextResponse } from 'next/server';
 
 export async function GET() {
   try {
     const trainings = await prisma.training.findMany({
       include: {
-        pap: {
+        office: {
           select: {
-            pap: true,
-            papId: true,
+            office: true,
+            officeId: true,
           },
         },
       },
@@ -36,23 +36,26 @@ export async function POST(request: Request) {
       addressOfTheVenue,
       issuedOn,
       issuedAt,
-      papId,
-      validUntil,
-    } = (await request.json()) as TrainingsT;
+      officeId,
+      programHolder,
+    } = (await request.json()) as CreateTrainingT;
+
+    console.log(programHolder);
+    console.log(officeId);
 
     await prisma.training.create({
       data: {
+        trainingCode: await generateTrainingCode(),
         title: title.trim(),
-        dateFrom: new Date(dateFrom),
-        dateTo: new Date(dateTo),
+        dateFrom,
+        dateTo,
         numberOfHours,
         venue: venue.trim(),
         addressOfTheVenue: addressOfTheVenue.trim(),
-        issuedOn: new Date(issuedOn),
+        issuedOn,
         issuedAt: issuedAt.trim(),
-        papId,
-        trainingCode: (await generateTrainingCode()).trim(),
-        validUntil: new Date(validUntil),
+        officeId,
+        programHolder: programHolder.trim(),
       },
     });
 
@@ -68,7 +71,7 @@ async function generateTrainingCode() {
 
   const year = new Date().getFullYear();
   const month = (new Date().getMonth() + 1).toString().padStart(2, '0');
-  const incremented = count.toString().padStart(4, '0');
+  const incremented = count.toString().padStart(2, '0');
 
   const codeFormat = `MCD${year}${month}${incremented}`;
   return codeFormat;

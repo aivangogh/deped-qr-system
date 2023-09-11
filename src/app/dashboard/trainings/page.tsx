@@ -1,19 +1,17 @@
 'use client';
 
+import { dashboardRoutes } from '@/app/routes';
+import { Button } from '@/components/ui/button';
+import { getTrainings } from '@/services/fetch/trainings';
 import useTrainingsStore from '@/store/useTrainingsStore';
+import { TrainingT } from '@/types/training';
+import { Plus } from 'lucide-react';
+import Link from 'next/link';
+import { useQuery } from 'react-query';
 import { columnsForTrainings } from './(components)/columns-for-trainings';
 import { DataTableForTrainings } from './(components)/data-table-for-trainings';
-import { Button } from '@/components/ui/button';
-import Link from 'next/link';
-import { dashboardRoutes, navRoutes } from '@/app/routes';
-import { Plus } from 'lucide-react';
-import { useQuery } from 'react-query';
-import { Training } from '@prisma/client';
-import { getTrainings } from '@/services/fetch/trainings';
-import { TrainingsT, TrainingsWithPapT } from '@/types/trainings';
-import { TrainingT } from '@/types/training';
 
-export default function Trainings() {
+export default function TrainingsPage() {
   const { trainings, setTrainings } = useTrainingsStore();
 
   useQuery({

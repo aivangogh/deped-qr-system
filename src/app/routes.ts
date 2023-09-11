@@ -25,10 +25,25 @@ export const participantRoutes = {
   },
 };
 
+export const dashboardNavRoutes = [
+  {
+    href: '/dashboard/trainings',
+    label: 'Trainings',
+  },
+  {
+    href: '/dashboard/budget-allocation',
+    label: 'Budget Allocation',
+  },
+];
+
 export const dashboardRoutes = {
   dashboard: {
-    path: '/dashboard',
-    label: 'Dashboard',
+    path: '/dashboard/trainings',
+    label: 'Trainigs',
+  },
+  budgetAllocation: {
+    path: '/dashboard/budget-allocation',
+    label: 'Budget Allocation',
   },
   addTraining: {
     path: '/dashboard/add-training',
@@ -67,8 +82,8 @@ export const authRoutes = {
     path: '/sign-out',
     label: 'Sign Out',
   },
-  error:{
+  error: {
     path: '/error',
     label: 'Error',
-  }
+  },
 };

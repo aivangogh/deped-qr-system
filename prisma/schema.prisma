@@ -95,21 +95,31 @@ model Training {
   addressOfTheVenue String
   issuedOn          DateTime?
   issuedAt          String?
-  validUntil        DateTime
+  validUntil        DateTime?
+  programHolder     String?
   speaker           Speaker[]
   participant       Participant[]
-  pap               Pap              @relation(fields: [papId], references: [papId])
-  papId             String
   DateOfTraining    DateOfTraining[]
+  office            Office?          @relation(fields: [officeId], references: [officeId])
+  officeId          String?
 }
 
 model Pap {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  papId       String   @unique
+  description String?
+  pap         String
+}
+
+model Office {
   id          String     @id @default(auto()) @map("_id") @db.ObjectId
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
-  papId       String     @unique
+  officeId    String     @unique
   description String?
-  pap         String
+  office      String
   Training    Training[]
 }
 
@@ -129,6 +139,9 @@ model Speaker {
   updatedAt    DateTime  @updatedAt
   speakerId    String?   @unique
   speaker      String?
+  position     String?
+  contact      String?
+  email        String?
   Training     Training? @relation(fields: [trainingCode], references: [trainingCode], onDelete: Cascade)
   trainingCode String?
 }

@@ -25,5 +25,5 @@ export default function HrtdLayout({
     router.push(navRoutes.participant.path);
   }
 
-  return <>{children}</>;
+  return <HrtdAuthLayout>{children}</HrtdAuthLayout>;
 }

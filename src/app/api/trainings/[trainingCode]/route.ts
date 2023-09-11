@@ -12,10 +12,10 @@ export async function GET(
         trainingCode: params.trainingCode,
       },
       include: {
-        pap: {
+        office: {
           select: {
-            pap: true,
-            papId: true,
+            office: true,
+            officeId: true,
           },
         },
         speaker: true,
@@ -38,9 +38,9 @@ export async function GET(
           addressOfTheVenue: training?.addressOfTheVenue,
           issuedOn: training?.issuedOn,
           issuedAt: training?.issuedAt,
-          validUntil: training?.validUntil,
-          papId: training?.papId,
-          pap: training?.pap.pap,
+          programHolder: training?.programHolder,
+          officeId: training?.office?.office,
+          office: training?.office?.officeId,
         },
         speakers: training?.speaker,
         participants: training?.participant,
@@ -66,8 +66,8 @@ export async function PUT(
     addressOfTheVenue,
     issuedOn,
     issuedAt,
-    papId,
-    validUntil,
+    officeId,
+    programHolder,
   } = (await request.json()) as UpdateTrainingT;
 
   const updateTraining: UpdateTrainingT = {
@@ -79,8 +79,8 @@ export async function PUT(
     addressOfTheVenue,
     issuedOn: new Date(issuedOn),
     issuedAt,
-    papId,
-    validUntil: new Date(validUntil),
+    officeId,
+    programHolder,
   };
 
   await prisma.training

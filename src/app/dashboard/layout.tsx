@@ -1,9 +1,9 @@
 'use client';
 
 import { useSession } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
 import { authRoutes, navRoutes } from '../routes';
 import HrtdAuthLayout from '@/layouts/HrtdAuthLayout';
+import { useRouter } from 'next/navigation';
 
 export default function HrtdLayout({
   children,
@@ -25,9 +25,5 @@ export default function HrtdLayout({
     router.push(navRoutes.participant.path);
   }
 
-  return (
-    <>
-      <HrtdAuthLayout>{children}</HrtdAuthLayout>
-    </>
-  );
+  return <>{children}</>;
 }

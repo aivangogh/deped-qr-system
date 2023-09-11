@@ -6,6 +6,6 @@ export const config = {
     '/api/:path*',
     '/training/:path*',
     '/dashboard/:path*',
-    '/participant/:path*',
+    '/participant/:path*'
   ],
 };

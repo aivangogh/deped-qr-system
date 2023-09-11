@@ -10,6 +10,7 @@ import { format } from 'date-fns';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 
+import { dashboardRoutes } from '@/app/routes';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
 import {
@@ -55,14 +56,13 @@ import {
 } from '@/components/ui/select';
 import { useToast } from '@/components/ui/use-toast';
 import { cn } from '@/lib/utils';
-import { createPap, getPaps } from '@/services/fetch/paps';
+import { createOffice, getOffices } from '@/services/fetch/offices';
 import { createTraining } from '@/services/fetch/trainings';
-import usePapsStore from '@/store/usePapsStore';
-import { PapsT } from '@/types/paps';
+import useOfficesStore from '@/store/useOfficesStore';
+import { OfficesT } from '@/types/offices';
 import { CreateTrainingT } from '@/types/trainings';
 import { useRouter } from 'next/navigation';
 import { useMutation, useQuery } from 'react-query';
-import { dashboardRoutes } from '@/app/routes';
 
 const TrainingFormSchema = z.object({
   title: z.string().min(2, {
@@ -91,40 +91,38 @@ const TrainingFormSchema = z.object({
     required_error: 'Please select must be at least 2 characters.',
     invalid_type_error: "That's not a date!",
   }),
-  papId: z.string({
-    required_error: 'Please select at least one PAP',
+  officeId: z.string({
+    required_error: 'Please select implementing office!',
   }),
-  validUntil: z.date({
-    required_error: 'Please select a date and time',
-    invalid_type_error: "That's not a date!",
+  programHolder: z.string({
+    required_error: 'Please select program holder!',
   }),
 });
 
-const PapFormSchema = z.object({
-  pap: z.string().min(2, {
-    message: 'Title must be at least 2 characters.',
+const OfficeFormSchema = z.object({
+  office: z.string({
+    required_error: 'Please select must be at least 2 characters.',
   }),
 });
 
 export default function AddTrainingForm() {
   const router = useRouter();
   const { toast } = useToast();
-  const { paps, setPaps, addPap } = usePapsStore();
+  const { offices, setOffices, addOffice } = useOfficesStore();
 
   const trainingForm = useForm<z.infer<typeof TrainingFormSchema>>({
     resolver: zodResolver(TrainingFormSchema),
   });
 
-  const papForm = useForm<z.infer<typeof PapFormSchema>>({
-    resolver: zodResolver(PapFormSchema),
+  const officeForm = useForm<z.infer<typeof OfficeFormSchema>>({
+    resolver: zodResolver(OfficeFormSchema),
   });
 
   useQuery({
-    queryKey: ['paps'],
-    queryFn: () => getPaps(),
+    queryKey: ['office-list'],
+    queryFn: () => getOffices(),
     onSuccess({ data }) {
-      setPaps(data);
-      console.log(data);
+      setOffices(data);
     },
   });
 
@@ -135,8 +133,7 @@ export default function AddTrainingForm() {
     },
     onSuccess({ data }) {
       console.log(data);
-      // addPap(data);
-      router.replace(dashboardRoutes.dashboard.path);
+      router.push(dashboardRoutes.dashboard.path);
 
       toast({
         title: 'Training created',
@@ -152,26 +149,25 @@ export default function AddTrainingForm() {
     },
   });
 
-  const papMutation = useMutation({
-    mutationKey: ['new-pap'],
-    mutationFn: (formData: PapsT) => {
-      // console.log(formData);
-      return createPap(formData);
+  const officeMutation = useMutation({
+    mutationKey: ['new-office'],
+    mutationFn: (formData: OfficesT) => {
+      return createOffice(formData);
     },
     onSuccess({ data }) {
       console.log(data);
-      addPap(data);
+      addOffice(data);
 
       toast({
-        title: 'PAP created',
-        description: 'PAP created successfully',
+        title: 'Office created',
+        description: 'Office added successfully',
       });
     },
     onError() {
-      papMutation.reset();
+      officeMutation.reset();
       toast({
         title: 'Something went wrong',
-        description: 'PAP was not created. Please try again.',
+        description: 'Office was not added. Please try again.',
       });
     },
   });
@@ -181,9 +177,9 @@ export default function AddTrainingForm() {
     addTrainingMutation.mutate(data);
   }
 
-  function onSubmitPap(data: z.infer<typeof PapFormSchema>) {
+  function onSubmitOffice(data: z.infer<typeof OfficeFormSchema>) {
     // console.log(data);
-    papMutation.mutate(data);
+    officeMutation.mutate(data);
   }
 
   return (
@@ -195,8 +191,7 @@ export default function AddTrainingForm() {
               <CardHeader>
                 <CardTitle>Add training</CardTitle>
                 <CardDescription>
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                  Quisquam
+                  Add a new training to the list.
                 </CardDescription>
               </CardHeader>
               <CardContent className="grid gap-6">
@@ -336,9 +331,6 @@ export default function AddTrainingForm() {
                                 {...field}
                               />
                             </FormControl>
-                            <FormDescription>
-                              Lorem ipsum dolor sit.
-                            </FormDescription>
                             <FormMessage />
                           </FormItem>
                         )}
@@ -359,7 +351,8 @@ export default function AddTrainingForm() {
                               <Input placeholder="Type here..." {...field} />
                             </FormControl>
                             <FormDescription>
-                              Lorem ipsum dolor sit amet.
+                              Note: The input here will be used as the venue of
+                              generated certificate.
                             </FormDescription>
                             <FormMessage />
                           </FormItem>
@@ -382,7 +375,8 @@ export default function AddTrainingForm() {
                               <Input placeholder="Type here..." {...field} />
                             </FormControl>
                             <FormDescription>
-                              Lorem ipsum dolor sit amet.
+                              Note: The input here will be used as the address
+                              of generated certificate.
                             </FormDescription>
                             <FormMessage />
                           </FormItem>
@@ -429,7 +423,7 @@ export default function AddTrainingForm() {
                               </PopoverContent>
                             </Popover>
                             <FormDescription>
-                              Lorem ipsum dolor sit amet consectetur adipisicing
+                              This form as the date of the certificate issued.
                             </FormDescription>
                             <FormMessage />
                           </FormItem>
@@ -452,7 +446,7 @@ export default function AddTrainingForm() {
                               />
                             </FormControl>
                             <FormDescription>
-                              Lorem ipsum dolor sit.
+                              This form as the place of the certificate issued.
                             </FormDescription>
                             <FormMessage />
                           </FormItem>
@@ -461,11 +455,11 @@ export default function AddTrainingForm() {
 
                       <FormField
                         control={trainingForm.control}
-                        name="papId"
+                        name="officeId"
                         render={({ field }) => (
                           <FormItem className="grid">
                             <FormLabel>
-                              Project, Activities and Projects (PAPs){' '}
+                              Implementing Office{' '}
                               <span className="text-red-500"> *</span>
                             </FormLabel>
                             <FormControl>
@@ -475,109 +469,64 @@ export default function AddTrainingForm() {
                               >
                                 <FormControl>
                                   <SelectTrigger>
-                                    <SelectValue placeholder="Select a PAP" />
+                                    <SelectValue placeholder="Select a Office" />
                                   </SelectTrigger>
                                 </FormControl>
                                 <SelectContent>
-                                  {/* TODO: Fetch PAPs here  */}
-                                  {paps.length > 0 ? (
+                                  {offices.length > 0 ? (
                                     <ScrollArea className="max-h-72 min-h-fit">
-                                      {paps.map(({ papId, pap }) => (
-                                        <SelectItem key={papId} value={papId}>
-                                          {pap}
+                                      {offices.map(({ officeId, office }) => (
+                                        <SelectItem
+                                          key={officeId}
+                                          value={officeId}
+                                          className="h-10"
+                                        >
+                                          {office}
                                         </SelectItem>
                                       ))}
                                     </ScrollArea>
                                   ) : (
                                     <div className="text-center py-2">
                                       <span className="text-xs">
-                                        No PAPs found
+                                        No Office found
                                       </span>
                                     </div>
                                   )}
                                   <SelectSeparator />
                                   <DialogTrigger asChild>
-                                    <Button variant="ghost" className="w-full">
+                                    <Button
+                                      variant="ghost"
+                                      className="w-full h-8"
+                                    >
                                       <PlusCircledIcon className="mr-2 h-4 w-4" />
-                                      Add PAP
+                                      Add Office
                                     </Button>
                                   </DialogTrigger>
                                 </SelectContent>
                               </Select>
                             </FormControl>
-                            <FormDescription>
-                              Lorem ipsum dolor sit amet.
-                            </FormDescription>
                             <FormMessage />
                           </FormItem>
                         )}
                       />
 
-                      {/* <FormField
-                        control={trainingForm.control}
-                        name="trainingCode"
-                        render={({ field }) => (
-                          <FormItem className="grid">
-                            <FormLabel>Traning Code</FormLabel>
-                            <FormControl>
-                              <Input
-                                readOnly
-                                {...field}
-                                placeholder="MCD202307XXXX"
-                                className="cursor-pointer"
-                              />
-                            </FormControl>
-                            <FormDescription>
-                              Lorem ipsum dolor sit amet.
-                            </FormDescription>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      /> */}
-
                       <FormField
                         control={trainingForm.control}
-                        name="validUntil"
+                        name="programHolder"
                         render={({ field }) => (
                           <FormItem className="grid">
                             <FormLabel>
-                              Date Time Validity{' '}
+                              Program Holder{' '}
                               <span className="text-red-500"> *</span>
                             </FormLabel>
-                            <Popover>
-                              <PopoverTrigger asChild>
-                                <FormControl>
-                                  <Button
-                                    variant={'outline'}
-                                    className={cn(
-                                      'w-[240px] pl-3 text-left font-normal',
-                                      !field.value && 'text-muted-foreground'
-                                    )}
-                                  >
-                                    {field.value ? (
-                                      format(field.value, 'PPP')
-                                    ) : (
-                                      <span>Pick a date</span>
-                                    )}
-                                    <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                                  </Button>
-                                </FormControl>
-                              </PopoverTrigger>
-                              <PopoverContent
-                                className="w-auto p-0"
-                                align="start"
-                              >
-                                <Calendar
-                                  mode="single"
-                                  selected={field.value}
-                                  onSelect={field.onChange}
-                                  initialFocus
-                                />
-                              </PopoverContent>
-                            </Popover>
-                            <FormDescription>
-                              Lorem ipsum dolor sit amet consectetur adipisicing
-                            </FormDescription>
+                            <FormControl>
+                              <Input
+                                placeholder="Type here..."
+                                type="text"
+                                {...field}
+                              />
+                            </FormControl>
+
                             <FormMessage />
                           </FormItem>
                         )}
@@ -604,26 +553,24 @@ export default function AddTrainingForm() {
             </form>
           </Form>
 
-          {/* Adding PAP Dialog */}
+          {/* Adding Office Dialog */}
           <DialogContent className="sm:max-w-[425px]">
-            <Form {...papForm}>
-              <form onSubmit={papForm.handleSubmit(onSubmitPap)}>
+            <Form {...officeForm}>
+              <form onSubmit={officeForm.handleSubmit(onSubmitOffice)}>
                 <DialogHeader>
-                  <DialogTitle>Add new PAP</DialogTitle>
+                  <DialogTitle>Impletement new Office</DialogTitle>
                   <DialogDescription>
-                    This will create a new PAP and add it to the list.
+                    This will create a new office and add it to the list.
                   </DialogDescription>
                 </DialogHeader>
-                <div className="grid gap-4 py-4">
+                <div className="grid gap-4 py-8">
                   <div className="grid items-center space-y-2">
                     <FormField
-                      control={papForm.control}
-                      name="pap"
+                      control={officeForm.control}
+                      name="office"
                       render={({ field }) => (
                         <FormItem className="grid">
-                          <FormLabel>
-                            Project, Activity and Project (PAP)
-                          </FormLabel>
+                          <FormLabel>Implementing Office</FormLabel>
                           <FormControl>
                             <Input
                               placeholder="Type here..."
@@ -631,9 +578,7 @@ export default function AddTrainingForm() {
                               autoFocus
                             />
                           </FormControl>
-                          <FormDescription>
-                            This will be used as the title of the training.
-                          </FormDescription>
+
                           <FormMessage />
                         </FormItem>
                       )}
@@ -641,8 +586,8 @@ export default function AddTrainingForm() {
                   </div>
                 </div>
                 <DialogFooter>
-                  <Button type="submit" disabled={papMutation.isLoading}>
-                    {papMutation.isLoading ? (
+                  <Button type="submit" disabled={officeMutation.isLoading}>
+                    {officeMutation.isLoading ? (
                       <>
                         <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
                         Adding...

@@ -36,7 +36,6 @@ export async function updateTraining(
 
 export async function createTraining(training: CreateTrainingT) {
   try {
-    console.log(training);
     const { data } = await axios.post(`/api/trainings`, training);
     return data;
   } catch (error) {

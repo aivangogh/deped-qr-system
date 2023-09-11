@@ -4,9 +4,7 @@ import { ColumnDef } from '@tanstack/react-table';
 
 import { Checkbox } from '@/components/ui/checkbox';
 
-import {
-  SpeakerDetailsT
-} from '@/types/types';
+import { SpeakerDetailsT } from '@/types/types';
 import { DataTableColumnHeader } from './data-table-column-header';
 import { DataTableRowActions } from './data-table-row-actions';
 import { Speaker } from '@prisma/client';
@@ -39,7 +37,7 @@ export const columnsForSpeakers: ColumnDef<Speaker>[] = [
       <DataTableColumnHeader column={column} title="Speaker ID" />
     ),
     cell: ({ row }) => (
-      <div className="w-[80px] font-medium">{row.getValue('speakerId')}</div>
+      <div className="w-[90px] font-medium">{row.getValue('speakerId')}</div>
     ),
     enableSorting: false,
     enableHiding: false,

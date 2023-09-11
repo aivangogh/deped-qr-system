@@ -1,6 +1,7 @@
 import { Training } from '@prisma/client';
 
 export type TrainingsT = {
+  trainingCode: string;
   title: string;
   dateFrom: Date;
   dateTo: Date;
@@ -9,10 +10,9 @@ export type TrainingsT = {
   addressOfTheVenue: string;
   issuedOn: Date;
   issuedAt: string;
-  papId: string;
-  pap?: string;
-  trainingCode: string;
-  validUntil: Date;
+  officeId: string;
+  office?: string;
+  programHolder: string;
 };
 
 export type TrainingsWithPapT = Training & {
@@ -22,5 +22,11 @@ export type TrainingsWithPapT = Training & {
   };
 };
 
-export type CreateTrainingT = Omit<TrainingsT, 'trainingCode' | 'pap'>;
-export type UpdateTrainingT = Omit<TrainingsT, 'trainingCode' | 'pap'>;
+export type CreateTrainingT = Omit<
+  TrainingsT,
+  'trainingCode' | 'pap' | 'office' | 'papId' | 'validUntil'
+>;
+export type UpdateTrainingT = Omit<
+  TrainingsT,
+  'trainingCode' | 'pap' | 'office' | 'papId' | 'validUntil'
+>;

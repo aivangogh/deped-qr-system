@@ -49,7 +49,7 @@ export default function TrainingSidebar() {
               />
             </div>
             <div className="grid w-full max-w-sm items-center gap-1.5">
-              <Label htmlFor="numberOfHours">Date of Training:</Label>
+              <Label>Date of Training:</Label>
               <CalendarDateRangePicker
                 dateData={{
                   from: training.dateFrom,
@@ -59,13 +59,22 @@ export default function TrainingSidebar() {
             </div>
 
             <div className="grid w-full max-w-sm items-center gap-1.5">
-              <Label htmlFor="numberOfHours">
-                Project, Activities and Projects (PAPs)
-              </Label>
+              <Label htmlFor="office">Implementing Office</Label>
               <Input
                 type="text"
-                id="pap"
-                value={training.pap}
+                id="office"
+                value={training.officeId}
+                readOnly
+                className="cursor-default"
+              />
+            </div>
+
+            <div className="grid w-full max-w-sm items-center gap-1.5">
+              <Label htmlFor="office">Program Holder</Label>
+              <Input
+                type="text"
+                id="programHolder"
+                value={training.programHolder}
                 readOnly
                 className="cursor-default"
               />
