@@ -1,4 +1,4 @@
-import { dashboardRoutes, navRoutes } from '@/app/routes';
+import { authRoutes, dashboardRoutes, navRoutes } from '@/app/routes';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import {
@@ -56,7 +56,9 @@ export function HrtdNav() {
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={() => signOut()}>
+        <DropdownMenuItem
+          onClick={() => signOut({ callbackUrl: authRoutes.signIn.path })}
+        >
           <LogOut className="mr-2 h-4 w-4" />
           Log out
         </DropdownMenuItem>

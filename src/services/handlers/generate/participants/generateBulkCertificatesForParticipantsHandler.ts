@@ -20,8 +20,6 @@ export default async function generateBulkCertificatesForParticipantsHandler(
 
   const fileId = getFileIdFromGoogleDriveLink(url);
 
-  console.log('TRAINING', training);
-
   const templateBuffer = await downloadTemplateFromGoogleDrive(fileId!);
 
   const certificates: { fileName: string; buffer: Buffer }[] = [];
