@@ -12,6 +12,8 @@ type TrainingDetailsT = {
 const useTrainingStore = create<TrainingDetailsT>((set) => ({
   training: {
     title: '',
+    amount: 0,
+    year: 2023,
     trainingCode: '',
     dateFrom: new Date(),
     dateTo: new Date(),
@@ -29,6 +31,8 @@ const useTrainingStore = create<TrainingDetailsT>((set) => ({
     set({
       training: {
         title: '',
+        amount: 0,
+        year: 2023,
         trainingCode: '',
         dateFrom: new Date(),
         dateTo: new Date(),

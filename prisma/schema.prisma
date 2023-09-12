@@ -83,10 +83,10 @@ model ResetToken {
 }
 
 model Training {
-  id                String           @id @default(auto()) @map("_id") @db.ObjectId
-  trainingCode      String           @unique
-  createdAt         DateTime         @default(now())
-  updatedAt         DateTime         @updatedAt
+  id                String             @id @default(auto()) @map("_id") @db.ObjectId
+  trainingCode      String             @unique
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
   title             String
   dateFrom          DateTime
   dateTo            DateTime
@@ -100,8 +100,29 @@ model Training {
   speaker           Speaker[]
   participant       Participant[]
   DateOfTraining    DateOfTraining[]
-  office            Office?          @relation(fields: [officeId], references: [officeId])
+  office            Office?            @relation(fields: [officeId], references: [officeId])
   officeId          String?
+  budgetAllocation  BudgetAllocation[]
+}
+
+model BudgetAllocation {
+  id           String    @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  description  String?
+  amount       Float
+  year         Int
+  training     Training? @relation(fields: [trainingCode], references: [trainingCode], onDelete: Cascade)
+  trainingCode String?
+}
+
+model ApprovedBudget {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  description String?
+  amount      Float
+  year        Int
 }
 
 model Pap {
@@ -142,7 +163,7 @@ model Speaker {
   position     String?
   contact      String?
   email        String?
-  Training     Training? @relation(fields: [trainingCode], references: [trainingCode], onDelete: Cascade)
+  training     Training? @relation(fields: [trainingCode], references: [trainingCode], onDelete: Cascade)
   trainingCode String?
 }
 

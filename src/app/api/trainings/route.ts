@@ -29,6 +29,8 @@ export async function POST(request: Request) {
   try {
     const {
       title,
+      amount,
+      year,
       dateFrom,
       dateTo,
       numberOfHours,
@@ -47,6 +49,12 @@ export async function POST(request: Request) {
       data: {
         trainingCode: await generateTrainingCode(),
         title: title.trim(),
+        budgetAllocation: {
+          create: {
+            amount,
+            year: parseInt(year as string),
+          },
+        },
         dateFrom,
         dateTo,
         numberOfHours,

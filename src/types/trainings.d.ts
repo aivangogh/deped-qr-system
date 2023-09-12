@@ -3,6 +3,8 @@ import { Training } from '@prisma/client';
 export type TrainingsT = {
   trainingCode: string;
   title: string;
+  amount: number;
+  year: string | number;
   dateFrom: Date;
   dateTo: Date;
   numberOfHours: number;

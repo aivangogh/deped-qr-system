@@ -45,6 +45,7 @@ import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
 import { Calendar } from '@/components/ui/calendar';
 import useOfficesStore from '@/store/useOfficesStore';
+import { ScrollArea } from '@radix-ui/react-scroll-area';
 
 const trainingFormSchema = z.object({
   titleOfTraining: z
@@ -83,7 +84,7 @@ const defaultValues: Partial<TrainingFormValues> = {
 export default function UpdateTraining() {
   const { toast } = useToast();
   const { paps, setPaps } = usePapsStore();
-  const { offices, setOffices } = useOfficesStore()
+  const { offices, setOffices } = useOfficesStore();
   const { training } = useTrainingStore();
 
   useQuery({
@@ -109,15 +110,15 @@ export default function UpdateTraining() {
 
   return (
     <>
-      <SheetContent>
+      <SheetContent className="h-screen">
         <SheetHeader>
           <SheetTitle>Edit Training Details</SheetTitle>
           <SheetDescription>
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam
           </SheetDescription>
         </SheetHeader>
-        <div className="mt-6">
-          <Form {...form}>
+        <Form {...form}>
+          <ScrollArea className="h-96 mt-6">
             <form
               onSubmit={form.handleSubmit(onSubmit)}
               className="flex flex-col justify-between h-full space-y-4"
@@ -238,9 +239,7 @@ export default function UpdateTraining() {
                     name="officeId"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>
-                          Implementing Office
-                        </FormLabel>
+                        <FormLabel>Implementing Office</FormLabel>
                         <Select value={training.officeId!}>
                           <FormControl>
                             <SelectTrigger className="w-[180px]">
@@ -332,8 +331,8 @@ export default function UpdateTraining() {
                 </Button>
               </div>
             </form>
-          </Form>
-        </div>
+          </ScrollArea>
+        </Form>
       </SheetContent>
     </>
   );

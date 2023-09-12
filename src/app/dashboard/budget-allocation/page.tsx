@@ -1,4 +1,4 @@
-import { Separator } from '@/components/ui/separator';
+import { TablesForTrainingsBudget } from './(components)/trainings-budget/tables-for-trainings-budget';
 
 export default function BudgetAllocationPage() {
   return (
@@ -9,7 +9,11 @@ export default function BudgetAllocationPage() {
           Lorem, ipsum dolor sit amet consectetur adipisicing.
         </p> */}
       </div>
-      <Separator />
+      <div className="grid grid-cols-12 gap-4">
+        <div className="col-span-6">
+          <TablesForTrainingsBudget />
+        </div>
+      </div>
     </div>
   );
 }

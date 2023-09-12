@@ -6,3 +6,12 @@ export type TrainingT = Training & {
     papId: string;
   };
 };
+
+export type TrainingWithBudgetT = {
+  trainingCode: string;
+  title: string;
+  budgetAllocation: {
+    amount: number;
+    year: number;
+  };
+};

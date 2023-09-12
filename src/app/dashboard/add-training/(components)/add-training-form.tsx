@@ -68,6 +68,10 @@ const TrainingFormSchema = z.object({
   title: z.string().min(2, {
     message: 'Username must be at least 2 characters.',
   }),
+  amount: z.coerce.number().positive(),
+  year: z.string({
+    required_error: 'Please select a year!',
+  }),
   dateFrom: z.date({
     required_error: 'Please select a date and time',
     invalid_type_error: "That's not a date!",
@@ -198,339 +202,448 @@ export default function AddTrainingForm() {
                 <div className="grid gap-4">
                   <div className="grid gap-2">
                     <div className="space-y-6">
-                      <FormField
-                        control={trainingForm.control}
-                        name="title"
-                        render={({ field }) => (
-                          <FormItem className="grid">
-                            <FormLabel>
-                              Title
-                              <span className="text-red-500"> *</span>
-                            </FormLabel>
-                            <FormControl>
-                              <Input
-                                placeholder="Type here..."
-                                {...field}
-                                autoFocus
-                              />
-                            </FormControl>
-                            <FormDescription>
-                              This will be used as the title of the training.
-                            </FormDescription>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
+                      <div className="space-y-2">
+                        <div>
+                          <span className="text-xl font-bold">
+                            Training Information
+                          </span>
+                        </div>
+                        <div className="space-y-6">
+                          <FormField
+                            control={trainingForm.control}
+                            name="title"
+                            render={({ field }) => (
+                              <FormItem className="grid">
+                                <FormLabel>
+                                  Title
+                                  <span className="text-red-500"> *</span>
+                                </FormLabel>
+                                <FormControl>
+                                  <Input
+                                    placeholder="Type here..."
+                                    {...field}
+                                    autoFocus
+                                  />
+                                </FormControl>
+                                <FormDescription>
+                                  This will be used as the title of the
+                                  training.
+                                </FormDescription>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
 
-                      <div className="flex space-x-4">
-                        <FormField
-                          control={trainingForm.control}
-                          name="dateFrom"
-                          render={({ field }) => (
-                            <FormItem className="grid">
-                              <FormLabel>
-                                Date From{' '}
-                                <span className="text-red-500"> *</span>
-                              </FormLabel>
-                              <Popover>
-                                <PopoverTrigger asChild>
+                          <div className="flex space-x-4">
+                            <FormField
+                              control={trainingForm.control}
+                              name="amount"
+                              render={({ field }) => (
+                                <FormItem className="grid">
+                                  <FormLabel>
+                                    HRTD Budget Allocation
+                                    <span className="text-red-500"> *</span>
+                                  </FormLabel>
                                   <FormControl>
-                                    <Button
-                                      variant={'outline'}
-                                      className={cn(
-                                        'w-[240px] pl-3 text-left font-normal',
-                                        !field.value && 'text-muted-foreground'
-                                      )}
-                                    >
-                                      {field.value ? (
-                                        format(field.value, 'PPP')
-                                      ) : (
-                                        <span>Pick a date</span>
-                                      )}
-                                      <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                                    </Button>
+                                    <Input
+                                      type="number"
+                                      placeholder="0"
+                                      defaultValue={0}
+                                      {...field}
+                                    />
                                   </FormControl>
-                                </PopoverTrigger>
-                                <PopoverContent
-                                  className="w-auto p-0"
-                                  align="start"
-                                >
-                                  <Calendar
-                                    mode="single"
-                                    selected={field.value}
-                                    onSelect={field.onChange}
-                                    initialFocus
-                                  />
-                                </PopoverContent>
-                              </Popover>
-                              <FormDescription>
-                                Training starts on the first day.
-                              </FormDescription>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                        <FormField
-                          control={trainingForm.control}
-                          name="dateTo"
-                          render={({ field }) => (
-                            <FormItem className="grid">
-                              <FormLabel>
-                                Date To <span className="text-red-500"> *</span>
-                              </FormLabel>
-                              <Popover>
-                                <PopoverTrigger asChild>
-                                  <FormControl>
-                                    <Button
-                                      variant={'outline'}
-                                      className={cn(
-                                        'w-[240px] pl-3 text-left font-normal',
-                                        !field.value && 'text-muted-foreground'
-                                      )}
+                                  <FormMessage />
+                                </FormItem>
+                              )}
+                            />
+
+                            <FormField
+                              control={trainingForm.control}
+                              name="year"
+                              render={({ field }) => (
+                                <FormItem className="w-36">
+                                  <FormLabel>
+                                    Year{' '}
+                                    <span className="text-red-500"> *</span>
+                                  </FormLabel>
+                                  <Select
+                                    onValueChange={field.onChange}
+                                    value={field.value}
+                                  >
+                                    <FormControl>
+                                      <SelectTrigger>
+                                        <SelectValue placeholder="Select a year" />
+                                      </SelectTrigger>
+                                    </FormControl>
+                                    <SelectContent>
+                                      <ScrollArea className="h-[200px]">
+                                        {Array.from({ length: 50 }, (_, i) => (
+                                          <SelectItem
+                                            key={i}
+                                            value={`${
+                                              new Date().getFullYear() + i
+                                            }`}
+                                          >
+                                            {new Date().getFullYear() + i}
+                                          </SelectItem>
+                                        ))}
+                                      </ScrollArea>
+                                    </SelectContent>
+                                  </Select>
+                                  <FormMessage />
+                                </FormItem>
+                              )}
+                            />
+                          </div>
+
+                          <div className="flex space-x-6">
+                            <FormField
+                              control={trainingForm.control}
+                              name="dateFrom"
+                              render={({ field }) => (
+                                <FormItem className="grid">
+                                  <FormLabel>
+                                    Date From{' '}
+                                    <span className="text-red-500"> *</span>
+                                  </FormLabel>
+                                  <Popover>
+                                    <PopoverTrigger asChild>
+                                      <FormControl>
+                                        <Button
+                                          variant={'outline'}
+                                          className={cn(
+                                            'w-[240px] pl-3 text-left font-normal',
+                                            !field.value &&
+                                              'text-muted-foreground'
+                                          )}
+                                        >
+                                          {field.value ? (
+                                            format(field.value, 'PPP')
+                                          ) : (
+                                            <span>Pick a date</span>
+                                          )}
+                                          <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                                        </Button>
+                                      </FormControl>
+                                    </PopoverTrigger>
+                                    <PopoverContent
+                                      className="w-auto p-0"
+                                      align="start"
                                     >
-                                      {field.value ? (
-                                        format(field.value, 'PPP')
-                                      ) : (
-                                        <span>Pick a date</span>
-                                      )}
-                                      <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                                    </Button>
-                                  </FormControl>
-                                </PopoverTrigger>
-                                <PopoverContent
-                                  className="w-auto p-0"
-                                  align="start"
-                                >
-                                  <Calendar
-                                    mode="single"
-                                    selected={field.value}
-                                    onSelect={field.onChange}
-                                    initialFocus
+                                      <Calendar
+                                        mode="single"
+                                        selected={field.value}
+                                        onSelect={field.onChange}
+                                        initialFocus
+                                      />
+                                    </PopoverContent>
+                                  </Popover>
+                                  <FormDescription>
+                                    Training starts on the first day.
+                                  </FormDescription>
+                                  <FormMessage />
+                                </FormItem>
+                              )}
+                            />
+                            <FormField
+                              control={trainingForm.control}
+                              name="dateTo"
+                              render={({ field }) => (
+                                <FormItem className="grid">
+                                  <FormLabel>
+                                    Date To{' '}
+                                    <span className="text-red-500"> *</span>
+                                  </FormLabel>
+                                  <Popover>
+                                    <PopoverTrigger asChild>
+                                      <FormControl>
+                                        <Button
+                                          variant={'outline'}
+                                          className={cn(
+                                            'w-[240px] pl-3 text-left font-normal',
+                                            !field.value &&
+                                              'text-muted-foreground'
+                                          )}
+                                        >
+                                          {field.value ? (
+                                            format(field.value, 'PPP')
+                                          ) : (
+                                            <span>Pick a date</span>
+                                          )}
+                                          <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                                        </Button>
+                                      </FormControl>
+                                    </PopoverTrigger>
+                                    <PopoverContent
+                                      className="w-auto p-0"
+                                      align="start"
+                                    >
+                                      <Calendar
+                                        mode="single"
+                                        selected={field.value}
+                                        onSelect={field.onChange}
+                                        initialFocus
+                                      />
+                                    </PopoverContent>
+                                  </Popover>
+                                  <FormDescription>
+                                    Training ends on the last day.
+                                  </FormDescription>
+                                  <FormMessage />
+                                </FormItem>
+                              )}
+                            />
+                          </div>
+                          <FormField
+                            control={trainingForm.control}
+                            name="numberOfHours"
+                            render={({ field }) => (
+                              <FormItem className="w-fit">
+                                <FormLabel>
+                                  No. of hours{' '}
+                                  <span className="text-red-500"> *</span>
+                                </FormLabel>
+                                <FormControl>
+                                  <Input
+                                    placeholder="0"
+                                    type="number"
+                                    {...field}
                                   />
-                                </PopoverContent>
-                              </Popover>
-                              <FormDescription>
-                                Training ends on the last day.
-                              </FormDescription>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                        </div>
                       </div>
 
-                      <FormField
-                        control={trainingForm.control}
-                        name="numberOfHours"
-                        render={({ field }) => (
-                          <FormItem className="grid">
-                            <FormLabel>No. of hours</FormLabel>
-                            <FormControl>
-                              <Input
-                                placeholder="Type here..."
-                                type="number"
-                                {...field}
-                              />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-
-                      <FormField
-                        control={trainingForm.control}
-                        name="venue"
-                        render={({ field }) => (
-                          <FormItem className="grid">
-                            <FormLabel>
-                              Venue <span className="text-red-500"> *</span>
-                              <span className="opacity-80 italic text-sm">
-                                (New People’s Hall, 3rd Floor, New City Hall)
-                              </span>
-                            </FormLabel>
-                            <FormControl>
-                              <Input placeholder="Type here..." {...field} />
-                            </FormControl>
-                            <FormDescription>
-                              Note: The input here will be used as the venue of
-                              generated certificate.
-                            </FormDescription>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-
-                      <FormField
-                        control={trainingForm.control}
-                        name="addressOfTheVenue"
-                        render={({ field }) => (
-                          <FormItem className="grid">
-                            <FormLabel>
-                              Address of the training
-                              <span className="text-red-500"> *</span>
-                              <span className="opacity-80 italic text-sm">
-                                (Malaybalay City, Bukidnon)
-                              </span>
-                            </FormLabel>
-                            <FormControl>
-                              <Input placeholder="Type here..." {...field} />
-                            </FormControl>
-                            <FormDescription>
-                              Note: The input here will be used as the address
-                              of generated certificate.
-                            </FormDescription>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-
-                      <FormField
-                        control={trainingForm.control}
-                        name="issuedOn"
-                        render={({ field }) => (
-                          <FormItem className="grid">
-                            <FormLabel>
-                              Issued On <span className="text-red-500"> *</span>
-                            </FormLabel>
-                            <Popover>
-                              <PopoverTrigger asChild>
+                      <div className="space-y-2">
+                        <div>
+                          <span className="text-xl font-bold">
+                            Training Location
+                          </span>
+                        </div>
+                        <div className="space-y-6">
+                          <FormField
+                            control={trainingForm.control}
+                            name="venue"
+                            render={({ field }) => (
+                              <FormItem className="grid">
+                                <FormLabel>
+                                  Venue <span className="text-red-500"> *</span>
+                                  <span className="opacity-80 italic text-sm">
+                                    (New People’s Hall, 3rd Floor, New City
+                                    Hall)
+                                  </span>
+                                </FormLabel>
                                 <FormControl>
-                                  <Button
-                                    variant={'outline'}
-                                    className={cn(
-                                      'w-[240px] pl-3 text-left font-normal',
-                                      !field.value && 'text-muted-foreground'
-                                    )}
+                                  <Input
+                                    placeholder="Type here..."
+                                    {...field}
+                                  />
+                                </FormControl>
+                                <FormDescription>
+                                  Note: The input here will be used as the venue
+                                  of generated certificate.
+                                </FormDescription>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+
+                          <FormField
+                            control={trainingForm.control}
+                            name="addressOfTheVenue"
+                            render={({ field }) => (
+                              <FormItem className="grid">
+                                <FormLabel>
+                                  Address of the training
+                                  <span className="text-red-500"> *</span>
+                                  <span className="opacity-80 italic text-sm">
+                                    (Malaybalay City, Bukidnon)
+                                  </span>
+                                </FormLabel>
+                                <FormControl>
+                                  <Input
+                                    placeholder="Type here..."
+                                    {...field}
+                                  />
+                                </FormControl>
+                                <FormDescription>
+                                  Note: The input here will be used as the
+                                  address of generated certificate.
+                                </FormDescription>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                        </div>
+                      </div>
+
+                      <div className="space-y-2">
+                        <div>
+                          <span className="text-xl font-bold">
+                            Training Details
+                          </span>
+                        </div>
+                        <div className="space-y-6">
+                          <FormField
+                            control={trainingForm.control}
+                            name="issuedOn"
+                            render={({ field }) => (
+                              <FormItem className="grid">
+                                <FormLabel>
+                                  Issued On{' '}
+                                  <span className="text-red-500"> *</span>
+                                </FormLabel>
+                                <Popover>
+                                  <PopoverTrigger asChild>
+                                    <FormControl>
+                                      <Button
+                                        variant={'outline'}
+                                        className={cn(
+                                          'w-[240px] pl-3 text-left font-normal',
+                                          !field.value &&
+                                            'text-muted-foreground'
+                                        )}
+                                      >
+                                        {field.value ? (
+                                          format(field.value, 'PPP')
+                                        ) : (
+                                          <span>Pick a date</span>
+                                        )}
+                                        <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                                      </Button>
+                                    </FormControl>
+                                  </PopoverTrigger>
+                                  <PopoverContent
+                                    className="w-auto p-0"
+                                    align="start"
                                   >
-                                    {field.value ? (
-                                      format(field.value, 'PPP')
-                                    ) : (
-                                      <span>Pick a date</span>
-                                    )}
-                                    <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                                  </Button>
-                                </FormControl>
-                              </PopoverTrigger>
-                              <PopoverContent
-                                className="w-auto p-0"
-                                align="start"
-                              >
-                                <Calendar
-                                  mode="single"
-                                  selected={field.value}
-                                  onSelect={field.onChange}
-                                  initialFocus
-                                />
-                              </PopoverContent>
-                            </Popover>
-                            <FormDescription>
-                              This form as the date of the certificate issued.
-                            </FormDescription>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
+                                    <Calendar
+                                      mode="single"
+                                      selected={field.value}
+                                      onSelect={field.onChange}
+                                      initialFocus
+                                    />
+                                  </PopoverContent>
+                                </Popover>
+                                <FormDescription>
+                                  This form as the date of the certificate
+                                  issued.
+                                </FormDescription>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
 
-                      <FormField
-                        control={trainingForm.control}
-                        name="issuedAt"
-                        render={({ field }) => (
-                          <FormItem className="grid">
-                            <FormLabel>
-                              Issued At <span className="text-red-500"> *</span>
-                            </FormLabel>
-                            <FormControl>
-                              <Input
-                                placeholder="Type here..."
-                                type="text"
-                                {...field}
-                              />
-                            </FormControl>
-                            <FormDescription>
-                              This form as the place of the certificate issued.
-                            </FormDescription>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-
-                      <FormField
-                        control={trainingForm.control}
-                        name="officeId"
-                        render={({ field }) => (
-                          <FormItem className="grid">
-                            <FormLabel>
-                              Implementing Office{' '}
-                              <span className="text-red-500"> *</span>
-                            </FormLabel>
-                            <FormControl>
-                              <Select
-                                onValueChange={field.onChange}
-                                defaultValue={field.value}
-                              >
+                          <FormField
+                            control={trainingForm.control}
+                            name="issuedAt"
+                            render={({ field }) => (
+                              <FormItem className="grid">
+                                <FormLabel>
+                                  Issued At{' '}
+                                  <span className="text-red-500"> *</span>
+                                </FormLabel>
                                 <FormControl>
-                                  <SelectTrigger>
-                                    <SelectValue placeholder="Select a Office" />
-                                  </SelectTrigger>
+                                  <Input
+                                    placeholder="Type here..."
+                                    type="text"
+                                    {...field}
+                                  />
                                 </FormControl>
-                                <SelectContent>
-                                  {offices.length > 0 ? (
-                                    <ScrollArea className="max-h-72 min-h-fit">
-                                      {offices.map(({ officeId, office }) => (
-                                        <SelectItem
-                                          key={officeId}
-                                          value={officeId}
-                                          className="h-10"
+                                <FormDescription>
+                                  This form as the place of the certificate
+                                  issued.
+                                </FormDescription>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+
+                          <FormField
+                            control={trainingForm.control}
+                            name="officeId"
+                            render={({ field }) => (
+                              <FormItem className="w-72">
+                                <FormLabel>
+                                  Implementing Office{' '}
+                                  <span className="text-red-500"> *</span>
+                                </FormLabel>
+                                <FormControl>
+                                  <Select
+                                    onValueChange={field.onChange}
+                                    defaultValue={field.value}
+                                  >
+                                    <FormControl>
+                                      <SelectTrigger>
+                                        <SelectValue placeholder="Select a Office" />
+                                      </SelectTrigger>
+                                    </FormControl>
+                                    <SelectContent>
+                                      {offices.length > 0 ? (
+                                        <ScrollArea className="max-h-72 min-h-fit">
+                                          {offices.map(
+                                            ({ officeId, office }) => (
+                                              <SelectItem
+                                                key={officeId}
+                                                value={officeId}
+                                                className="h-10"
+                                              >
+                                                {office}
+                                              </SelectItem>
+                                            )
+                                          )}
+                                        </ScrollArea>
+                                      ) : (
+                                        <div className="text-center py-2">
+                                          <span className="text-xs">
+                                            No Office found
+                                          </span>
+                                        </div>
+                                      )}
+                                      <SelectSeparator />
+                                      <DialogTrigger asChild>
+                                        <Button
+                                          variant="ghost"
+                                          className="w-full h-8"
                                         >
-                                          {office}
-                                        </SelectItem>
-                                      ))}
-                                    </ScrollArea>
-                                  ) : (
-                                    <div className="text-center py-2">
-                                      <span className="text-xs">
-                                        No Office found
-                                      </span>
-                                    </div>
-                                  )}
-                                  <SelectSeparator />
-                                  <DialogTrigger asChild>
-                                    <Button
-                                      variant="ghost"
-                                      className="w-full h-8"
-                                    >
-                                      <PlusCircledIcon className="mr-2 h-4 w-4" />
-                                      Add Office
-                                    </Button>
-                                  </DialogTrigger>
-                                </SelectContent>
-                              </Select>
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
+                                          <PlusCircledIcon className="mr-2 h-4 w-4" />
+                                          Add Office
+                                        </Button>
+                                      </DialogTrigger>
+                                    </SelectContent>
+                                  </Select>
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
 
-                      <FormField
-                        control={trainingForm.control}
-                        name="programHolder"
-                        render={({ field }) => (
-                          <FormItem className="grid">
-                            <FormLabel>
-                              Program Holder{' '}
-                              <span className="text-red-500"> *</span>
-                            </FormLabel>
-                            <FormControl>
-                              <Input
-                                placeholder="Type here..."
-                                type="text"
-                                {...field}
-                              />
-                            </FormControl>
+                          <FormField
+                            control={trainingForm.control}
+                            name="programHolder"
+                            render={({ field }) => (
+                              <FormItem className="grid">
+                                <FormLabel>
+                                  Program Holder{' '}
+                                  <span className="text-red-500"> *</span>
+                                </FormLabel>
+                                <FormControl>
+                                  <Input
+                                    placeholder="Type here..."
+                                    type="text"
+                                    {...field}
+                                  />
+                                </FormControl>
 
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>

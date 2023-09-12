@@ -1,6 +1,7 @@
 import { prisma } from '@/lib/prisma';
 import { UpdateTrainingT } from '@/types/trainings';
 import { NextResponse } from 'next/server';
+import { parse } from 'path';
 
 export async function GET(
   request: Request,
@@ -59,6 +60,8 @@ export async function PUT(
 ) {
   const {
     title,
+    amount,
+    year,
     dateFrom,
     dateTo,
     numberOfHours,
@@ -70,25 +73,23 @@ export async function PUT(
     programHolder,
   } = (await request.json()) as UpdateTrainingT;
 
-  const updateTraining: UpdateTrainingT = {
-    title,
-    dateFrom,
-    dateTo,
-    numberOfHours,
-    venue,
-    addressOfTheVenue,
-    issuedOn: new Date(issuedOn),
-    issuedAt,
-    officeId,
-    programHolder,
-  };
-
   await prisma.training
     .update({
       where: {
         trainingCode: params.trainingCode,
       },
-      data: updateTraining,
+      data: {
+        title,
+        dateFrom,
+        dateTo,
+        numberOfHours,
+        venue,
+        addressOfTheVenue,
+        issuedOn,
+        issuedAt,
+        officeId,
+        programHolder,
+      },
     })
     .then((res) => {
       return NextResponse.json({ status: 200, message: 'Training updated' });
