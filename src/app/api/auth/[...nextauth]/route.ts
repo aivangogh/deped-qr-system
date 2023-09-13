@@ -1,39 +1,8 @@
 import { authRoutes } from '@/app/routes';
 import { prisma } from '@/lib/prisma';
 import { PrismaAdapter } from '@next-auth/prisma-adapter';
-import NextAuth, { User } from 'next-auth';
+import NextAuth from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google';
-
-type ExpectedUserType = {
-  id: string;
-  role: 'participant' | 'hrtd';
-  position: string;
-  school: string;
-  phone: string;
-  isSubmitted: boolean;
-  // Add other optional properties as needed (e.g., name, email, image, etc.)
-  name?: string | null;
-  email?: string | null;
-  image?: string | null;
-};
-
-async function findUserByEmailDomain(email: string): Promise<User | null> {
-  const user = await prisma.user.findFirst({
-    where: {
-      email: {
-        endsWith: '@student.buksu.edu.ph',
-      },
-    },
-  });
-
-  console.log(`User: ${user}`);
-
-  if (!user) {
-    return null;
-  }
-
-  return user;
-}
 
 const handler = NextAuth({
   adapter: PrismaAdapter(prisma),
@@ -49,6 +18,23 @@ const handler = NextAuth({
     strategy: 'jwt',
   },
   callbacks: {
+    async signIn({ user, account, profile, email, credentials }) {
+      if (account?.provider === 'google' && user.email) {
+        // Define the allowed email addresses
+        const allowedEmails = [
+          'rex.dacanay@deped.gov.ph',
+          'woodrowwilson.merida@deped.gov.ph',
+        ];
+
+        if (allowedEmails.includes(user.email)) {
+          return true; // Allow sign-in for allowed email addresses
+        } else {
+          return false; // Block sign-in for other email addresses
+        }
+      }
+
+      return false; // Block sign-in for non-Google providers
+    },
     async jwt({ token, user, account }) {
       return { ...token, ...user, ...account };
     },
@@ -60,7 +46,7 @@ const handler = NextAuth({
   secret: process.env.NEXTAUTH_SECRET,
   pages: {
     signIn: authRoutes.signIn.path,
-    
+    signOut: authRoutes.signIn.path,
   },
 });
 

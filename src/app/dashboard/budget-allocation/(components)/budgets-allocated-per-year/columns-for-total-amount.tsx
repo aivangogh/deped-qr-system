@@ -6,9 +6,10 @@ import { TrainingsT, TrainingsWithPapT } from '@/types/trainings';
 import { DataTableColumnHeader } from './data-table-column-header';
 import { DataTableRowActions } from './data-table-row-actions';
 import { Training } from '@prisma/client';
-import { TrainingT } from '@/types/training';
+import { TotalAmountByYear, TrainingT } from '@/types/training';
+import toPhpCurrency from '@/utils/toPhpCurrency';
 
-export const columnsForTrainings: ColumnDef<TrainingT>[] = [
+export const columnsForTotalAmount: ColumnDef<TotalAmountByYear>[] = [
   // {
   //   id: 'select',
   //   header: ({ table }) => (
@@ -31,56 +32,26 @@ export const columnsForTrainings: ColumnDef<TrainingT>[] = [
   //   enableHiding: false,
   // },
   {
-    accessorKey: 'trainingCode',
+    accessorKey: 'year',
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Training Code" />
+      <DataTableColumnHeader column={column} title="By Year" />
     ),
     cell: ({ row }) => (
-      <div className="w-[80px] font-medium">{row.getValue('trainingCode')}</div>
+      <div className="w-[80px] font-medium">{row.getValue('year')}</div>
     ),
     enableSorting: false,
     enableHiding: false,
   },
   {
-    accessorKey: 'title',
+    accessorKey: 'totalAmount',
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Title" />
+      <DataTableColumnHeader column={column} title="Total" />
     ),
     cell: ({ row }) => {
       return (
         <div className="flex space-x-2">
           <span className="max-w-[150px] truncate font-medium">
-            {row.getValue('title')}
-          </span>
-        </div>
-      );
-    },
-  },
-  {
-    accessorKey: 'dateFrom',
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Date" />
-    ),
-    cell: ({ row }) => {
-      return (
-        <div className="flex space-x-2">
-          <span className="max-w-[150px] truncate font-medium">
-            {new Date(row.getValue('dateFrom')).toLocaleDateString()}
-          </span>
-        </div>
-      );
-    },
-  },
-  {
-    accessorKey: 'venue',
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Venue" />
-    ),
-    cell: ({ row }) => {
-      return (
-        <div className="flex space-x-2">
-          <span className="max-w-[300px] truncate font-medium">
-            {row.getValue('venue')}
+            {toPhpCurrency(row.getValue('totalAmount'))}
           </span>
         </div>
       );
@@ -118,11 +89,11 @@ export const columnsForTrainings: ColumnDef<TrainingT>[] = [
   //     );
   //   },
   // },
-  {
-    id: 'actions',
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Actions" />
-    ),
-    cell: ({ row }) => <DataTableRowActions row={row} />,
-  },
+  // {
+  //   id: 'actions',
+  //   header: ({ column }) => (
+  //     <DataTableColumnHeader column={column} title="Actions" />
+  //   ),
+  //   cell: ({ row }) => <DataTableRowActions row={row} />,
+  // },
 ];
