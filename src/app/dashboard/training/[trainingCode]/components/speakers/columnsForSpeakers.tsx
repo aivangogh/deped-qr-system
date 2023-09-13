@@ -1,13 +1,9 @@
 'use client';
 
 import { ColumnDef } from '@tanstack/react-table';
-
-import { Checkbox } from '@/components/ui/checkbox';
-
-import { SpeakerDetailsT } from '@/types/types';
+import { Speaker } from '@prisma/client';
 import { DataTableColumnHeader } from './data-table-column-header';
 import { DataTableRowActions } from './data-table-row-actions';
-import { Speaker } from '@prisma/client';
 
 export const columnsForSpeakers: ColumnDef<Speaker>[] = [
   // {

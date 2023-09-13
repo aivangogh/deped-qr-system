@@ -12,16 +12,18 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
-import { TrainingInfoT } from '@/types/types';
-import prettierJson from '@/utils/prettierJsonFromExcel';
-import { FileSpreadsheet } from 'lucide-react';
-import { useState } from 'react';
-import { parseExcelToJson } from '../../../../utils/parseExcelToJson';
-import ExcelToJson from './ExcelToJson';
 import { importXlsxFile } from '@/services/fetch/import-xlsx-file';
-import useTrainingStore from '@/store/useTrainingStore';
 import useParticipantStore from '@/store/useParticipantStore';
 import useSpeakerStore from '@/store/useSpeakerStore';
+import useTrainingStore from '@/store/useTrainingStore';
+import { TrainingInfoT } from '@/types/types';
+import { FileSpreadsheet } from 'lucide-react';
+import { useState } from 'react';
+import ExcelToJson from './ExcelToJson';
+import { ReloadIcon } from '@radix-ui/react-icons';
+import { useRouter } from 'next/navigation';
+import { useMutation } from 'react-query';
+import { toast } from '@/components/ui/use-toast';
 
 export function DialogFileUpload() {
   const { training } = useTrainingStore();
@@ -31,16 +33,48 @@ export function DialogFileUpload() {
   const { setTraining } = useTrainingStore();
   const { setParticipants } = useParticipantStore();
   const { setSpeakers } = useSpeakerStore();
+  const [isUploading, setIsUploading] = useState(false);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const router = useRouter();
+
+  const importMutation = useMutation({
+    mutationKey: ['training'],
+    mutationFn: (trainingCode: string) => {
+      return importXlsxFile(trainingCode, uploadedFile!);
+    },
+    onSuccess({ data }) {
+      console.log(data);
+
+      setIsUploading(false);
+      console.log(data);
+      // setTraining(data.training);
+      setSpeakers(data.speaker!);
+      setParticipants(data.participants!);
+
+      toast({
+        title: 'Training imported successfully',
+        description: 'Training was imported successfully.',
+      });
+
+      // router.refresh();
+    },
+    onError() {
+      importMutation.reset();
+      toast({
+        title: 'Something went wrong',
+        description: 'Training was not created. Please try again.',
+      });
+    },
+  });
 
   const handleSetTrainingInfo = async () => {
-    await importXlsxFile(training.trainingCode, uploadedFile!).then(
-      ({ data }) => {
-        console.log(data);
-        // setTraining(data.training);
-        setSpeakers(data.speaker!);
-        setParticipants(data.participants!);
-      }
-    );
+    setIsUploading(true);
+
+    toast({
+      title: 'Importing...',
+    });
+
+    importMutation.mutate(training.trainingCode);
   };
 
   const handleFileUpload = (file: File) => {
@@ -69,8 +103,17 @@ export function DialogFileUpload() {
 
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction onClick={handleSetTrainingInfo}>
-            Import File
+          <AlertDialogAction asChild>
+            <Button onClick={handleSetTrainingInfo} disabled={isUploading}>
+              {isUploading ? (
+                <>
+                  <ReloadIcon className="animate-spin mr-2 h-4 w-4" />
+                  Importing...
+                </>
+              ) : (
+                'Import File'
+              )}
+            </Button>
           </AlertDialogAction>
         </AlertDialogFooter>
 

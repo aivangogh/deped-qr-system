@@ -1,35 +1,27 @@
 'use client';
 
-import { DialogFileUpload } from '@/app/dashboard/(components)/FileUploader/dialog-file-upload';
-import { dashboardRoutes } from '@/app/routes';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { getTraining } from '@/services/fetch/trainings';
 import useParticipantStore from '@/store/useParticipantStore';
 import useSpeakerStore from '@/store/useSpeakerStore';
 import useTrainingStore from '@/store/useTrainingStore';
-import { ChevronRight } from 'lucide-react';
-import Link from 'next/link';
 import { useQuery } from 'react-query';
-import { PresetActions } from '../../(components)/PresetActions';
-import { columnsForParticipants } from './components/participants/columnsForParticipants';
-import { DataTableForParticipants } from './components/participants/data-table-for-participants';
-import TrainingSidebar from './components/sidebar/TrainingSidebar';
-import { columnsForSpeakers } from './components/speakers/columnsForSpeakers';
-import { DataTableForSpeakers } from './components/speakers/data-table-for-speakers';
+import Training from './components/Training';
+import LoadingSpinner from '@/components/LoadingSpinner';
+import { TrainingDetailsT } from '@/types/training';
 
 export default function TrainingPage({
   params,
 }: {
   params: { trainingCode: string };
 }) {
-  const { training, setTraining } = useTrainingStore();
+  const { setTraining } = useTrainingStore();
   const { speakers, setSpeakers } = useSpeakerStore();
   const { participants, setParticipants } = useParticipantStore();
 
-  useQuery({
+  const { isLoading } = useQuery({
     queryKey: ['training', params.trainingCode],
     queryFn: () => getTraining(params.trainingCode),
-    onSuccess: ({ data }) => {
+    onSuccess: ({ data }: { data: TrainingDetailsT }) => {
       console.log(data);
       setTraining(data.training);
       setSpeakers(data.speakers);
@@ -37,49 +29,9 @@ export default function TrainingPage({
     },
   });
 
-  return (
-    <div className="grid grid-cols-4">
-      <div className="container col-span-3 h-full flex-1 flex-col space-y-4 my-4">
-        <div className="mb-4 flex items-center space-x-1 text-sm text-muted-foreground">
-          <Link
-            href={dashboardRoutes.dashboard.path}
-            className="overflow-hidden text-ellipsis whitespace-nowrap hover:text-foreground hover:underline"
-          >
-            {dashboardRoutes.dashboard.label}
-          </Link>
-          <ChevronRight className="h-4 w-4" />
-          <div className="font-medium text-foreground">
-            {training.trainingCode}
-          </div>
-        </div>
-
-        <Tabs defaultValue="speakers">
-          <div className="flex justify-between mb-4">
-            <TabsList className="grid w-96 grid-cols-2">
-              <TabsTrigger value="speakers">Speakers</TabsTrigger>
-              <TabsTrigger value="participants">Participants</TabsTrigger>
-            </TabsList>
-            <div className="space-x-2">
-              <DialogFileUpload />
-              <PresetActions />
-            </div>
-          </div>
-          <TabsContent value="speakers">
-            <DataTableForSpeakers
-              data={speakers}
-              columns={columnsForSpeakers}
-            />
-          </TabsContent>
-          <TabsContent value="participants">
-            <DataTableForParticipants
-              data={participants}
-              columns={columnsForParticipants}
-            />
-          </TabsContent>
-        </Tabs>
-      </div>
-
-      <TrainingSidebar />
-    </div>
-  );
+  if (isLoading) {
+    return <LoadingSpinner />;
+  } else {
+    return <Training />;
+  }
 }

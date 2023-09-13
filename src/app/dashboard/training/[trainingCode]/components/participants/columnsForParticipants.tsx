@@ -85,21 +85,21 @@ export const columnsForParticipants: ColumnDef<Participant>[] = [
       );
     },
   },
-  {
-    accessorKey: 'contact',
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Contact" />
-    ),
-    cell: ({ row }) => {
-      return (
-        <div className="flex space-x-2">
-          <span className="max-w-[60px] font-medium">
-            {row.getValue('contact')}
-          </span>
-        </div>
-      );
-    },
-  },
+  // {
+  //   accessorKey: 'contact',
+  //   header: ({ column }) => (
+  //     <DataTableColumnHeader column={column} title="Contact" />
+  //   ),
+  //   cell: ({ row }) => {
+  //     return (
+  //       <div className="flex space-x-2">
+  //         <span className="max-w-[60px] font-medium">
+  //           {row.getValue('contact')}
+  //         </span>
+  //       </div>
+  //     );
+  //   },
+  // },
   {
     accessorKey: 'email',
     header: ({ column }) => (

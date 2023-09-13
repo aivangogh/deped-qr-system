@@ -51,14 +51,16 @@ export async function POST(
     console.log(_speakers);
     console.log(_participants);
 
-    return NextResponse.json({
-      success: true,
-      data: {
-        training: training,
-        speakers: speakers,
-        participants: participants,
-      },
-    });
+    if (_speakers && _participants) {
+      return NextResponse.json({
+        status: 200,
+        data: {
+          training: training,
+          speakers: speakers,
+          participants: participants,
+        },
+      });
+    }
 
     // Perform any further actions with formattedData
   } catch (error) {

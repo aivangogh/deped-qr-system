@@ -69,7 +69,7 @@ export function DataTableForParticipants<TData, TValue>({
 
   return (
     <>
-      <div className='space-y-4'>
+      <div className="space-y-4">
         <span className="text-2xl font-bold">Participants</span>
 
         <div className="space-y-4">
@@ -95,11 +95,14 @@ export function DataTableForParticipants<TData, TValue>({
                 ))}
               </TableHeader>
               <TableBody>
-                {table.getRowModel().rows?.length ? (
+                {table &&
+                table.getRowModel() &&
+                table.getRowModel().rows &&
+                table.getRowModel().rows.length ? (
                   table.getRowModel().rows.map((row) => (
                     <TableRow
                       key={row.id}
-                      data-state={row.getIsSelected() && 'selected'}
+                      data-state={row.getIsSelected() ? 'selected' : undefined}
                     >
                       {row.getVisibleCells().map((cell) => (
                         <TableCell key={cell.id}>

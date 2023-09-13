@@ -60,7 +60,6 @@ export function PresetActions() {
   const [open, setIsOpen] = useState<boolean>(false);
   const [showDeleteDialog, setShowDeleteDialog] = useState<boolean>(false);
   const { training } = useTrainingStore();
-  const { resetTraining } = useTrainingStore();
   const { resetSpeakers } = useSpeakerStore();
   const { resetParticipants } = useParticipantStore();
   const [showDownloadDialog, setShowDownloadDialog] = useState<boolean>(false);
@@ -73,7 +72,6 @@ export function PresetActions() {
     ]);
 
     if (res[0] && res[1] === true) {
-      resetTraining();
       resetSpeakers();
       resetParticipants();
 

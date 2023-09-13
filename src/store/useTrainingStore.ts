@@ -1,20 +1,19 @@
-import { TrainingsT } from '@/types/trainings';
-import { Training } from '@prisma/client';
+import { TrainingWithoutBudgetT } from '@/types/training';
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
 
 type TrainingDetailsT = {
-  training: TrainingsT;
-  setTraining: (training: TrainingsT) => void;
+  training: TrainingWithoutBudgetT;
+  setTraining: (training: TrainingWithoutBudgetT) => void;
   resetTraining: () => void;
 };
 
 const useTrainingStore = create<TrainingDetailsT>((set) => ({
   training: {
-    title: '',
-    amount: 0,
-    year: 2023,
+    id: '',
     trainingCode: '',
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    title: '',
     dateFrom: new Date(),
     dateTo: new Date(),
     numberOfHours: 0,
@@ -26,14 +25,17 @@ const useTrainingStore = create<TrainingDetailsT>((set) => ({
     officeId: '',
     office: '',
   },
-  setTraining: (training) => set({ training }),
-  resetTraining: () =>
+  setTraining: (training: TrainingWithoutBudgetT) => {
+    set({ training });
+  },
+  resetTraining: () => {
     set({
       training: {
-        title: '',
-        amount: 0,
-        year: 2023,
+        id: '',
         trainingCode: '',
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        title: '',
         dateFrom: new Date(),
         dateTo: new Date(),
         numberOfHours: 0,
@@ -45,7 +47,8 @@ const useTrainingStore = create<TrainingDetailsT>((set) => ({
         officeId: '',
         office: '',
       },
-    }),
+    });
+  },
 }));
 
 export default useTrainingStore;

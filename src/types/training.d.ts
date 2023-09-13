@@ -1,4 +1,4 @@
-import { Training } from '@prisma/client';
+import { Participant, Speaker, Training } from '@prisma/client';
 import { type } from 'os';
 
 export type BudgetAllocation = {
@@ -27,4 +27,28 @@ export type TrainingWithBudgetT = {
 export type TrainingWithBudgetAndTotalAmountT = {
   trainingsWithBudget: TrainingWithBudgetT[];
   totalAmountByYear: TotalAmountByYear[];
+};
+
+
+export type TrainingWithoutBudgetT = {
+  id: string;
+  trainingCode: string;
+  createdAt: Date;
+  updatedAt: Date;
+  title: string;
+  dateFrom: Date;
+  dateTo: Date;
+  numberOfHours: number;
+  venue: string;
+  addressOfTheVenue: string;
+  issuedOn: Date;
+  issuedAt: string;
+  programHolder: string;
+  officeId: string;
+  office: string;
+};
+export type TrainingDetailsT = {
+  training: TrainingWithoutBudgetT;
+  speakers: Speaker[];
+  participants: Participant[];
 };
