@@ -24,7 +24,7 @@ export function SignIn() {
     <Card>
       <CardHeader className="space-y-1">
         <CardTitle className="text-2xl">Sign In</CardTitle>
-        <CardDescription>to continue to Training QR System</CardDescription>
+        <CardDescription>to Training QR System</CardDescription>
       </CardHeader>
       <CardContent className="grid gap-4">
         <div className="grid grid-cols-1 gap-6">
@@ -32,7 +32,7 @@ export function SignIn() {
             variant="outline"
             onClick={() => signIn('google', { callbackUrl: '/' })}
           >
-            <Icons.google className="mr-2 h-4 w-4" />
+            <Icons.google className="h-4 w-4" />
             Google
           </Button>
         </div>
