@@ -29,6 +29,7 @@ import useParticipantStore from '@/store/useParticipantStore';
 import useSpeakerStore from '@/store/useSpeakerStore';
 import { deleteSpeakers } from '@/services/fetch/speakers';
 import { deleteParticipants } from '@/services/fetch/participants';
+import { ReloadIcon } from '@radix-ui/react-icons';
 
 async function deleteSpeakersPromise(trainingCode: string): Promise<boolean> {
   return new Promise((resolve, reject) => {
@@ -63,9 +64,11 @@ export function PresetActions() {
   const { resetSpeakers } = useSpeakerStore();
   const { resetParticipants } = useParticipantStore();
   const [showDownloadDialog, setShowDownloadDialog] = useState<boolean>(false);
+  const [isResting, setIsResting] = useState<boolean>(false);
   const { excelDirectUrl } = useSettingsStore();
 
   const resetDataHandler = async () => {
+    setIsResting(true);
     const res = await Promise.all([
       deleteSpeakersPromise(training.trainingCode),
       deleteParticipantsPromise(training.trainingCode),
@@ -76,6 +79,7 @@ export function PresetActions() {
       resetParticipants();
 
       setShowDeleteDialog(false);
+      setIsResting(false);
 
       toast({
         description: 'This imported data has been deleted.',
@@ -114,10 +118,9 @@ export function PresetActions() {
           <DropdownMenuItem
             className="text-red-600"
             onSelect={() => setShowDeleteDialog(true)}
-            onClick={resetDataHandler}
           >
             <ListRestart className="mr-2 h-4 w-4" />
-            Reset Data
+            Delete Data
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
@@ -131,9 +134,20 @@ export function PresetActions() {
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <Button variant="destructive" onClick={resetDataHandler}>
-              Reset
+            <AlertDialogCancel disabled={isResting}>Cancel</AlertDialogCancel>
+            <Button
+              variant="destructive"
+              onClick={resetDataHandler}
+              disabled={isResting}
+            >
+              {isResting ? (
+                <>
+                  <ReloadIcon className="animate-spin mr-2 h-4 w-4" />
+                  Deleting...
+                </>
+              ) : (
+                'Delete Data'
+              )}
             </Button>
           </AlertDialogFooter>
         </AlertDialogContent>

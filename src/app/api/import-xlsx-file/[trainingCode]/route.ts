@@ -52,13 +52,46 @@ export async function POST(
     console.log(_participants);
 
     if (_speakers && _participants) {
-      return NextResponse.json({
-        status: 200,
-        data: {
-          training: training,
-          speakers: speakers,
-          participants: participants,
+      const training = await prisma.training.findUnique({
+        where: {
+          trainingCode: params.trainingCode,
         },
+        include: {
+          office: {
+            select: {
+              office: true,
+              officeId: true,
+            },
+          },
+          speaker: true,
+          participant: true,
+        },
+      });
+
+      return NextResponse.json({
+        data: {
+          training: {
+            id: training?.id,
+            trainingCode: training?.trainingCode,
+            createdAt: training?.createdAt,
+            updatedAt: training?.updatedAt,
+            title: training?.title,
+            dateFrom: training?.dateFrom,
+            dateTo: training?.dateTo,
+            numberOfHours: training?.numberOfHours,
+            venue: training?.venue,
+            addressOfTheVenue: training?.addressOfTheVenue,
+            issuedOn: training?.issuedOn,
+            issuedAt: training?.issuedAt,
+            programHolder: training?.programHolder,
+            officeId: training?.office?.office,
+            office: training?.office?.officeId,
+          },
+          speakers: training?.speaker,
+          participants: training?.participant,
+        },
+        status: 200,
+        message: 'Training found',
       });
     }
 

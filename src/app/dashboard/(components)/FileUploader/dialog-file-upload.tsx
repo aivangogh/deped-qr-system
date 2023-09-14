@@ -12,51 +12,39 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
+import { toast } from '@/components/ui/use-toast';
 import { importXlsxFile } from '@/services/fetch/import-xlsx-file';
-import useParticipantStore from '@/store/useParticipantStore';
-import useSpeakerStore from '@/store/useSpeakerStore';
 import useTrainingStore from '@/store/useTrainingStore';
-import { TrainingInfoT } from '@/types/types';
+import { ReloadIcon } from '@radix-ui/react-icons';
 import { FileSpreadsheet } from 'lucide-react';
 import { useState } from 'react';
+import { useMutation, useQueryClient } from 'react-query';
 import ExcelToJson from './ExcelToJson';
-import { ReloadIcon } from '@radix-ui/react-icons';
-import { useRouter } from 'next/navigation';
-import { useMutation } from 'react-query';
-import { toast } from '@/components/ui/use-toast';
 
 export function DialogFileUpload() {
   const { training } = useTrainingStore();
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
-  const [formattedJsonData, setFormattedJsonData] =
-    useState<TrainingInfoT | null>(null);
-  const { setTraining } = useTrainingStore();
-  const { setParticipants } = useParticipantStore();
-  const { setSpeakers } = useSpeakerStore();
   const [isUploading, setIsUploading] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const router = useRouter();
+
+  const queryClient = useQueryClient();
 
   const importMutation = useMutation({
-    mutationKey: ['training'],
+    mutationKey: ['mutate-training'],
     mutationFn: (trainingCode: string) => {
       return importXlsxFile(trainingCode, uploadedFile!);
     },
     onSuccess({ data }) {
-      console.log(data);
-
       setIsUploading(false);
-      console.log(data);
-      // setTraining(data.training);
-      setSpeakers(data.speaker!);
-      setParticipants(data.participants!);
+      setIsDialogOpen(false);
+
+      // Trigger a refetch of the training data (assuming you have a query for it)
+      queryClient.invalidateQueries(['training', training.trainingCode]);
 
       toast({
         title: 'Training imported successfully',
         description: 'Training was imported successfully.',
       });
-
-      // router.refresh();
     },
     onError() {
       importMutation.reset();
@@ -71,7 +59,7 @@ export function DialogFileUpload() {
     setIsUploading(true);
 
     toast({
-      title: 'Importing...',
+      description: "We're importing your file. Please wait",
     });
 
     importMutation.mutate(training.trainingCode);
@@ -82,7 +70,7 @@ export function DialogFileUpload() {
   };
 
   return (
-    <AlertDialog>
+    <AlertDialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
       <AlertDialogTrigger asChild>
         <Button variant="secondary" className="ml-auto h-8">
           <FileSpreadsheet className="mr-2 h-4 w-4" />
@@ -102,27 +90,19 @@ export function DialogFileUpload() {
         </div>
 
         <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction asChild>
-            <Button onClick={handleSetTrainingInfo} disabled={isUploading}>
-              {isUploading ? (
-                <>
-                  <ReloadIcon className="animate-spin mr-2 h-4 w-4" />
-                  Importing...
-                </>
-              ) : (
-                'Import File'
-              )}
-            </Button>
-          </AlertDialogAction>
-        </AlertDialogFooter>
+          <AlertDialogCancel disabled={isUploading}>Cancel</AlertDialogCancel>
 
-        {/* {jsonData && (
-          <div>
-            <h2>Parsed JSON:</h2>
-            <pre>{JSON.stringify(jsonData, null, 2)}</pre>
-          </div>
-        )} */}
+          <Button onClick={handleSetTrainingInfo} disabled={isUploading}>
+            {isUploading ? (
+              <>
+                <ReloadIcon className="animate-spin mr-2 h-4 w-4" />
+                Importing...
+              </>
+            ) : (
+              'Import File'
+            )}
+          </Button>
+        </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
   );
