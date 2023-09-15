@@ -1,6 +1,5 @@
 import { TotalAmountByYear, TrainingWithBudgetT } from '@/types/training';
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
 
 type BudgetAllocationT = {
   budgets: TrainingWithBudgetT[];
@@ -9,18 +8,11 @@ type BudgetAllocationT = {
   setTotalAmountByYear: (totalAmountByYear: TotalAmountByYear[]) => void;
 };
 
-const useBudgetAllocationStore = create<BudgetAllocationT>()(
-  persist(
-    (set) => ({
-      budgets: [],
-      totalAmountByYear: [],
-      setBudgets: (budgets) => set({ budgets }),
-      setTotalAmountByYear: (totalAmountByYear) => set({ totalAmountByYear }),
-    }),
-    {
-      name: 'budgets',
-    }
-  )
-);
+const useBudgetAllocationStore = create<BudgetAllocationT>((set) => ({
+  budgets: [],
+  totalAmountByYear: [],
+  setBudgets: (budgets) => set({ budgets }),
+  setTotalAmountByYear: (totalAmountByYear) => set({ totalAmountByYear }),
+}));
 
 export default useBudgetAllocationStore;
