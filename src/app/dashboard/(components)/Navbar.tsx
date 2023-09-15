@@ -44,12 +44,12 @@ export default function Navbar({
                 <Link
                   key={route.href}
                   href={route.href}
+                  prefetch={false}
                   className={`${
                     isActive ? 'text-primary' : 'text-muted-foreground'
                   } text-sm font-medium transition-colors hover:text-primary`}
                 >
                   {route.label}
-                  
                 </Link>
               );
             })}
