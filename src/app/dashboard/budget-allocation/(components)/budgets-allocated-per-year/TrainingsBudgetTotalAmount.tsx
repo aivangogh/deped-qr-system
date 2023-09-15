@@ -11,15 +11,6 @@ export default function TrainingsBudgetTotalAmount() {
   const { totalAmountByYear, setTotalAmountByYear } =
     useBudgetAllocationStore();
 
-  useQuery({
-    queryKey: 'trainingsWithBudget',
-    queryFn: () => getTrainingsBudget(),
-    onSuccess: ({ data }: { data: TrainingWithBudgetAndTotalAmountT }) => {
-      console.log(data);
-      setTotalAmountByYear(data.totalAmountByYear);
-    },
-  });
-
   return (
     <>
       <DataTableForTotalAmount

@@ -11,15 +11,6 @@ export default function BudgetAllocationPage() {
   const { trainingsWithBudget, setTrainingsWithBudget } =
     useTrainingsWithBudgetStore();
 
-  useQuery({
-    queryKey: 'trainingsWithBudget',
-    queryFn: () => getTrainingsBudget(),
-    onSuccess: ({ data }: { data: TrainingWithBudgetAndTotalAmountT }) => {
-      // console.log(data);
-      setTrainingsWithBudget(data.trainingsWithBudget);
-    },
-  });
-
   return (
     <>
       <DataTableForTrainingsBudget
