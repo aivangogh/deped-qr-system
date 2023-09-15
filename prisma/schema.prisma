@@ -163,6 +163,7 @@ model Speaker {
   position     String?
   contact      String?
   email        String?
+  role         String?
   training     Training? @relation(fields: [trainingCode], references: [trainingCode], onDelete: Cascade)
   trainingCode String?
 }

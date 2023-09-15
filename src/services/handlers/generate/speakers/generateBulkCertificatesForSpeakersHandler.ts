@@ -1,21 +1,16 @@
 import { downloadTemplateFromGoogleDrive } from '@/services/api/google-drive-file/downloadTemplateFromGoogleDrive';
-import {
-  ParticipantDetailsT,
-  SpeakerDetailsT,
-  TrainingDetailsT,
-} from '@/types/types';
-import { getFileIdFromGoogleDriveLink } from '@/utils/getFileIdFromGoogleDriveLink';
-import { NextApiRequest, NextApiResponse } from 'next';
-import QRCode from 'qrcode';
-import createReport from 'docx-templates';
-import archiver from 'archiver';
-import { Readable } from 'stream';
 import { GenerateCertificatesRequestForSpeakers } from '@/types/generate-pdf';
 import {
   formatDatesToDateRange,
   generateDayLabel,
   generateMonthYearLabel,
 } from '@/utils/formatDates';
+import { getFileIdFromGoogleDriveLink } from '@/utils/getFileIdFromGoogleDriveLink';
+import { createQrCodeWitLogo } from '@/utils/qrCode/qrcodeWithLogo';
+import archiver from 'archiver';
+import createReport from 'docx-templates';
+import { NextApiRequest, NextApiResponse } from 'next';
+import QRCode from 'qrcode';
 
 export default async function generateBulkCertificatesForSpeakersHandler(
   req: NextApiRequest,
@@ -37,9 +32,9 @@ export default async function generateBulkCertificatesForSpeakersHandler(
     for (const speaker of speakers) {
       const additionalJsContext = {
         qrCode: async () => {
-          const qrCodeData = `Title of training: ${training.title}`;
+          const qrCodeData = `Title of training: ${training.title}\nSpeaker: ${speaker.speaker}\nRole: ${speaker.role}`;
           const qrCodeImage = await QRCode.toDataURL(qrCodeData);
-          const data = qrCodeImage.slice('data:image/png;base64,'.length);
+          const data = qrCodeImage?.slice('data:image/png;base64,'.length);
           return { width: 3, height: 3, data, extension: '.png' };
         },
       };
@@ -49,6 +44,7 @@ export default async function generateBulkCertificatesForSpeakersHandler(
         cmdDelimiter: ['{', '}'],
         data: {
           name_of_speaker: speaker.speaker,
+          role: speaker.role,
           title_of_training: training.title,
           venue: training.venue,
           address_of_the_venue: training.addressOfTheVenue,

@@ -41,7 +41,7 @@ export default async function generateBulkCertificatesAndSendEmailHandler(
 
       const additionalJsContext = {
         qrCode: async () => {
-          const qrCodeData = `Title of training: ${training.title}`;
+          const qrCodeData = `Title of training: ${training.title}\nSpeaker: ${speaker.speaker}\nRole: ${speaker.role}`;
           const qrCodeImage = await QRCode.toDataURL(qrCodeData);
           const data = qrCodeImage.slice('data:image/png;base64,'.length);
           return { width: 3, height: 3, data, extension: '.png' };
@@ -53,6 +53,7 @@ export default async function generateBulkCertificatesAndSendEmailHandler(
         cmdDelimiter: ['{', '}'],
         data: {
           name_of_speaker: speaker.speaker,
+          role: speaker.role,
           title_of_training: training.title,
           venue: training.venue,
           address_of_the_venue: training.addressOfTheVenue,

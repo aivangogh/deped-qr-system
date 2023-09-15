@@ -19,6 +19,12 @@ export async function GET(
             officeId: true,
           },
         },
+        budgetAllocation: {
+          select: {
+            amount: true,
+            year: true,
+          },
+        },
         speaker: true,
         participant: true,
       },

@@ -49,6 +49,14 @@ export const dashboardRoutes = {
     path: '/dashboard/add-training',
     label: 'Add Training',
   },
+  editTraining: {
+    trainingCode: (trainingCode: string) => {
+      return `/dashboard/training/${trainingCode}/edit`;
+    },
+
+    path: '/dashboard/training',
+    label: 'Edit Training',
+  },
   settings: {
     path: '/dashboard/settings',
     label: 'Settings',

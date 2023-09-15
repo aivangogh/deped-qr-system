@@ -63,7 +63,7 @@ export const columnsForParticipants: ColumnDef<Participant>[] = [
     cell: ({ row }) => {
       return (
         <div className="flex space-x-2">
-          <span className="max-w-[150px] truncate font-medium">
+          <span className="max-w-[75px] truncate font-medium">
             {row.getValue('position')}
           </span>
         </div>
@@ -78,7 +78,7 @@ export const columnsForParticipants: ColumnDef<Participant>[] = [
     cell: ({ row }) => {
       return (
         <div className="flex space-x-2">
-          <span className="max-w-[300px] truncate font-medium">
+          <span className="max-w-[100px] truncate font-medium">
             {row.getValue('school')}
           </span>
         </div>
@@ -108,9 +108,7 @@ export const columnsForParticipants: ColumnDef<Participant>[] = [
     cell: ({ row }) => {
       return (
         <div className="flex space-x-2">
-          <span className="max-w-[100px] font-medium">
-            {row.getValue('email')}
-          </span>
+          <span className="font-medium">{row.getValue('email')}</span>
         </div>
       );
     },
@@ -120,6 +118,12 @@ export const columnsForParticipants: ColumnDef<Participant>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Actions" />
     ),
-    cell: ({ row }) => <DataTableRowActions row={row} />,
+    cell: ({ row }) => {
+      return (
+        <span className="max-w-[50px]">
+          <DataTableRowActions row={row} />
+        </span>
+      );
+    },
   },
 ];

@@ -117,213 +117,221 @@ export default function UpdateTraining() {
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam
           </SheetDescription>
         </SheetHeader>
-        <Form {...form}>
-          <ScrollArea className="h-96 mt-6">
+        <div className="h-full flex flex-col">
+          <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit)}
               className="flex flex-col justify-between h-full space-y-4"
             >
-              <div className="space-y-4">
-                <div className="grid w-full max-w-sm items-center gap-1.5">
-                  <FormField
-                    control={form.control}
-                    name="titleOfTraining"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Title of Training:</FormLabel>
-                        <FormControl>
-                          <Input
-                            type="text"
-                            id="titleOfTraining"
-                            value={training.title}
-                            className="cursor-default"
-                          />
-                        </FormControl>
-                      </FormItem>
-                    )}
-                  />
-                </div>
-              </div>
-              <div className="space-y-4">
-                <div className="grid w-full max-w-sm items-center gap-1.5">
-                  <FormField
-                    control={form.control}
-                    name="dateFrom"
-                    render={({ field }) => (
-                      <FormItem className="grid">
-                        <FormLabel>
-                          Date From <span className="text-red-500"> *</span>
-                        </FormLabel>
-                        <Popover>
-                          <PopoverTrigger asChild>
-                            <FormControl>
-                              <Button
-                                variant={'outline'}
-                                className={cn(
-                                  'w-[240px] pl-3 text-left font-normal',
-                                  !field.value && 'text-muted-foreground'
-                                )}
-                              >
-                                {field.value ? (
-                                  format(field.value, 'PPP')
-                                ) : (
-                                  <span>Pick a date</span>
-                                )}
-                                <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                              </Button>
-                            </FormControl>
-                          </PopoverTrigger>
-                          <PopoverContent className="w-auto p-0" align="start">
-                            <Calendar
-                              mode="single"
-                              selected={field.value}
-                              onSelect={field.onChange}
-                              initialFocus
-                            />
-                          </PopoverContent>
-                        </Popover>
-                        <FormDescription>
-                          Training starts on the first day.
-                        </FormDescription>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="dateTo"
-                    render={({ field }) => (
-                      <FormItem className="grid">
-                        <FormLabel>
-                          Date To <span className="text-red-500"> *</span>
-                        </FormLabel>
-                        <Popover>
-                          <PopoverTrigger asChild>
-                            <FormControl>
-                              <Button
-                                variant={'outline'}
-                                className={cn(
-                                  'w-[240px] pl-3 text-left font-normal',
-                                  !field.value && 'text-muted-foreground'
-                                )}
-                              >
-                                {field.value ? (
-                                  format(field.value, 'PPP')
-                                ) : (
-                                  <span>Pick a date</span>
-                                )}
-                                <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                              </Button>
-                            </FormControl>
-                          </PopoverTrigger>
-                          <PopoverContent className="w-auto p-0" align="start">
-                            <Calendar
-                              mode="single"
-                              selected={field.value}
-                              onSelect={field.onChange}
-                              initialFocus
-                            />
-                          </PopoverContent>
-                        </Popover>
-                        <FormDescription>
-                          Training ends on the last day.
-                        </FormDescription>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-                <div className="grid w-full max-w-sm items-center gap-1.5">
-                  <FormField
-                    control={form.control}
-                    name="officeId"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Implementing Office</FormLabel>
-                        <Select value={training.officeId!}>
+              <ScrollArea className="h-full">
+                <div className="space-y-4">
+                  <div className="grid w-full max-w-sm items-center gap-1.5">
+                    <FormField
+                      control={form.control}
+                      name="titleOfTraining"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Title of Training:</FormLabel>
                           <FormControl>
-                            <SelectTrigger className="w-[180px]">
-                              <SelectValue placeholder="Select a Office" />
-                            </SelectTrigger>
+                            <Input
+                              type="text"
+                              id="titleOfTraining"
+                              value={training.title}
+                              className="cursor-default"
+                            />
                           </FormControl>
-                          <SelectContent>
-                            {offices.map(({ officeId, office }) => (
-                              <SelectItem key={officeId} value={officeId}>
-                                {office}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      </FormItem>
-                    )}
-                  />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
                 </div>
-                <div className="grid w-full max-w-sm items-center gap-1.5">
-                  <FormField
-                    control={form.control}
-                    name="numberOfHours"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Number of hours:</FormLabel>
-                        <FormControl>
-                          <Input
-                            type="number"
-                            id="numberOfHours"
-                            placeholder="24"
-                            value={
-                              training.numberOfHours
-                                ? training.numberOfHours
-                                : 0
-                            }
-                            className="cursor-default"
-                          />
-                        </FormControl>
-                      </FormItem>
-                    )}
-                  />
+                <div className="space-y-4">
+                  <div className="grid w-full max-w-sm items-center gap-1.5">
+                    <FormField
+                      control={form.control}
+                      name="dateFrom"
+                      render={({ field }) => (
+                        <FormItem className="grid">
+                          <FormLabel>
+                            Date From <span className="text-red-500"> *</span>
+                          </FormLabel>
+                          <Popover>
+                            <PopoverTrigger asChild>
+                              <FormControl>
+                                <Button
+                                  variant={'outline'}
+                                  className={cn(
+                                    'w-[240px] pl-3 text-left font-normal',
+                                    !field.value && 'text-muted-foreground'
+                                  )}
+                                >
+                                  {field.value ? (
+                                    format(field.value, 'PPP')
+                                  ) : (
+                                    <span>Pick a date</span>
+                                  )}
+                                  <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                                </Button>
+                              </FormControl>
+                            </PopoverTrigger>
+                            <PopoverContent
+                              className="w-auto p-0"
+                              align="start"
+                            >
+                              <Calendar
+                                mode="single"
+                                selected={field.value}
+                                onSelect={field.onChange}
+                                initialFocus
+                              />
+                            </PopoverContent>
+                          </Popover>
+                          <FormDescription>
+                            Training starts on the first day.
+                          </FormDescription>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="dateTo"
+                      render={({ field }) => (
+                        <FormItem className="grid">
+                          <FormLabel>
+                            Date To <span className="text-red-500"> *</span>
+                          </FormLabel>
+                          <Popover>
+                            <PopoverTrigger asChild>
+                              <FormControl>
+                                <Button
+                                  variant={'outline'}
+                                  className={cn(
+                                    'w-[240px] pl-3 text-left font-normal',
+                                    !field.value && 'text-muted-foreground'
+                                  )}
+                                >
+                                  {field.value ? (
+                                    format(field.value, 'PPP')
+                                  ) : (
+                                    <span>Pick a date</span>
+                                  )}
+                                  <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                                </Button>
+                              </FormControl>
+                            </PopoverTrigger>
+                            <PopoverContent
+                              className="w-auto p-0"
+                              align="start"
+                            >
+                              <Calendar
+                                mode="single"
+                                selected={field.value}
+                                onSelect={field.onChange}
+                                initialFocus
+                              />
+                            </PopoverContent>
+                          </Popover>
+                          <FormDescription>
+                            Training ends on the last day.
+                          </FormDescription>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                  <div className="grid w-full max-w-sm items-center gap-1.5">
+                    <FormField
+                      control={form.control}
+                      name="officeId"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Implementing Office</FormLabel>
+                          <Select value={training.officeId!}>
+                            <FormControl>
+                              <SelectTrigger className="w-[180px]">
+                                <SelectValue placeholder="Select a Office" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              {offices.map(({ officeId, office }) => (
+                                <SelectItem key={officeId} value={officeId}>
+                                  {office}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                  <div className="grid w-full max-w-sm items-center gap-1.5">
+                    <FormField
+                      control={form.control}
+                      name="numberOfHours"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Number of hours:</FormLabel>
+                          <FormControl>
+                            <Input
+                              type="number"
+                              id="numberOfHours"
+                              placeholder="24"
+                              value={
+                                training.numberOfHours
+                                  ? training.numberOfHours
+                                  : 0
+                              }
+                              className="cursor-default"
+                            />
+                          </FormControl>
+                        </FormItem>
+                      )}
+                    />
+                  </div>
                 </div>
-              </div>
 
-              <div className="space-y-4">
-                <div className="grid w-full max-w-sm items-center gap-1.5">
-                  <FormField
-                    control={form.control}
-                    name="venue"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Venue:</FormLabel>
-                        <FormControl>
-                          <Input
-                            type="text"
-                            id="venue"
-                            placeholder="Type here..."
-                            value={training.venue!}
-                          />
-                        </FormControl>
-                      </FormItem>
-                    )}
-                  />
+                <div className="space-y-4">
+                  <div className="grid w-full max-w-sm items-center gap-1.5">
+                    <FormField
+                      control={form.control}
+                      name="venue"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Venue:</FormLabel>
+                          <FormControl>
+                            <Input
+                              type="text"
+                              id="venue"
+                              placeholder="Type here..."
+                              value={training.venue!}
+                            />
+                          </FormControl>
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                  <div className="grid w-full max-w-sm items-center gap-1.5">
+                    <FormField
+                      control={form.control}
+                      name="addressOfTheVenue"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Address of the venue:</FormLabel>
+                          <FormControl>
+                            <Input
+                              type="text"
+                              id="addressOfTheVenue"
+                              placeholder="Type here..."
+                              value={training.addressOfTheVenue!}
+                            />
+                          </FormControl>
+                        </FormItem>
+                      )}
+                    />
+                  </div>
                 </div>
-                <div className="grid w-full max-w-sm items-center gap-1.5">
-                  <FormField
-                    control={form.control}
-                    name="addressOfTheVenue"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Address of the venue:</FormLabel>
-                        <FormControl>
-                          <Input
-                            type="text"
-                            id="addressOfTheVenue"
-                            placeholder="Type here..."
-                            value={training.addressOfTheVenue!}
-                          />
-                        </FormControl>
-                      </FormItem>
-                    )}
-                  />
-                </div>
-              </div>
+              </ScrollArea>
               <div className="">
                 <Button size="sm" type="submit">
                   <Save className="mr-2 h-4 w-4" />
@@ -331,8 +339,8 @@ export default function UpdateTraining() {
                 </Button>
               </div>
             </form>
-          </ScrollArea>
-        </Form>
+          </Form>
+        </div>
       </SheetContent>
     </>
   );

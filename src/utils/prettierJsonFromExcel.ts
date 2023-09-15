@@ -40,7 +40,8 @@ export function prettierTrainingDetails(trainingCode: string, parsedData: any) {
 export function prettierSpeakerDetails(trainingCode: string, parsedData: any) {
   const columnNames = {
     speakers: 0,
-    email: 1,
+    role: 1,
+    email: 2,
   };
 
   const speakers: SpeakerDetailsT[] = parsedData
@@ -52,6 +53,7 @@ export function prettierSpeakerDetails(trainingCode: string, parsedData: any) {
       speakerId: `${trainingCode}S${index + 1}`,
       speaker: row[columnNames.speakers].trim(),
       trainingCode: trainingCode,
+      role: row[columnNames.role],
       email: row[columnNames.email],
     }));
 

@@ -97,17 +97,9 @@ export default function DialogGenerateBulkCertificatesForParticipants() {
           {certificateURL ? (
             <>
               <div className="flex flex-col items-center justify-center h-40 space-y-4">
-                {/* <object
-                  data={certificateURL}
-                  type="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-                  width="100%"
-                  height="100%"
-                >
-                  <p>Sorry, the certificate could not be displayed.</p>
-                </object> */}
                 <FileCheck2 size={40} color="green" />
                 <span className="text-2xl font-medium">
-                  Certificates generated
+                  Certificates generated!
                 </span>
               </div>
             </>
