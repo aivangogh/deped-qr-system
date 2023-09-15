@@ -38,6 +38,7 @@ import { useToast } from '@/components/ui/use-toast';
 import useTrainingStore from '@/store/useTrainingStore';
 import useTrainingsStore from '@/store/useTrainingsStore';
 import { useState } from 'react';
+import { useQueryClient } from 'react-query';
 
 interface DataTableRowActionsProps<TData> {
   row: Row<TData>;
@@ -51,6 +52,7 @@ export function DataTableRowActions<TData>({
   const { toast } = useToast();
   const { removeTraining } = useTrainingsStore();
   const [isTrainingDeleting, setIsTrainingDeleting] = useState(false);
+  const query = useQueryClient();
 
   const deleteTrainingHandler = async () => {
     setIsTrainingDeleting(true);
@@ -65,6 +67,7 @@ export function DataTableRowActions<TData>({
           });
 
           removeTraining(trainingCode);
+          
         }
       })
       .catch((err) => {
