@@ -67,7 +67,6 @@ export function DataTableRowActions<TData>({
           });
 
           removeTraining(trainingCode);
-          
         }
       })
       .catch((err) => {
@@ -99,12 +98,12 @@ export function DataTableRowActions<TData>({
               </DropdownMenuItem>
             </Link>
 
-            <AlertDialogTrigger asChild>
+            {/* <AlertDialogTrigger asChild>
               <DropdownMenuItem className="text-red-600">
                 <Trash2 className="mr-2 h-4 w-4" />
                 Delete
               </DropdownMenuItem>
-            </AlertDialogTrigger>
+            </AlertDialogTrigger> */}
           </DropdownMenuContent>
         </DropdownMenu>
         <AlertDialogContent>

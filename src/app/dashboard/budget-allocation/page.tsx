@@ -8,6 +8,8 @@ import TrainingsBudgetTotalAmount from './(components)/budgets-allocated-per-yea
 import TrainingsBudget from './(components)/trainings-budget/TrainingsBudget';
 import useBudgetAllocationStore from '@/store/useBudgetAllocationStore';
 
+export const dynamic = 'force-dynamic';
+
 export default function BudgetAllocationPage() {
   const { setTrainingsWithBudget } = useTrainingsWithBudgetStore();
   const { setTotalAmountByYear } = useBudgetAllocationStore();
@@ -25,13 +27,13 @@ export default function BudgetAllocationPage() {
   return (
     <div className="my-4">
       <div className="grid grid-cols-12 space-x-8 ">
-        <div className="col-span-6 space-y-4">
+        <div className="col-span-8 space-y-4">
           <h3 className="text-xl font-semibold">
             Budget Allocation per training
           </h3>
           <TrainingsBudget />
         </div>
-        <div className="col-span-5 col-start-7 col-end-12 space-y-4">
+        <div className="col-span-4 space-y-4">
           <h3 className="text-xl font-semibold">
             Total Budget Allocation per year
           </h3>

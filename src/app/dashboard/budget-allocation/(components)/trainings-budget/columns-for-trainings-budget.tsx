@@ -37,7 +37,7 @@ export const columnsForTrainingsBudget: ColumnDef<TrainingWithBudgetT>[] = [
       <DataTableColumnHeader column={column} title="Training Code" />
     ),
     cell: ({ row }) => (
-      <div className="w-[80px] font-medium">{row.getValue('trainingCode')}</div>
+      <div className="w-[70px] font-medium">{row.getValue('trainingCode')}</div>
     ),
     enableSorting: false,
     enableHiding: false,
@@ -50,7 +50,7 @@ export const columnsForTrainingsBudget: ColumnDef<TrainingWithBudgetT>[] = [
     cell: ({ row }) => {
       return (
         <div className="flex space-x-2">
-          <span className="w-auto max-w-[400px] truncate font-medium">
+          <span className="w-auto max-w-[300px] truncate font-medium">
             {row.getValue('title')}
           </span>
         </div>
@@ -121,11 +121,11 @@ export const columnsForTrainingsBudget: ColumnDef<TrainingWithBudgetT>[] = [
   //     );
   //   },
   // },
-  // {
-  //   id: 'actions',
-  //   header: ({ column }) => (
-  //     <DataTableColumnHeader column={column} title="Actions" />
-  //   ),
-  //   cell: ({ row }) => <DataTableRowActions row={row} />,
-  // },
+  {
+    id: 'actions',
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Actions" />
+    ),
+    cell: ({ row }) => <DataTableRowActions row={row} />,
+  },
 ];

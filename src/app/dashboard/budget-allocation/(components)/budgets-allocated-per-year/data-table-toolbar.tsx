@@ -21,19 +21,7 @@ export function DataTableToolbar<TData>({
   return (
     <div className="flex items-center justify-between">
       <div className="flex flex-1 items-center space-x-2">
-        <div className="flex items-center">
-          {/* <Filter className="mr-2 h-4 w-4" /> */}
-          <Input
-            placeholder="Search by keyword"
-            value={
-              (table.getColumn('participant')?.getFilterValue() as string) ?? ''
-            }
-            onChange={(event) =>
-              table.getColumn('participant')?.setFilterValue(event.target.value)
-            }
-            className="h-8 w-[150px] lg:w-[250px]"
-          />
-        </div>
+        
         {/* {table.getColumn('status') && (
           <DataTableFacetedFilter
             column={table.getColumn('status')}
