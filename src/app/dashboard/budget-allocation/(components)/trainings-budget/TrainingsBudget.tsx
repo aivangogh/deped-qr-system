@@ -1,21 +1,21 @@
 'use client';
 
-import { getTrainingsBudget } from '@/services/fetch/budgets';
-import useTrainingsWithBudgetStore from '@/store/useTrainingsWithBudgetStore';
-import { TrainingWithBudgetAndTotalAmountT } from '@/types/training';
-import { useQuery } from 'react-query';
+import { TrainingWithBudgetT } from '@/types/training';
 import { columnsForTrainingsBudget } from './columns-for-trainings-budget';
 import { DataTableForTrainingsBudget } from './data-table-for-trainings-budget';
 
-export default function BudgetAllocationPage() {
-  const { trainingsWithBudget, setTrainingsWithBudget } =
-    useTrainingsWithBudgetStore();
+type BudgetAllocationPagePropsT = {
+  data: TrainingWithBudgetT[];
+};
 
+export default function BudgetAllocationPage({
+  data,
+}: BudgetAllocationPagePropsT) {
   return (
     <>
       <DataTableForTrainingsBudget
         columns={columnsForTrainingsBudget}
-        data={trainingsWithBudget}
+        data={data}
       />
     </>
   );

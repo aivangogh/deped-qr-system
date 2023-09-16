@@ -11,8 +11,8 @@ export async function getBudgets() {
 
 export async function getTrainingsBudget() {
   try {
-    const {data} = await axios.get('/api/budgets/trainings');
-    return data;
+    const res = await axios.get('/api/budgets/trainings');
+    return res.data;
   } catch (error) {
     throw error;
   }

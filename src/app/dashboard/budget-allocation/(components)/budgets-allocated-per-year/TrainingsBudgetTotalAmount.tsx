@@ -1,22 +1,22 @@
 'use client';
 
-import { getTrainingsBudget } from '@/services/fetch/budgets';
-import useBudgetAllocationStore from '@/store/useBudgetAllocationStore';
-import { TrainingWithBudgetAndTotalAmountT } from '@/types/training';
-import { useQuery } from 'react-query';
+import {
+  TotalAmountByYear
+} from '@/types/training';
 import { columnsForTotalAmount } from './columns-for-total-amount';
 import { DataTableForTotalAmount } from './data-table-for-total-amount';
 
-export default function TrainingsBudgetTotalAmount() {
-  const { totalAmountByYear, setTotalAmountByYear } =
-    useBudgetAllocationStore();
+type BudgetAllocationPagePropsT = {
+  data: TotalAmountByYear[];
+};
+
+export default function TrainingsBudgetTotalAmount({
+  data,
+}: BudgetAllocationPagePropsT) {
 
   return (
     <>
-      <DataTableForTotalAmount
-        columns={columnsForTotalAmount}
-        data={totalAmountByYear}
-      />
+      <DataTableForTotalAmount columns={columnsForTotalAmount} data={data} />
     </>
   );
 }

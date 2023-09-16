@@ -7,22 +7,24 @@ import { useQuery } from 'react-query';
 import TrainingsBudgetTotalAmount from './(components)/budgets-allocated-per-year/TrainingsBudgetTotalAmount';
 import TrainingsBudget from './(components)/trainings-budget/TrainingsBudget';
 import useBudgetAllocationStore from '@/store/useBudgetAllocationStore';
+import LoadingSpinner from '@/components/LoadingSpinner';
 
 export const dynamic = 'force-dynamic';
+
+type BudgetAllocationPagePropsT = {
+  data: TrainingWithBudgetAndTotalAmountT;
+};
 
 export default function BudgetAllocationPage() {
   const { setTrainingsWithBudget } = useTrainingsWithBudgetStore();
   const { setTotalAmountByYear } = useBudgetAllocationStore();
 
-  useQuery({
-    queryKey: 'trainingsWithBudget',
+  const { data: training, isLoading } = useQuery<BudgetAllocationPagePropsT>({
     queryFn: () => getTrainingsBudget(),
-    onSuccess: ({ data }: { data: TrainingWithBudgetAndTotalAmountT }) => {
-      // console.log(data);
-      setTrainingsWithBudget(data.trainingsWithBudget);
-      setTotalAmountByYear(data.totalAmountByYear);
-    },
   });
+
+  if (isLoading) return <LoadingSpinner />;
+
 
   return (
     <div className="my-4">
@@ -31,13 +33,15 @@ export default function BudgetAllocationPage() {
           <h3 className="text-xl font-semibold">
             Budget Allocation per training
           </h3>
-          <TrainingsBudget />
+          <TrainingsBudget data={training?.data.trainingsWithBudget!} />
         </div>
         <div className="col-span-4 space-y-4">
           <h3 className="text-xl font-semibold">
             Total Budget Allocation per year
           </h3>
-          <TrainingsBudgetTotalAmount />
+          <TrainingsBudgetTotalAmount
+            data={training?.data.totalAmountByYear!}
+          />
         </div>
       </div>
     </div>
