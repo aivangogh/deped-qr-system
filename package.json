@@ -55,6 +55,8 @@
     "lucide": "^0.257.0",
     "lucide-react": "^0.259.0",
     "mammoth": "^1.6.0",
+    "moment": "^2.29.4",
+    "moment-timezone": "^0.5.43",
     "next": "13.4.19",
     "next-auth": "^4.22.1",
     "nodemailer": "^6.9.5",

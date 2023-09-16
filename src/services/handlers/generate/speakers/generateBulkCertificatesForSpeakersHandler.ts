@@ -39,6 +39,8 @@ export default async function generateBulkCertificatesForSpeakersHandler(
         },
       };
 
+      console.log(training);
+
       const buffer = await createReport({
         template: templateBuffer,
         cmdDelimiter: ['{', '}'],

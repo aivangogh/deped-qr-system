@@ -1,14 +1,16 @@
+import moment from 'moment-timezone';
+
 export function formatDatesToDateRange(
   startDateStr: Date,
   endDateStr: Date
 ): string {
-  const startDate = new Date(startDateStr);
-  const endDate = new Date(endDateStr);
+  const startDate = moment(startDateStr).tz('Asia/Manila');
+  const endDate = moment(endDateStr).tz('Asia/Manila');
 
-  const startDay = startDate.getDate();
-  const endDay = endDate.getDate();
-  const month = startDate.toLocaleDateString('en-US', { month: 'long' });
-  const year = startDate.getFullYear();
+  const startDay = startDate.date();
+  const endDay = endDate.date();
+  const month = startDate.format('MMMM');
+  const year = startDate.year();
 
   if (startDay === endDay) {
     return `${month} ${startDay}, ${year}`;
@@ -18,8 +20,8 @@ export function formatDatesToDateRange(
 }
 
 export function generateDayLabel(dateStr: Date): string {
-  const date = new Date(dateStr);
-  const day = date.getDate();
+  const date = moment(dateStr).tz('Asia/Manila');
+  const day = date.date();
   const suffix = getDaySuffix(day);
   return `${day}${suffix}`;
 }
@@ -42,8 +44,8 @@ function getDaySuffix(day: number): string {
 }
 
 export function generateMonthYearLabel(dateStr: Date): string {
-  const date = new Date(dateStr);
-  const month = date.toLocaleDateString('en-US', { month: 'long' });
-  const year = date.getFullYear();
+  const date = moment(dateStr).tz('Asia/Manila');
+  const month = date.format('MMMM');
+  const year = date.year();
   return `${month}, ${year}`;
 }
