@@ -16,6 +16,11 @@ function excelTextToDate(excelTextDate: any): Date {
   return date;
 }
 
+function removeEmptyArrays<T>(arr: T[][]): T[][] {
+  const nonEmptyArrays = arr.filter((subArr) => subArr.length > 0);
+  return nonEmptyArrays;
+}
+
 export function prettierTrainingDetails(trainingCode: string, parsedData: any) {
   const columnNames = {
     title: 0,
@@ -24,14 +29,28 @@ export function prettierTrainingDetails(trainingCode: string, parsedData: any) {
     hours: 3,
   };
 
+  if (!parsedData) {
+    throw new Error('parsedData is undefined');
+  }
+
+  const titleValue = parsedData[columnNames.title]?.trim(); // Trim whitespace
+  const dateStartValue = parsedData[columnNames.dateStart]; // No need to trim dates
+  const dateEndValue = parsedData[columnNames.dateEnd]; // No need to trim dates
+  const hoursValue = parsedData[columnNames.hours];
+
+  // Check if all necessary fields are empty, and if so, return null
+  if (!titleValue && !dateStartValue && !dateEndValue && !hoursValue) {
+    return null;
+  }
+
   const trainingDetails: TrainingDetailsT = {
     trainingCode,
-    title: parsedData[columnNames.title],
+    title: titleValue || 'N/A', // Set a default value if empty
     date: {
-      start: excelTextToDate(parsedData[columnNames.dateStart]),
-      end: excelTextToDate(parsedData[columnNames.dateEnd]),
+      start: excelTextToDate(dateStartValue),
+      end: excelTextToDate(dateEndValue),
     },
-    hours: parsedData[columnNames.hours],
+    hours: hoursValue || 0, // Set a default value if empty
   };
 
   return trainingDetails;
@@ -44,18 +63,28 @@ export function prettierSpeakerDetails(trainingCode: string, parsedData: any) {
     email: 2,
   };
 
+  if (!parsedData) {
+    throw new Error('parsedData is undefined');
+  }
+
+  // Skip the first row (header row) and start processing from the second row
+  const dataRows = parsedData.slice(2); // Slice to remove the first row
+
   const speakers: SpeakerDetailsT[] = parsedData
-    .filter((row: any) => {
-      const speakerValue = row[columnNames.speakers]?.trim();
-      return speakerValue !== undefined && speakerValue !== '';
+    .map((row: any, index: number) => {
+      const speakerValue = row[columnNames.speakers]?.trim() || null; // Trim whitespace
+      const roleValue = row[columnNames.role]?.trim() || null; // Trim whitespace
+      const emailValue = row[columnNames.email]?.trim() || null; // Trim whitespace
+
+      return {
+        speakerId: `${trainingCode}S${index + 1}`,
+        speaker: speakerValue, // Set a default value if empty
+        trainingCode: trainingCode,
+        role: roleValue, // Set a default value if empty
+        email: emailValue, // Set a default value if empty
+      };
     })
-    .map((row: any, index: number) => ({
-      speakerId: `${trainingCode}S${index + 1}`,
-      speaker: row[columnNames.speakers].trim(),
-      trainingCode: trainingCode,
-      role: row[columnNames.role],
-      email: row[columnNames.email],
-    }));
+    .filter(Boolean); // Remove null values (rows with all empty cells)
 
   return speakers;
 }
@@ -72,39 +101,59 @@ export function prettierParticipantDetails(
     email: 4,
   };
 
+  if (!parsedData) {
+    throw new Error('parsedData is undefined');
+  }
+
+  // Skip the first row (header row) and start processing from the second row
+  const dataRows = parsedData.slice(2); // Slice to remove the first row
+
   const participants: ParticipantDetailsT[] = parsedData
-    .filter((row: any) => {
-      const participantValue = row[columnNames.participants]?.trim();
-      return participantValue !== undefined && participantValue !== '';
+    .map((row: any, index: number) => {
+      const participantValue = row[columnNames.participants]?.trim() || null; // Trim whitespace
+      const positionValue = row[columnNames.position]?.trim() || null; // Trim whitespace
+      const schoolValue = row[columnNames.school]?.trim() || null; // Trim whitespace
+      const emailValue = row[columnNames.email]?.trim() || null; // Trim whitespace
+      const contactValue = row[columnNames.contact]?.toString() || null;
+
+      // Check if all necessary fields are empty, and if so, skip this row
+      if (
+        !participantValue &&
+        !positionValue &&
+        !schoolValue &&
+        !contactValue &&
+        !emailValue
+      ) {
+        return null;
+      }
+
+      return {
+        participantId: `${trainingCode}P${index + 1}`,
+        participant: participantValue, // Set a default value if empty
+        position: positionValue, // Set a default value if empty
+        school: schoolValue, // Set a default value if empty
+        contact: contactValue, // Set a default value if empty
+        email: emailValue, // Set a default value if empty
+        trainingCode: trainingCode,
+      };
     })
-    .map((row: any, index: number) => ({
-      participantId: `${trainingCode}P${index + 1}`,
-      participant: row[columnNames.participants].trim(),
-      position: row[columnNames.position],
-      school: row[columnNames.school],
-      contact: row[columnNames.contact],
-      email: row[columnNames.email],
-      trainingCode: trainingCode,
-    }));
+    .filter(Boolean); // Remove null values (rows with all empty cells)
 
   return participants;
 }
 
 export default function prettierJsonFromExcel(
   trainingCode: string,
-  trainingData: any,
   speakersData: any,
   participantsData: any
 ) {
-  const training = prettierTrainingDetails(trainingCode, trainingData);
   const speakers = prettierSpeakerDetails(trainingCode, speakersData); // Assuming the speaker data is in the first column
   const participants = prettierParticipantDetails(
     trainingCode,
     participantsData
   ); // Starting from the row with participant data
 
-  const formattedData: TrainingInfoT = {
-    training,
+  const formattedData: Omit<TrainingInfoT, 'training'> = {
     speakers,
     participants,
   };

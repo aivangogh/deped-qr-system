@@ -202,6 +202,7 @@ export default function EditTrainingForm({
       officeId: training?.officeId,
       programHolder: training?.programHolder,
     },
+    mode: 'onChange',
   });
 
   const officeForm = useForm<z.infer<typeof OfficeFormSchema>>({
@@ -252,7 +253,7 @@ export default function EditTrainingForm({
                                 </FormLabel>
                                 <FormControl>
                                   <Input
-                                    defaultValue={training?.title}
+                                    defaultValue={field.value}
                                     placeholder="Type here..."
                                     {...field}
                                     autoFocus
@@ -329,7 +330,7 @@ export default function EditTrainingForm({
                             />
                           </div>
 
-                          <div className="flex space-x-6">
+                          {/* <div className="flex space-x-6">
                             <FormField
                               control={trainingForm.control}
                               name="dateFrom"
@@ -426,7 +427,7 @@ export default function EditTrainingForm({
                                 </FormItem>
                               )}
                             />
-                          </div>
+                          </div> */}
                           <FormField
                             control={trainingForm.control}
                             name="numberOfHours"

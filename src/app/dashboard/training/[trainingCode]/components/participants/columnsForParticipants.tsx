@@ -33,7 +33,7 @@ export const columnsForParticipants: ColumnDef<Participant>[] = [
       <DataTableColumnHeader column={column} title="Participant ID" />
     ),
     cell: ({ row }) => (
-      <div className="w-[90px] font-medium">
+      <div className="w-[110px] font-medium">
         {row.getValue('participantId')}
       </div>
     ),
@@ -78,7 +78,7 @@ export const columnsForParticipants: ColumnDef<Participant>[] = [
     cell: ({ row }) => {
       return (
         <div className="flex space-x-2">
-          <span className="max-w-[100px] truncate font-medium">
+          <span className="max-w-[150px] truncate font-medium">
             {row.getValue('school')}
           </span>
         </div>
@@ -108,7 +108,9 @@ export const columnsForParticipants: ColumnDef<Participant>[] = [
     cell: ({ row }) => {
       return (
         <div className="flex space-x-2">
-          <span className="font-medium">{row.getValue('email')}</span>
+          <span className="max-w-[100px] truncate font-medium">
+            {row.getValue('email')}
+          </span>
         </div>
       );
     },

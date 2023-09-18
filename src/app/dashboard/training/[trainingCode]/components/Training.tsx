@@ -45,11 +45,11 @@ export default function Training() {
             </div>
           </div>
 
-          <Tabs defaultValue="speakers">
+          <Tabs defaultValue="participants">
             <div className="flex justify-between mb-4">
               <TabsList className="grid w-96 grid-cols-2">
-                <TabsTrigger value="speakers">Speakers</TabsTrigger>
                 <TabsTrigger value="participants">Participants</TabsTrigger>
+                <TabsTrigger value="speakers">Speakers</TabsTrigger>
               </TabsList>
               <div className="space-x-2">
                 <DialogFileUpload />

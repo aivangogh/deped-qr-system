@@ -100,8 +100,8 @@ model Training {
   speaker           Speaker[]
   participant       Participant[]
   DateOfTraining    DateOfTraining[]
-  office            Office?            @relation(fields: [officeId], references: [officeId])
-  officeId          String?
+  office            Office             @relation(fields: [officeId], references: [officeId])
+  officeId          String
   budgetAllocation  BudgetAllocation[]
 }
 

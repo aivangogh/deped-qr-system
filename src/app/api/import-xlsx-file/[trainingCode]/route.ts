@@ -22,36 +22,55 @@ export async function POST(
 
   try {
     const fileBuffer = await file.arrayBuffer();
-    const trainingSheetIndex = 1;
-    const speakersSheetIndex = 2;
-    const participantsSheetIndex = 3;
+    // const trainingSheetIndex = 2;
+    const speakersSheetIndex = 1;
+    const participantsSheetIndex = 2;
 
-    const trainingData = await parseExcelToJson(fileBuffer, trainingSheetIndex);
+    // const trainingData = await parseExcelToJson(fileBuffer, trainingSheetIndex);
     const speakersData = await parseExcelToJson(fileBuffer, speakersSheetIndex);
     const participantsData = await parseExcelToJson(
       fileBuffer,
       participantsSheetIndex
     );
 
-    const { training, speakers, participants } = prettierJsonFromExcel(
-      params.trainingCode,
-      trainingData[2],
-      speakersData.slice(2),
-      participantsData.slice(2)
+    const dataRows = speakersData.slice(1);
+    const speakersDataWithoutEmptyArrays: any[][] = dataRows.filter(
+      (subArray: any[]) => {
+        // Check if the subarray is not empty
+        return subArray.length > 0;
+      }
     );
 
-    const _speakers = await prisma.speaker.createMany({
-      data: speakers,
-    });
+    // Similarly for participantsData
+    const dataRowsParticipants = participantsData.slice(1);
+    const participantsDataWithoutEmptyArrays: any[][] =
+      dataRowsParticipants.filter((subArray: any[]) => {
+        // Check if the subarray is not empty
+        return subArray.length > 0;
+      });
 
-    const _participants = await prisma.participant.createMany({
-      data: participants,
-    });
+    console.log(speakersDataWithoutEmptyArrays);
+    console.log(participantsDataWithoutEmptyArrays);
 
-    console.log(_speakers);
-    console.log(_participants);
+    const { speakers, participants } = prettierJsonFromExcel(
+      params.trainingCode,
+      speakersDataWithoutEmptyArrays,
+      participantsDataWithoutEmptyArrays
+    );
 
-    if (_speakers && _participants) {
+    if (speakers.length > 0) {
+      await prisma.speaker.createMany({
+        data: speakers,
+      });
+    }
+
+    if (participants.length > 0) {
+      await prisma.participant.createMany({
+        data: participants,
+      });
+    }
+
+    if (speakers.length > 0 || participants.length > 0) {
       const training = await prisma.training.findUnique({
         where: {
           trainingCode: params.trainingCode,
