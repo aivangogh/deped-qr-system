@@ -57,30 +57,35 @@ import {
 import { useToast } from '@/components/ui/use-toast';
 import { cn } from '@/lib/utils';
 import { createOffice, getOffices } from '@/services/fetch/offices';
-import { createTraining, getTraining } from '@/services/fetch/trainings';
+import {
+  createTraining,
+  getTraining,
+  updateTraining,
+} from '@/services/fetch/trainings';
 import useOfficesStore from '@/store/useOfficesStore';
 import { OfficesT } from '@/types/offices';
-import { CreateTrainingT } from '@/types/trainings';
+import { CreateTrainingT, UpdateTrainingT } from '@/types/trainings';
 import { useRouter } from 'next/navigation';
 import { useMutation, useQuery } from 'react-query';
 import useTrainingStore from '@/store/useTrainingStore';
+import LoadingSpinner from '@/components/LoadingSpinner';
 
 const TrainingFormSchema = z.object({
   title: z.string().min(2, {
     message: 'Username must be at least 2 characters.',
   }),
-  amount: z.coerce.number().positive(),
-  year: z.string({
-    required_error: 'Please select a year!',
-  }),
-  dateFrom: z.date({
-    required_error: 'Please select a date and time',
-    invalid_type_error: "That's not a date!",
-  }),
-  dateTo: z.date({
-    required_error: 'Please select a date and time',
-    invalid_type_error: "That's not a date!",
-  }),
+  // amount: z.coerce.number().positive(),
+  // year: z.string({
+  //   required_error: 'Please select a year!',
+  // }),
+  // dateFrom: z.date({
+  //   required_error: 'Please select a date and time',
+  //   invalid_type_error: "That's not a date!",
+  // }),
+  // dateTo: z.date({
+  //   required_error: 'Please select a date and time',
+  //   invalid_type_error: "That's not a date!",
+  // }),
   numberOfHours: z.coerce.number().positive(),
   venue: z.string().min(2, {
     message: 'Venue must be at least 2 characters.',
@@ -88,10 +93,10 @@ const TrainingFormSchema = z.object({
   addressOfTheVenue: z.string().min(2, {
     message: 'Address of the venue must be at least 2 characters.',
   }),
-  issuedOn: z.date({
-    required_error: 'Please select a date and time',
-    invalid_type_error: "That's not a date!",
-  }),
+  // issuedOn: z.date({
+  //   required_error: 'Please select a date and time',
+  //   invalid_type_error: "That's not a date!",
+  // }),
   issuedAt: z.string({
     required_error: 'Please select must be at least 2 characters.',
     invalid_type_error: "That's not a date!",
@@ -118,20 +123,17 @@ export default function EditTrainingForm({
   const router = useRouter();
   const { toast } = useToast();
   const { offices, setOffices, addOffice } = useOfficesStore();
-  const { training, setTraining } = useTrainingStore();
+  const { training } = useTrainingStore();
 
-  console.log(trainingCode);
-
-  useQuery({
+  const { isLoading } = useQuery({
     queryKey: ['training', trainingCode],
     queryFn: () => getTraining(trainingCode),
     onSuccess({ data }) {
       console.log(data.training);
-      setTraining(data.training);
+      // setTraining(data.training);
     },
   });
 
-  console.log(training);
   useQuery({
     queryKey: ['office-list'],
     queryFn: () => getOffices(),
@@ -140,22 +142,41 @@ export default function EditTrainingForm({
     },
   });
 
-  const addTrainingMutation = useMutation({
-    mutationKey: ['new-training'],
-    mutationFn: (formData: CreateTrainingT) => {
-      return createTraining(formData);
+  const trainingForm = useForm<z.infer<typeof TrainingFormSchema>>({
+    resolver: zodResolver(TrainingFormSchema),
+    defaultValues: {
+      title: training?.title!,
+      // amount: training?.amount,
+      // year: training?.year,
+      // dateFrom: training?.dateFrom as Date,
+      // dateTo: training?.dateTo as Date,
+      numberOfHours: training?.numberOfHours,
+      venue: training?.venue,
+      addressOfTheVenue: training?.addressOfTheVenue,
+      // issuedOn: training?.issuedOn as Date,
+      issuedAt: training?.issuedAt,
+      officeId: training?.officeId,
+      programHolder: training?.programHolder,
+    },
+    mode: 'all',
+  });
+
+  const updateTrainingMutation = useMutation({
+    mutationKey: ['update-training'],
+    mutationFn: (formData: UpdateTrainingT) => {
+      return updateTraining(trainingCode, formData);
     },
     onSuccess({ data }) {
       console.log(data);
-      router.push(dashboardRoutes.dashboard.path);
+      router.replace(`/dashboard/training/${trainingCode}`);
 
       toast({
-        title: 'Training created',
-        description: 'Training created successfully',
+        title: 'Training updated',
+        description: 'Training updated successfully',
       });
     },
     onError() {
-      addTrainingMutation.reset();
+      updateTrainingMutation.reset();
       toast({
         title: 'Something went wrong',
         description: 'Training was not created. Please try again.',
@@ -186,37 +207,22 @@ export default function EditTrainingForm({
     },
   });
 
-  const trainingForm = useForm<z.infer<typeof TrainingFormSchema>>({
-    resolver: zodResolver(TrainingFormSchema),
-    defaultValues: {
-      title: training?.title,
-      // amount: training?.amount,
-      // year: training?.year,
-      dateFrom: training?.dateFrom,
-      dateTo: training?.dateTo,
-      numberOfHours: training?.numberOfHours,
-      venue: training?.venue,
-      addressOfTheVenue: training?.addressOfTheVenue,
-      issuedOn: training?.issuedOn,
-      issuedAt: training?.issuedAt,
-      officeId: training?.officeId,
-      programHolder: training?.programHolder,
-    },
-    mode: 'onChange',
-  });
-
   const officeForm = useForm<z.infer<typeof OfficeFormSchema>>({
     resolver: zodResolver(OfficeFormSchema),
   });
 
   function onSubmitTraining(data: z.infer<typeof TrainingFormSchema>) {
     console.log(data);
-    addTrainingMutation.mutate(data);
+    updateTrainingMutation.mutate(data);
   }
 
   function onSubmitOffice(data: z.infer<typeof OfficeFormSchema>) {
     // console.log(data);
     officeMutation.mutate(data);
+  }
+
+  if (isLoading) {
+    return <LoadingSpinner />;
   }
 
   return (
@@ -256,7 +262,6 @@ export default function EditTrainingForm({
                                     defaultValue={field.value}
                                     placeholder="Type here..."
                                     {...field}
-                                    autoFocus
                                   />
                                 </FormControl>
                                 <FormDescription>
@@ -268,7 +273,7 @@ export default function EditTrainingForm({
                             )}
                           />
 
-                          <div className="flex space-x-4">
+                          {/* <div className="flex space-x-4">
                             <FormField
                               control={trainingForm.control}
                               name="amount"
@@ -328,7 +333,7 @@ export default function EditTrainingForm({
                                 </FormItem>
                               )}
                             />
-                          </div>
+                          </div> */}
 
                           {/* <div className="flex space-x-6">
                             <FormField
@@ -521,7 +526,7 @@ export default function EditTrainingForm({
                           </span>
                         </div>
                         <div className="space-y-6">
-                          <FormField
+                          {/* <FormField
                             control={trainingForm.control}
                             name="issuedOn"
                             render={({ field }) => (
@@ -569,7 +574,7 @@ export default function EditTrainingForm({
                                 <FormMessage />
                               </FormItem>
                             )}
-                          />
+                          /> */}
 
                           <FormField
                             control={trainingForm.control}
@@ -582,6 +587,7 @@ export default function EditTrainingForm({
                                 </FormLabel>
                                 <FormControl>
                                   <Input
+                                    defaultValue={field.value}
                                     placeholder="Type here..."
                                     type="text"
                                     {...field}
@@ -686,14 +692,17 @@ export default function EditTrainingForm({
                 <Button variant="ghost" onClick={() => router.back()}>
                   Cancel
                 </Button>
-                <Button type="submit" disabled={addTrainingMutation.isLoading}>
-                  {addTrainingMutation.isLoading ? (
+                <Button
+                  type="submit"
+                  disabled={updateTrainingMutation.isLoading}
+                >
+                  {updateTrainingMutation.isLoading ? (
                     <>
                       <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
-                      Submitting...
+                      Updating...
                     </>
                   ) : (
-                    'Submit'
+                    'Update'
                   )}
                 </Button>
               </CardFooter>

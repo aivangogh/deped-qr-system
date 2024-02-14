@@ -30,5 +30,14 @@ export type CreateTrainingT = Omit<
 >;
 export type UpdateTrainingT = Omit<
   TrainingsT,
-  'trainingCode' | 'pap' | 'office' | 'papId' | 'validUntil'
+  | 'trainingCode'
+  | 'amount'
+  | 'year'
+  | 'dateFrom'
+  | 'dateTo'
+  | 'issuedOn'
+  | 'pap'
+  | 'office'
+  | 'papId'
+  | 'validUntil'
 >;

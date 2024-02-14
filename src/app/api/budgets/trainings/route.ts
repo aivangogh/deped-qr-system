@@ -17,7 +17,7 @@ export async function GET() {
           select: {
             amount: true,
             year: true,
-          },
+          }, 
         },
       },
     });

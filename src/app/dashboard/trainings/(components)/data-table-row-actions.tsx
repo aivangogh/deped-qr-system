@@ -92,7 +92,7 @@ export function DataTableRowActions<TData>({
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-[160px]">
-            <Link href={`/dashboard/training/${trainingCode}`} target="_blank">
+            <Link href={`/dashboard/training/${trainingCode}`}>
               <DropdownMenuItem>
                 <ExternalLink className="mr-2 h-4 w-4" />
                 View

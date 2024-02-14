@@ -64,45 +64,36 @@ export async function PUT(
   request: Request,
   { params }: { params: { trainingCode: string } }
 ) {
-  const {
-    title,
-    amount,
-    year,
-    dateFrom,
-    dateTo,
-    numberOfHours,
-    venue,
-    addressOfTheVenue,
-    issuedOn,
-    issuedAt,
-    officeId,
-    programHolder,
-  } = (await request.json()) as UpdateTrainingT;
+  try {
+    const {
+      title,
+      numberOfHours,
+      venue,
+      addressOfTheVenue,
+      issuedAt,
+      officeId,
+      programHolder,
+    } = (await request.json()) as UpdateTrainingT;
 
-  await prisma.training
-    .update({
+    await prisma.training.update({
       where: {
         trainingCode: params.trainingCode,
       },
       data: {
         title,
-        dateFrom,
-        dateTo,
         numberOfHours,
         venue,
         addressOfTheVenue,
-        issuedOn,
         issuedAt,
         officeId,
         programHolder,
       },
-    })
-    .then((res) => {
-      return NextResponse.json({ status: 200, message: 'Training updated' });
-    })
-    .catch((err) => {
-      return NextResponse.json({ status: 500, error: err });
     });
+
+    return NextResponse.json({ status: 200, message: 'Training updated' });
+  } catch (err) {
+    return NextResponse.json({ status: 500, error: err });
+  }
 }
 
 export async function DELETE(

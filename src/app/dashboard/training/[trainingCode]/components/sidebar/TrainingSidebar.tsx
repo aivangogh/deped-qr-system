@@ -124,13 +124,13 @@ export default function TrainingSidebar() {
       <div className="flex flex-col space-y-4 p-4 border-l w-full">
         <div className="flex items-center justify-between">
           <span className="text-2xl font-bold">Training Details</span>
-          {/* <Link
+          <Link
             href={dashboardRoutes.editTraining.trainingCode(
               training.trainingCode!
             )}
           >
             <Button variant="link">Edit</Button>
-          </Link> */}
+          </Link>
         </div>
         <div className="space-y-4">
           <div className="w-full max-w-sm items-center gap-1.5">
