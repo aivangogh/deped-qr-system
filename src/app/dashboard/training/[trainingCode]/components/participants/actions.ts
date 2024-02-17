@@ -1,4 +1,3 @@
-"use server";
 
 import { downloadTemplateFromGoogleDrive } from "@/services/api/google-drive-file/downloadTemplateFromGoogleDrive";
 import { GenerateCertificatesRequestForParticipants } from "@/types/generate-pdf";
