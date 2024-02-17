@@ -59,9 +59,6 @@ dependencies:
   '@radix-ui/react-toast':
     specifier: ^1.1.5
     version: 1.1.5(@types/react-dom@18.2.6)(@types/react@18.2.14)(react-dom@18.2.0)(react@18.2.0)
-  '@tanstack/react-query-next-experimental':
-    specifier: 5.0.0-alpha.80
-    version: 5.0.0-alpha.80(@tanstack/react-query@5.0.0-alpha.71)(next@14.1.0)(react-dom@18.2.0)(react@18.2.0)
   '@tanstack/react-table':
     specifier: ^8.12.0
     version: 8.12.0(react-dom@18.2.0)(react@18.2.0)
@@ -122,9 +119,15 @@ dependencies:
   file-saver:
     specifier: ^2.0.5
     version: 2.0.5
+  get-stream:
+    specifier: ^8.0.1
+    version: 8.0.1
   googleapis:
     specifier: ^120.0.0
     version: 120.0.0
+  jszip:
+    specifier: ^3.10.1
+    version: 3.10.1
   libreoffice-convert:
     specifier: ^1.5.1
     version: 1.5.1
@@ -238,6 +241,9 @@ devDependencies:
   '@types/file-saver':
     specifier: ^2.0.7
     version: 2.0.7
+  '@types/get-stream':
+    specifier: ^3.0.2
+    version: 3.0.2
   '@types/nodemailer':
     specifier: ^6.4.14
     version: 6.4.14
@@ -3448,42 +3454,6 @@ packages:
       tslib: 2.6.2
     dev: false
 
-  /@tanstack/query-core@5.0.0-alpha.70:
-    resolution: {integrity: sha512-JOq9ciu8647Au8rX0O9737kJ1IBAupLcI77eFc9RaubiZPr6DIurOtI2Lc4hoaJNHIofNBQUnEyifzDIHORsdA==}
-    dev: false
-
-  /@tanstack/react-query-next-experimental@5.0.0-alpha.80(@tanstack/react-query@5.0.0-alpha.71)(next@14.1.0)(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-J+rHrE+5BVEAoZVlvp5wryBdusKDBRrzysfpgOa4t6vcVRWHgzNlmWJFHelgipdHJrA3/4D6wSir8xmkp8ijtA==}
-    peerDependencies:
-      '@tanstack/react-query': 5.0.0-alpha.71
-      next: ^13.0.0
-      react: ^18.0.0
-      react-dom: ^18.0.0
-    dependencies:
-      '@tanstack/react-query': 5.0.0-alpha.71(react-dom@18.2.0)(react@18.2.0)
-      next: 14.1.0(@babel/core@7.23.9)(react-dom@18.2.0)(react@18.2.0)
-      react: 18.2.0
-      react-dom: 18.2.0(react@18.2.0)
-    dev: false
-
-  /@tanstack/react-query@5.0.0-alpha.71(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-QwP90/rqxYucCIJ/QAfBpg4ODF4ozKZIp145CElZCBkvvONGxY2Y6Z1mBPQXrync9Nb1fB4DEEVfpxEDcktogg==}
-    peerDependencies:
-      react: ^18.0.0
-      react-dom: ^18.0.0
-      react-native: '*'
-    peerDependenciesMeta:
-      react-dom:
-        optional: true
-      react-native:
-        optional: true
-    dependencies:
-      '@tanstack/query-core': 5.0.0-alpha.70
-      client-only: 0.0.1
-      react: 18.2.0
-      react-dom: 18.2.0(react@18.2.0)
-    dev: false
-
   /@tanstack/react-table@8.12.0(react-dom@18.2.0)(react@18.2.0):
     resolution: {integrity: sha512-LlEQ1Gpz4bfpiET+qmle4BhKDgKN3Y/sssc+O/wLqX8HRtjV+nhusYbllZlutZfMR8oeef83whKTj/VhaV8EeA==}
     engines: {node: '>=12'}
@@ -3532,6 +3502,13 @@ packages:
 
   /@types/file-saver@2.0.7:
     resolution: {integrity: sha512-dNKVfHd/jk0SkR/exKGj2ggkB45MAkzvWCaqLUUgkyjITkGNzH8H+yUwr+BLJUBjZOe9w8X3wgmXhZDRg1ED6A==}
+    dev: true
+
+  /@types/get-stream@3.0.2:
+    resolution: {integrity: sha512-UQNVnEQdbov8JmapA6DRzxe9/PgMxf6FJ35/QdtQXcga+sun0/VJTnto1O9NNJ3Mk/KKihaCscKZZ0zqqwv8cA==}
+    deprecated: This is a stub types definition. get-stream provides its own type definitions, so you do not need this installed.
+    dependencies:
+      get-stream: 8.0.1
     dev: true
 
   /@types/glob@7.2.0:
@@ -5844,6 +5821,10 @@ packages:
     dependencies:
       pump: 3.0.0
     dev: false
+
+  /get-stream@8.0.1:
+    resolution: {integrity: sha512-VaUJspBffn/LMCJVoMvSAdmscJyS1auj5Zulnn5UoYcY531UWmdwhRWkcGKnGU93m5HSXP9LP2usOryrBtQowA==}
+    engines: {node: '>=16'}
 
   /get-symbol-description@1.0.2:
     resolution: {integrity: sha512-g0QYk1dZBxGwk+Ngc+ltRH2IBp2f7zBkBMBJZCDerh6EhlhSR6+9irMCuT/09zD6qkarHUSn529sK/yL4S27mg==}

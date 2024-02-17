@@ -1,4 +1,4 @@
-import { Button } from '@/components/ui/button';
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -7,21 +7,21 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@/components/ui/dialog';
-import { generateBulkCertificatesForParticipants } from '@/services/fetch/generatePdf';
-import useParticipantStore from '@/store/useParticipantStore';
-import useSettingsStore from '@/store/useSettingsStore';
-import useTrainingStore from '@/store/useTrainingStore';
-import { GenerateCertificatesRequestForParticipants } from '@/types/generate-pdf';
-import { saveAs } from 'file-saver';
-import { Download, FileCheck2, FileText, RefreshCw } from 'lucide-react';
-import { useCallback, useState } from 'react';
+} from "@/components/ui/dialog";
+import useParticipantStore from "@/store/useParticipantStore";
+import useSettingsStore from "@/store/useSettingsStore";
+import useTrainingStore from "@/store/useTrainingStore";
+import { GenerateCertificatesRequestForParticipants } from "@/types/generate-pdf";
+import { saveAs } from "file-saver";
+import { Download, FileCheck2, FileText, RefreshCw } from "lucide-react";
+import { useCallback, useState } from "react";
+import generateBulkCertificatesForParticipants from "./actions";
 
 export default function DialogGenerateBulkCertificatesForParticipants() {
   const { training } = useTrainingStore();
   const { participants } = useParticipantStore();
   const { documentForParticipantsUrl } = useSettingsStore();
-  const [certificateURL, setCertificateURL] = useState<string | null>(null);
+  const [certificateBlob, setCertificateBlob] = useState<string | null>(null);
   const [isGenerating, setIsGenerating] = useState<boolean>(false);
 
   const handleGenerateBulkCertificates = useCallback(async () => {
@@ -34,41 +34,40 @@ export default function DialogGenerateBulkCertificatesForParticipants() {
         training: training,
       };
 
-      const blob = await generateBulkCertificatesForParticipants(requestData);
+      const arrayBuffer = await generateBulkCertificatesForParticipants(
+        requestData
+      );
 
-      // Create a temporary URL for the blob
-      const tempURL = URL.createObjectURL(blob);
+      if (arrayBuffer !== undefined) {
+        // Convert the array back to Uint8Array before creating a Blob
+        const uint8Array = new Uint8Array(arrayBuffer);
+        const blob = new Blob([uint8Array], { type: "application/zip" });
 
-      console.log(tempURL);
-      setCertificateURL(tempURL);
+        const tempURL = URL.createObjectURL(blob);
+        console.log(tempURL);
+        setCertificateBlob(tempURL);
+      } else {
+        console.error("Failed to generate certificates");
+      }
     } catch (error) {
-      // Handle the error
+      console.error("Error generating certificates:", error);
     } finally {
       setIsGenerating(false);
     }
   }, [documentForParticipantsUrl, participants, training]);
 
-  // Function to handle the download event for the "Download Certificate" button
-  const handleDownloadCertificates = () => {
-    if (certificateURL) {
+  const handleDownloadCertificates = async () => {
+    if (certificateBlob) {
       const fileName = `${training.title}-certificates-for-participants.zip`;
 
-      fetch(certificateURL)
-        .then((response) => response.blob())
-        .then((blob) => {
-          // Set the correct content type and encoding for the response
-          const contentType = 'application/zip';
-          const encoding = 'UTF-8';
+      try {
+        console.log("Downloading certificates...");
 
-          const file = new File([blob], fileName, { type: contentType });
-
-          // Trigger the file download
-          saveAs(file);
-        })
-        .catch((error) => {
-          // Handle any errors
-          console.error('Error downloading certificate:', error);
-        });
+        // Use the Blob directly
+        saveAs(certificateBlob, fileName);
+      } catch (error) {
+        console.error("Error downloading certificate:", error);
+      }
     }
   };
 
@@ -94,7 +93,7 @@ export default function DialogGenerateBulkCertificatesForParticipants() {
             </DialogDescription>
           </DialogHeader>
 
-          {certificateURL ? (
+          {certificateBlob ? (
             <>
               <div className="flex flex-col items-center justify-center h-40 space-y-4">
                 <FileCheck2 size={40} color="green" />
@@ -115,7 +114,7 @@ export default function DialogGenerateBulkCertificatesForParticipants() {
           )}
 
           <DialogFooter>
-            {certificateURL && (
+            {certificateBlob && (
               <>
                 <div className="flex space-x-2">
                   {/* <Button size="sm" variant="outline">
